@@ -1,0 +1,24 @@
+query getWishlists($page: Int, $pageSize:Int){
+  getWishlistsByEmail(page: $page, pageSize: $pageSize) {
+    id
+    email
+    wishlistType
+    isPublic
+    fieldsConfig{
+      department
+      description
+    }
+    products{
+      ID
+      Image
+      unitValue
+      linkProduct
+      nameProduct
+      quantityProduct
+      skuCodeReference
+      department
+      bundle
+    }
+  }
+}
+

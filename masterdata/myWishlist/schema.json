@@ -1,0 +1,46 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "wishlist",
+  "type": "object",
+  "properties": {
+    "email": {
+      "type": "string",
+      "format": "email"
+    },
+    "wishlistType": {
+      "type": "string"
+    },
+    "products": {
+      "type": "array"
+    },
+    "isPublic": {
+      "type": "boolean"
+    },
+    "fieldsConfig": {
+      "type": "array"
+    }
+  },
+  "required": [
+    "email",
+    "wishlistType",
+    "products",
+    "isPublic",
+    "fieldsConfig"
+  ],
+  "v-indexed": [
+    "email",
+    "wishlistType",
+    "products",
+    "isPublic",
+    "fieldsConfig"
+  ],
+  "v-default-fields": [
+    "email",
+    "wishlistType",
+    "products",
+    "isPublic",
+    "fieldsConfig"
+  ],
+  "v-cache": false,
+  "v-immediate-indexing": true
+}

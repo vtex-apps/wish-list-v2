@@ -1,0 +1,102 @@
+# To really understand GraphQL, go to https://graphql.org/learn/
+
+type Wishlist {
+  id: ID
+  email: String
+  wishlistType: String
+  products: [Products]
+  isPublic: Boolean
+  fieldsConfig: FieldsConfig
+  createdIn: String
+}
+
+input WishlistInput {
+  id: ID
+  wishlistType: String
+  products: [ProductsInput]
+  isPublic: Boolean
+  fieldsConfig: FieldsConfigInput
+}
+
+input FieldsConfigInput {
+  department: String
+  description: String
+}
+
+type FieldsConfig {
+  department: String
+  description: String
+}
+
+input ProductsInput {
+  ID: Int
+  Image: String
+  unitValue: Float
+  linkProduct: String
+  nameProduct: String
+  quantityProduct: Int
+  skuCodeReference: String
+  department: String
+  bundle: Int
+}
+
+type Products {
+  ID: Int
+  Image: String
+  unitValue: Float
+  linkProduct: String
+  nameProduct: String
+  quantityProduct: Int
+  skuCodeReference: String
+  department: String
+  bundle: Int
+}
+
+type DocumentCreatedResponse {
+  Id: String
+  Href: String
+  DocumentId: String
+}
+
+type DeleteWishlistResponse {
+  id: String
+  success: Boolean
+}
+
+type UpdateWishlistResponse {
+  id: String
+  success: Boolean
+}
+
+type Query {
+  """
+  Return a wishlist
+  """
+  getWishlist(id: ID!): Wishlist
+
+  """
+  Returns a list of wishlist by email user
+  """
+  getWishlistsByEmail(
+    page: Int,
+    pageSize: Int
+  ): [Wishlist]
+
+}
+
+type Mutation {
+  """
+  Create a new wishlist
+  """
+  createWishlist(wishlist: WishlistInput!): DocumentCreatedResponse
+
+  """
+  Update a existing wishlist
+  """
+  updateWishlist(wishlist: WishlistInput): UpdateWishlistResponse
+
+  """
+  Delete a wishlist
+  """
+  deleteWishlist(id: ID!): DeleteWishlistResponse
+}

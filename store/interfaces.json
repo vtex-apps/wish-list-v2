@@ -1,0 +1,15 @@
+{
+  "button-wishlist-pdp": {
+    "component": "ButtonWishlist",
+    "render": "client"
+  },
+  "my-account-link.my-wishlists-link": {
+    "component": "MyWishListsLink"
+  },
+  "my-account-page.my-wishlists-page": {
+    "component": "MyWishListsPage"
+  },
+  "wishlist-share": {
+    "component": "WishlistShare"
+  }
+}

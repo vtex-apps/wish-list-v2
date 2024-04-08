@@ -1,0 +1,43 @@
+query Product($slug: String) {
+  product(slug: $slug) @context(provider: "vtex.search-graphql") {
+    properties {
+      name
+      values
+    }
+    productName
+    link
+    priceRange {
+      sellingPrice {
+        highPrice
+      }
+    }
+    items {
+      itemId
+      name
+      unitMultiplier
+      sellers {
+        sellerId
+        sellerName
+        sellerDefault
+      }
+      referenceId {
+        Key
+        Value
+      }
+      images {
+        imageUrl
+      }
+    }
+    categoryTree {
+      name
+    }
+    skuSpecifications {
+      field {
+        name
+      }
+      values {
+        name
+      }
+    }
+  }
+}

@@ -1,0 +1,9 @@
+query TEST($ac: String, $fields: [String], $id: String, $account: String) {
+  document(acronym: $ac, fields: $fields, id: $id, account: $account)
+    @context(provider: "vtex.store-graphql") {
+    fields {
+      value
+      key
+    }
+  }
+}

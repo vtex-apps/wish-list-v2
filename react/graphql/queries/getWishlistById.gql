@@ -1,0 +1,23 @@
+query getWishlist($id: ID!) {
+  getWishlist(id: $id) {
+    id
+    email
+    wishlistType
+    isPublic
+    fieldsConfig{
+      description
+      department
+    }
+    products {
+      ID
+      Image
+      unitValue
+      linkProduct
+      nameProduct
+      quantityProduct
+      skuCodeReference
+      department
+      bundle
+    }
+  }
+}

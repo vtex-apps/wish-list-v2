@@ -1,0 +1,6 @@
+mutation deleteWishlist($id: ID!){
+  deleteWishlist(id: $id){
+    id
+    success
+  }
+}

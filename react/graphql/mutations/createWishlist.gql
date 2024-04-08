@@ -1,0 +1,7 @@
+mutation createWishlist($wishlist: WishlistInput!) {
+  createWishlist(wishlist: $wishlist) {
+    Id
+    Href
+    DocumentId
+  }
+}

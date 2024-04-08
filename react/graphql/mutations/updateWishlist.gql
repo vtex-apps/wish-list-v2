@@ -1,0 +1,6 @@
+mutation updateWishlist($wishlist: WishlistInput!) {
+  updateWishlist(wishlist: $wishlist) {
+    id
+    success
+  }
+}
