@@ -22,6 +22,7 @@ export interface Productos {
   skuCodeReference: string
   department: string
   bundle: number
+  price: number
 }
 
 export interface WishlistUpdateArs extends Wishlist {

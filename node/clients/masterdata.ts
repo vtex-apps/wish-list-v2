@@ -1,19 +1,29 @@
 import type { InstanceOptions, IOContext } from '@vtex/api'
-import { JanusClient } from '@vtex/api'
+// import { JanusClient } from '@vtex/api'
+import { ExternalClient } from '@vtex/api'
 
 import { DATA_ENTITY_NAME, FIELDS, SCHEMA } from '../utils/constant'
 import { Wishlist } from '../typings/wishlist'
 
-export default class MasterDataClient extends JanusClient {
+// export default class MasterDataClient extends JanusClient {
+  export default class MasterDataClient extends ExternalClient {
   constructor(context: IOContext, options?: InstanceOptions) {
-    super(context, {
+    // super(context, {
+    //   ...options,
+    //   headers: {
+    //     ...options?.headers,
+    //     VtexIdclientAutCookie: context.authToken,
+    //     Accept: 'application/vnd.vtex.pricing.v3+json',
+    //     'Cache-Control': 'no-cache',
+    //     'Content-Type': 'application/json',
+    //   },
+    // })
+    super(`https://${context.account}.vtexcommercestable.com.br`, context, {
       ...options,
       headers: {
         ...options?.headers,
-        VtexIdclientAutCookie: context.authToken,
-        Accept: 'application/vnd.vtex.pricing.v3+json',
-        'Cache-Control': 'no-cache',
-        'Content-Type': 'application/json',
+        ...{ Accept: 'application/vnd.vtex.ds.v10+json' },
+        ...(context.authToken ? { VtexIdclientAutCookie: context.authToken } : null),
       },
     })
   }
@@ -37,7 +47,7 @@ export default class MasterDataClient extends JanusClient {
 
     try {
       return await this.http.get(
-        `/api/dataentities/${DATA_ENTITY_NAME}/search?_where=${field}=${value}&_fields=${FIELDS}&_sort=createdIn&_schema=${SCHEMA}`,
+        `/api/dataentities/${DATA_ENTITY_NAME}/search?_where=(${field}=${value})&_fields=${FIELDS}&_sort=createdIn&_schema=${SCHEMA}`,
         {
           headers: {
             'REST-Range': `resources=${page ?? 0}-${pageSize ?? 100}`,

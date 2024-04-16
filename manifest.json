@@ -1,5 +1,5 @@
 {
-  "vendor": "whitebird",
+  "vendor": "sbdsefuat",
   "name": "my-wishlists",
   "version": "1.0.11",
   "title": "My Wish Lists",
@@ -55,6 +55,9 @@
       "name": "POWER_USER_DS"
     },
     {
+      "name": "LogisticsAdmin"
+    },
+    {
       "name": "outbound-access",
       "attrs": {
         "host": "api.vtex.com",
@@ -66,6 +69,20 @@
       "attrs": {
         "host": "portal.vtexcommercestable.com.br",
         "path": "/api/dataentities/*"
+      }
+    },
+    {
+      "name": "outbound-access",
+      "attrs": {
+        "host": "{{account}}.vtexcommercestable.com.br",
+        "path": "/api/dataentities/*"
+      }
+    },
+    {
+      "name": "outbound-access",
+      "attrs": {
+        "host": "api.vtex.com",
+        "path": "/*"
       }
     }
   ],

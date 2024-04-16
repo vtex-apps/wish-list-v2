@@ -5,6 +5,7 @@ import { Wishlist } from '../typings/wishlist'
 import MasterDataClient from './masterdata'
 import VtexId from './vtexId'
 import { DATA_ENTITY_NAME } from '../utils/constant'
+import { Pricing } from './pricing'
 
 export class Clients extends IOClients {
   public get wishlist() {
@@ -20,5 +21,9 @@ export class Clients extends IOClients {
 
   public get vtexId() {
     return this.getOrSet('vtexId', VtexId)
+  }
+
+  public get pricing() {
+    return this.getOrSet('pricing', Pricing)
   }
 }

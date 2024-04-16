@@ -1,8 +1,9 @@
 const extractProductData = ({ products }) => {
   if (products !== undefined) {
-    return products.map((item) => {
+    return products.map((item) => {      
       const productData = {
         id: item.ID,
+        skuId: item.ID,
         image: item.Image,
         department: item.department,
         skuReferenceCode: item.skuCodeReference,

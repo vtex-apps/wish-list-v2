@@ -27,6 +27,7 @@ export const getWishlistsByEmail = async (
 
     return wishlists || []
   } catch (error) {
+    console.error('get wishlists error: ', error)
     return error
   }
 }

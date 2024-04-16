@@ -2,6 +2,7 @@ import { ProductStepper } from '../components/ProductQuantity'
 import { handleQuantityChange } from '../components/helpers/index'
 import { IconDelete } from 'vtex.styleguide'
 import { useRuntime } from 'vtex.render-runtime'
+import ProductPrice from '../components/ProductPrice'
 
 import styles from '../styles.css'
 
@@ -112,6 +113,16 @@ export const jsonSchema = (
             <span className={styles.wishlistProductUnitValue}>
               {formattedValue || null}
             </span>
+          )
+        },
+      },
+      price: {
+        title: 'Price',
+        width: 110,
+        cellRenderer: ({ rowData }) => {
+
+          return (
+            <ProductPrice skuId={rowData?.skuId} skuReference={rowData?.skuReferenceCode} productQuantity={rowData?.qty} currency={currency} />
           )
         },
       },

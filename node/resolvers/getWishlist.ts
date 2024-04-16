@@ -23,6 +23,7 @@ export const getWishlist = async (
     }
 
     return wishlist
+
   } catch (error) {
     return error
   }
