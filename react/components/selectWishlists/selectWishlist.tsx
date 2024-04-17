@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-handler-names */
 import React from 'react'
 import { useCssHandles } from 'vtex.css-handles'
 
@@ -29,12 +28,11 @@ const SelectWishlist = (props: SelectWishList) => {
 
   return (
     <>
-      {' '}
       {props.closeSlect && (
         <div className={`${handles.containerSelect}`}>
           <div className={`${handles.containerButtonCloseBox}`}>
             <button
-              onClick={props.closeModal}
+              onClick={props.handleCloseModal}
               className={`${handles.containerButtonClose}`}
             >
               X
@@ -51,7 +49,7 @@ const SelectWishlist = (props: SelectWishList) => {
                     className={`${handles.containerSelectDropdown}`}
                     onFocus={props.handleSelectFocus}
                     onBlur={props.handleSelectBlur}
-                    onChange={props.captureValue}
+                    onChange={props.handleCaptureValue}
                     size={props.selectSize}
                   >
                     <option value="" disabled selected>
@@ -68,41 +66,39 @@ const SelectWishlist = (props: SelectWishList) => {
                     ))}
                   </select>
 
-                   {props.isLoading ? <>
-                      <button
-                      disabled={props.isLoading}
-                      className={`${handles.containerButtonCreate}`}
-                      onClick={props.addList}
-                    >
-                      {props.isLoading ? "loading..": "Create new list" }
-                       </button>
-                    </>
-                    :
-
+                  {props.isLoading ? (
                     <>
-                    <button
-                    className={`${handles.containerButtonAddList}`}
-                    onClick={props.addToList}
-                  >
-                    Add to list
-                  </button>
+                      <button
+                        disabled={props.isLoading}
+                        className={`${handles.containerButtonCreate}`}
+                        onClick={props.handleAddList}
+                      >
+                        {props.isLoading ? 'loading..' : 'Create new list'}
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <button
+                        className={`${handles.containerButtonAddList}`}
+                        onClick={props.handleAddList}
+                      >
+                        Add to list
+                      </button>
 
-                  {props.errorSelect && (
-                    <p className={`${handles.containerError}`}>
-                      {props.errorSelect}
-                    </p>
+                      {props.errorSelect && (
+                        <p className={`${handles.containerError}`}>
+                          {props.errorSelect}
+                        </p>
+                      )}
+                      <button
+                        disabled={props.isLoading}
+                        className={`${handles.containerButtonCreate}`}
+                        onClick={props.handleAddList}
+                      >
+                        {props.isLoading ? 'loading..' : 'Create new list'}
+                      </button>
+                    </>
                   )}
-                  <button
-                    disabled={props.isLoading}
-                    className={`${handles.containerButtonCreate}`}
-                    onClick={props.addList}
-                  >
-                  {props.isLoading ? "loading..": "Create new list" }
-                  </button>
-
-                  </>}
-
-
                 </>
               )}
 
@@ -126,10 +122,10 @@ const SelectWishlist = (props: SelectWishList) => {
                   )}
                   <button
                     disabled={props.isLoading}
-                    onClick={props.sendData1}
+                    onClick={props.handleSendData1}
                     className={`${handles.containerButtonCreateList}`}
                   >
-                   {props.isLoading ? "loading..": "Create list" }
+                    {props.isLoading ? 'loading..' : 'Create list'}
                   </button>
                 </div>
               )}
@@ -140,7 +136,7 @@ const SelectWishlist = (props: SelectWishList) => {
               {props.isButton && (
                 <button
                   className={`${handles.containerButtonCreate}`}
-                  onClick={props.createLengthZero}
+                  onClick={props.handleCreateLengthZero}
                 >
                   Create new list
                 </button>
@@ -165,7 +161,7 @@ const SelectWishlist = (props: SelectWishList) => {
                   )}
                   <button
                     className={`${handles.containerButtonCreateList2}`}
-                    onClick={props.sendData2}
+                    onClick={props.handleSendData2}
                   >
                     Create List
                   </button>

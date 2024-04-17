@@ -58,7 +58,12 @@ const MyWishLists = () => {
     if (nameListAccount.trim() === '') {
       setFieldValidation('The field cannot be empty')
     } else {
-      createWishlist(userEmail, nameListAccount, () => refetch())
+      createWishlist({
+        emailInfo: userEmail,
+        nameListWishlist: nameListAccount,
+        getList: () => refetch(),
+        products: [],
+      })
       setNameListAccount('')
       setFieldValidation('')
       setIsModalAccount(false)

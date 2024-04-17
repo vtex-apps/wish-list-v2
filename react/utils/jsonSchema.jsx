@@ -1,35 +1,37 @@
-import { ProductStepper } from '../components/ProductQuantity'
-import { handleQuantityChange } from '../components/helpers/index'
+import React from 'react'
 import { IconDelete } from 'vtex.styleguide'
 import { useRuntime } from 'vtex.render-runtime'
 
+import { ProductStepper } from '../components/ProductQuantity'
 import styles from '../styles.css'
 
-export const jsonSchema = (
+export const JsonSchema = ({
   addProductsToCart,
   deleteItemsWishlist,
   selectedWishlist,
   wishlist,
   wishlists,
-  updateWishlist
-) => {
+  updateWishlist,
+}) => {
   const runtime = useRuntime()
   const { culture } = runtime
-  let currency = culture.customCurrencySymbol
+  const currency = culture.customCurrencySymbol
   const jsonschema = {
     properties: {
       image: {
         title: 'Image',
         width: 80,
-        cellRenderer: ({ cellData, rowData }) => {
-          const linkUrl = rowData?.linkProduct || ''
-          const parts = linkUrl?.split('.br/')
-          const productUrl =
-            window.location.origin + '/' + parts[parts?.length - 1]
+        cellRenderer({ cellData, rowData }) {
+          const linkUrl = rowData.linkProduct || ''
+          const parts = linkUrl.split('.br/')
+          const productUrl = `${window.location.origin}/${
+            parts[parts.length - 1]
+          }`
+
           return (
-            <a href={productUrl || ''} target="_blank">
+            <a href={productUrl || ''} target="_blank" rel="noreferrer">
               <img
-                src={cellData || rowData?.Image || ''}
+                src={cellData || rowData.Image || ''}
                 alt={rowData.name || ''}
                 className={styles.wishlistProductImage}
               />
@@ -41,10 +43,10 @@ export const jsonSchema = (
         sortable: true,
         title: 'Department',
         width: 150,
-        cellRenderer: ({ cellData, rowData }) => {
+        cellRenderer({ cellData, rowData }) {
           return (
             <p className={styles.wishlistProductDepartment}>
-              {cellData || rowData?.department || ''}
+              {cellData || rowData.department || ''}
             </p>
           )
         },
@@ -52,18 +54,21 @@ export const jsonSchema = (
       skuReferenceCode: {
         title: 'Part #',
         width: 125,
-        cellRenderer: ({ cellData, rowData }) => {
-          const linkUrl = rowData?.linkProduct || ''
-          const parts = linkUrl?.split('.br/')
-          const productUrl =
-            window.location.origin + '/' + parts[parts?.length - 1]
+        cellRenderer({ cellData, rowData }) {
+          const linkUrl = rowData.linkProduct || ''
+          const parts = linkUrl.split('.br/')
+          const productUrl = `${window.location.origin}/${
+            parts[parts.length - 1]
+          }`
+
           return (
             <a
               href={productUrl || ''}
               className={styles.wishlistProductTexts}
               target="_blank"
+              rel="noreferrer"
             >
-              {cellData || rowData?.skuCodeReference || ''}
+              {cellData || rowData.skuCodeReference || ''}
             </a>
           )
         },
@@ -72,18 +77,22 @@ export const jsonSchema = (
         sortable: true,
         title: 'Description',
         width: 220,
-        cellRenderer: ({ cellData, rowData }) => {
-          const linkUrl = rowData?.linkProduct || ''
-          const parts = linkUrl?.split('.br/')
-          const productUrl =
-            window.location.origin + '/' + parts[parts?.length - 1]
+        name: '',
+        cellRenderer({ cellData, rowData }) {
+          const linkUrl = rowData.linkProduct || ''
+          const parts = linkUrl.split('.br/')
+          const productUrl = `${window.location.origin}/${
+            parts[parts.length - 1]
+          }`
+
           return (
             <a
               href={productUrl || ''}
               className={styles.wishlistProductTexts}
               target="_blank"
+              rel="noreferrer"
             >
-              {cellData || rowData?.nameProduct || ''}
+              {cellData || rowData.nameProduct || ''}
             </a>
           )
         },
@@ -91,7 +100,7 @@ export const jsonSchema = (
       qty: {
         title: 'Qty',
         width: 145,
-        cellRenderer: ({ rowData }) => {
+        cellRenderer({ rowData }) {
           return (
             <ProductStepper
               initialQty={rowData.qty || null}
@@ -106,8 +115,11 @@ export const jsonSchema = (
       unitValue: {
         title: 'Unit Value',
         width: 110,
-        cellRenderer: ({ cellData }) => {
-          const formattedValue = `${currency} ${parseFloat(cellData).toFixed(2)}`
+        cellRenderer({ cellData }) {
+          const formattedValue = `${currency} ${parseFloat(cellData).toFixed(
+            2
+          )}`
+
           return (
             <span className={styles.wishlistProductUnitValue}>
               {formattedValue || null}
@@ -118,7 +130,7 @@ export const jsonSchema = (
       add: {
         title: 'Add',
         width: 100,
-        cellRenderer: ({ rowData }) => {
+        cellRenderer({ rowData }) {
           return (
             <button
               className={styles.wishlistAddItem}
@@ -132,17 +144,17 @@ export const jsonSchema = (
       remove: {
         title: 'Remove',
         width: 90,
-        cellRenderer: (rowData) => {
+        cellRenderer(rowData) {
           return (
             <button
               className={styles.wishlistDeleteItem}
               onClick={async () => {
-                deleteItemsWishlist(
+                deleteItemsWishlist({
                   rowData,
                   wishlist,
                   selectedWishlist,
-                  updateWishlist
-                )
+                  updateWishlist,
+                })
               }}
             >
               <IconDelete />

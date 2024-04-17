@@ -8,8 +8,7 @@ import { useUserEmail } from './useUserEmail'
 import useStoreGlobal from '../globalStore/globalStore'
 import useMutationCreateWishlist from './actions/useMutationCreateWishlist'
 
-// eslint-disable-next-line @typescript-eslint/naming-convention
-interface useAddSharedListPageProps {
+interface UseAddSharedListPageProps {
   queryId: string
   products: any
   updatedProducts: any
@@ -18,7 +17,7 @@ interface useAddSharedListPageProps {
 export default function useAddSharedListPage({
   queryId,
   products,
-}: useAddSharedListPageProps) {
+}: UseAddSharedListPageProps) {
   // ORDER FORM
   const { orderForm } = useOrderForm()
 

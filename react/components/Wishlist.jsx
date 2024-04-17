@@ -1,14 +1,13 @@
 // Hooks
-import React, { useEffect, useState, useContext } from 'react'
+import React, { useEffect, useState, useContext, useCallback } from 'react'
 import { Table, Spinner, ToastContext } from 'vtex.styleguide'
 
 // Components
-import AutocompleteBlock from '../components/SearchSKU/AutocompleteBlock'
+import AutocompleteBlock from './SearchSKU/AutocompleteBlock'
 import EditableWishlistTitle from './WishlistName/WishlistName'
 import WishlistPrivacyOptions from './WishlistPrivacyOptions'
 import ModalCreateList from './ModalCreateList'
 import useCreateListAccount from '../hooks/useCreateListAccount'
-
 // Helpers & Utils
 import { extractProductData, deleteItemsWishlist, getEmailID } from './helpers'
 import useQueryWishlistById from '../hooks/actions/useQueryWishlistById'
@@ -18,14 +17,14 @@ import useDeleteWishlist from '../hooks/actions/useMutationDeleteWishlist'
 import useAddToCart from '../hooks/useAddToCart'
 import useBulkAction from '../hooks/useBulkAction'
 import { useUserEmail } from '../hooks/useUserEmail'
-import { jsonSchema } from '../utils/jsonSchema'
+import { JsonSchema } from '../utils/jsonSchema'
 import useStoreGlobal from '../globalStore/globalStore'
 // Table config
 import {
   handleNextClick,
   handlePrevClick,
   handleSubmitDataTable,
-  selectorObject,
+  SelectorObject,
   handleFiltersChange,
 } from './helpers/tableConfig'
 import {
@@ -34,7 +33,6 @@ import {
   handleInputSearchSubmit,
 } from './helpers/tableSearch'
 import { initialJsonState } from '../utils/tableRowsSchema'
-
 // Styles
 import styles from '../styles.css'
 
@@ -44,19 +42,24 @@ function Wishlist({ wishlists, fetchData }) {
   const { showToast } = useContext(ToastContext)
   const [filterState, setfilterState] = useState({})
 
-  const handleSelectWishlist = (id) => {
-    setSelectedWishlist(id)
-  }
+  const handleSelectWishlist = useCallback(
+    (id) => {
+      setSelectedWishlist(id)
+    },
+    [setSelectedWishlist]
+  )
+
   const [allProducts, setAllProducts] = useState(
     wishlists.length > 0 ? extractProductData(wishlists[0]) : []
   )
+
   const [displayedProducts, setDisplayedProducts] = useState(
     wishlists.length > 0 ? extractProductData(wishlists[0]) : []
   )
 
-  const [isLoadingSKU, setIsLoadingSKU] = useState(false)
+  const [, setIsLoadingSKU] = useState(false)
   const [searchValue, setSearchValue] = useState('')
-  const [isUpdatingQty, setIsUpdatingQty] = useState(false)
+  // const [isUpdatingQty, setIsUpdatingQty] = useState(false)
   const [updatedSelectedRows, setUpdatedSelectedRows] = useState([])
   const [wishlist, setWishlist] = useState([])
   const [initialState, setInitialState] = useState(initialJsonState)
@@ -128,14 +131,14 @@ function Wishlist({ wishlists, fetchData }) {
     updateWishlist
   )
 
-  const tableSchema = jsonSchema(
+  const tableSchema = JsonSchema({
     addProductsToCart,
     deleteItemsWishlist,
     selectedWishlist,
     wishlist,
     wishlists,
-    updateWishlist
-  )
+    updateWishlist,
+  })
 
   const {
     fieldValidationTable,
@@ -160,10 +163,8 @@ function Wishlist({ wishlists, fetchData }) {
           targetElement.classList.remove('pa7')
           targetElement.style.setProperty('padding-left', '0rem', 'important')
         }
-      } else {
-        if (targetElement) {
-          targetElement.classList.add('pa7')
-        }
+      } else if (targetElement) {
+        targetElement.classList.add('pa7')
       }
     }
 
@@ -177,6 +178,7 @@ function Wishlist({ wishlists, fetchData }) {
 
   useEffect(() => {
     const button = document.querySelector('#toggleFieldsBtn > button')
+
     button.style.minHeight = '28.10px'
     button.style.minWidth = 'min-content'
 
@@ -192,28 +194,39 @@ function Wishlist({ wishlists, fetchData }) {
     if (!button) return
 
     const svgContainer = button.querySelector('.vtex-button__label')
-    if (svgContainer) {
-      const svg = svgContainer.querySelector('svg')
-      if (svg) {
-        svg.style.display = 'none'
-      }
 
-      let editViewText = svgContainer.querySelector('.edit-view-text')
-      if (!editViewText) {
-        editViewText = document.createElement('span')
-        editViewText.classList.add('edit-view-text')
-        editViewText.textContent = 'Edit View'
-
-        if (window.innerWidth <= 768) {
-          button.style.minHeight = '28.09px !important'
-          editViewText.textContent = 'Edit'
-          editViewText.style.cssText += 'font-weight: 500; font-size: 13px'
-          editViewText.style.cssText += 'top: initial'
-        }
-
-        svgContainer.appendChild(editViewText)
-      }
+    if (!svgContainer) {
+      return
     }
+
+    // if (svgContainer) {
+    const svg = svgContainer.querySelector('svg')
+
+    if (svg) {
+      svg.style.display = 'none'
+    }
+
+    let editViewText = svgContainer.querySelector('.edit-view-text')
+
+    if (editViewText) {
+      return
+    }
+
+    // if (!editViewText) {
+    editViewText = document.createElement('span')
+    editViewText.classList.add('edit-view-text')
+    editViewText.textContent = 'Edit View'
+
+    if (window.innerWidth <= 768) {
+      button.style.minHeight = '28.09px !important'
+      editViewText.textContent = 'Edit'
+      editViewText.style.cssText += 'font-weight: 500; font-size: 13px'
+      editViewText.style.cssText += 'top: initial'
+    }
+
+    svgContainer.appendChild(editViewText)
+    // }
+    // }
   }, [])
 
   useEffect(() => {
@@ -228,6 +241,7 @@ function Wishlist({ wishlists, fetchData }) {
     const handleButtonClick = () => {
       setTimeout(() => {
         const elementToStyle = document.querySelector('#toggleFieldsBtn > div')
+
         if (elementToStyle) {
           if (window.innerWidth <= 1046) {
             elementToStyle.style.setProperty('position', 'fixed', 'important')
@@ -254,6 +268,7 @@ function Wishlist({ wishlists, fetchData }) {
   useEffect(() => {
     setSelectedWishlist(selectedWishlist)
     handleSelectWishlist(selectedWishlist)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedWishlist])
 
   // Logic to get paginated data
@@ -262,20 +277,30 @@ function Wishlist({ wishlists, fetchData }) {
     const endIndex = startIndex + itemsPerPage
     const data = displayedProducts || []
     const slicedData = data.slice(startIndex, endIndex)
+
     setPaginatedData(slicedData)
   }, [currentPage, itemsPerPage, displayedProducts])
 
   // Logic to update the total number of items
   useEffect(() => {
     const data = displayedProducts || []
+
     setTotalItems(data.length)
   }, [displayedProducts])
 
   // Handlers to change page and rows per page
   const handleRowsChange = (e, value) => {
-    setItemsPerPage(parseInt(value))
+    setItemsPerPage(parseInt(value, 10))
     setCurrentPage(1) // Return to the first page when the number of rows per page changes
   }
+
+  const bulkActionsrowsSelected = (qty) => (
+    <React.Fragment>Selected rows: {qty}</React.Fragment>
+  )
+
+  const bulkActionsAllRowsSelected = (qty) => (
+    <React.Fragment>All rows selected {qty}</React.Fragment>
+  )
 
   return (
     <>
@@ -332,11 +357,12 @@ function Wishlist({ wishlists, fetchData }) {
               </button>
               {isModalAccountTable && (
                 <ModalCreateList
-                  buttonCloseModal={buttonCloseModalTable}
+                  handleButtonCloseModal={buttonCloseModalTable}
+                  // handleButtonCloseModal={closeModalCreateList}
                   handleNameList={handleNameListTable}
                   fieldValidation={fieldValidationTable}
                   handleSubmitData={(event) =>
-                    handleSubmitDataTable(
+                    handleSubmitDataTable({
                       event,
                       createWishlist,
                       userEmail,
@@ -344,8 +370,7 @@ function Wishlist({ wishlists, fetchData }) {
                       nameListAccountTable,
                       setNameListAccountTable,
                       setIsModalAccountTable,
-                      fetchData
-                    )
+                    })
                   }
                 />
               )}
@@ -369,27 +394,29 @@ function Wishlist({ wishlists, fetchData }) {
             componentOnly={false}
             onAddToWishlist={async (product) => {
               setIsLoadingSKU(true)
-              const { product: productData } = product?.data || {}
-              const item = productData?.items?.[0] || {}
+              const { product: productData } = product.data || {}
+              const item = productData.items[0] || {}
 
-              const unitMultiplierProperty = productData?.properties?.find(
+              const unitMultiplierProperty = productData.properties.find(
                 (prop) => prop.name === 'UnitMultiplier'
               )
+
               const unitMultiplierValue = unitMultiplierProperty
                 ? parseInt(unitMultiplierProperty.values[0], 10)
                 : 1
+
               const hasBundle = unitMultiplierValue > 1
 
               const newProduct = {
-                ID: Number(item?.itemId),
-                Image: item?.images?.[0]?.imageUrl,
-                unitValue: productData?.priceRange?.sellingPrice?.highPrice,
-                linkProduct: productData?.link,
-                nameProduct: productData?.productName,
+                ID: Number(item.itemId),
+                Image: item.images[0].imageUrl,
+                unitValue: productData.priceRange.sellingPrice.highPrice,
+                linkProduct: productData.link,
+                nameProduct: productData.productName,
                 quantityProduct: 1,
-                skuCodeReference: item?.referenceId?.[0]?.Value,
-                department: productData?.categoryTree?.[0]?.name,
-                bundle: hasBundle ? unitMultiplierValue : item?.unitMultiplier,
+                skuCodeReference: item.referenceId[0].Value,
+                department: productData.categoryTree[0].name,
+                bundle: hasBundle ? unitMultiplierValue : item.unitMultiplier,
               }
 
               if (newProduct.bundle > 1) {
@@ -399,8 +426,10 @@ function Wishlist({ wishlists, fetchData }) {
               try {
                 if (wishlist.products.some((p) => p.ID === newProduct.ID)) {
                   showToast('You have already added this product to the list')
+
                   return false
                 }
+
                 await updateWishlist({
                   variables: {
                     wishlist: {
@@ -410,6 +439,7 @@ function Wishlist({ wishlists, fetchData }) {
                   },
                 })
                 showToast('Successfully added to the Favourites List')
+
                 return true
               } catch (error) {
                 console.error('Error adding to the list:', error)
@@ -428,21 +458,21 @@ function Wishlist({ wishlists, fetchData }) {
                   label: 'Search This List',
                   value: searchValue,
                   onChange: (e) =>
-                    handleInputSearchChange(
+                    handleInputSearchChange({
                       e,
                       allProducts,
                       setSearchValue,
-                      setDisplayedProducts
-                    ),
+                      setDisplayedProducts,
+                    }),
                   onClear: () =>
                     handleInputSearchClear(setDisplayedProducts, allProducts),
                   onSubmit: (e) =>
-                    handleInputSearchSubmit(
+                    handleInputSearchSubmit({
                       e,
                       allProducts,
                       searchValue,
-                      setDisplayedProducts
-                    ),
+                      setDisplayedProducts,
+                    }),
                 },
                 fields: {
                   label: 'Toggle visible fields',
@@ -454,13 +484,9 @@ function Wishlist({ wishlists, fetchData }) {
                 selectedRows: updatedSelectedRows,
                 texts: {
                   secondaryActionsLabel: 'Actions',
-                  rowsSelected: (qty) => (
-                    <React.Fragment>Selected rows: {qty}</React.Fragment>
-                  ),
+                  rowsSelected: bulkActionsrowsSelected,
                   selectAll: 'Select all',
-                  allRowsSelected: (qty) => (
-                    <React.Fragment>All rows selected {qty}</React.Fragment>
-                  ),
+                  allRowsSelected: bulkActionsAllRowsSelected,
                 },
                 totalItems: '',
                 onChange: (params) => {
@@ -504,7 +530,6 @@ function Wishlist({ wishlists, fetchData }) {
                 alwaysVisibleFilters: ['department', 'name'],
                 statements: initialState.filterStatements,
                 onChangeStatements: (e) => {
-
                   handleFiltersChange(
                     initialState.filterStatements,
                     initialState,
@@ -522,61 +547,100 @@ function Wishlist({ wishlists, fetchData }) {
                 options: {
                   department: {
                     label: 'Department',
-                    renderFilterLabel: (st) => {
-                      if (!filterState.department || !filterState.department.object) {
+                    renderFilterLabel: () => {
+                      if (
+                        !filterState.department ||
+                        !filterState.department.object
+                      ) {
                         return 'All'
                       }
-                      const keys = filterState.department.object ? Object.keys(filterState.department.object) : {}
-                      const isAllTrue = !keys.some((key) => !filterState.department.object[key])
-                      const isAllFalse = !keys.some((key) => filterState.department.object[key])
-                      const trueKeys = keys.filter((key) => filterState.department.object[key])
+
+                      const keys = filterState.department.object
+                        ? Object.keys(filterState.department.object)
+                        : {}
+
+                      const isAllTrue = !keys.some(
+                        (key) => !filterState.department.object[key]
+                      )
+
+                      const isAllFalse = !keys.some(
+                        (key) => filterState.department.object[key]
+                      )
+
+                      const trueKeys = keys.filter(
+                        (key) => filterState.department.object[key]
+                      )
+
                       let trueKeysLabel = ''
+
                       trueKeys.forEach((key, index) => {
-                        trueKeysLabel += `${key}${index === trueKeys.length - 1 ? '' : ', '
-                          }`
+                        trueKeysLabel += `${key}${
+                          index === trueKeys.length - 1 ? '' : ', '
+                        }`
                       })
-                      return `${isAllTrue
-                        ? 'All'
-                        : isAllFalse
+
+                      return `${
+                        isAllTrue
+                          ? 'All'
+                          : isAllFalse
                           ? 'None'
                           : `${trueKeysLabel}`
-                        }`
+                      }`
                     },
                     verbs: [
                       {
                         label: 'Sort',
                         value: 'Sort',
-                        object: (e) => selectorObject(e, filterState?.department?.object),
+                        object: (e) =>
+                          SelectorObject(e, filterState.department.object),
                       },
                     ],
                   },
                   name: {
                     label: 'Description',
-                    renderFilterLabel: (st) => {
+                    renderFilterLabel: () => {
                       if (!filterState.name || !filterState.name.object) {
                         return 'All'
                       }
-                      const keys = filterState.name.object ? Object.keys(filterState.name.object) : {}
-                      const isAllTrue = !keys.some((key) => !filterState.name.object[key])
-                      const isAllFalse = !keys.some((key) => filterState.name.object[key])
-                      const trueKeys = keys.filter((key) => filterState.name.object[key])
+
+                      const keys = filterState.name.object
+                        ? Object.keys(filterState.name.object)
+                        : {}
+
+                      const isAllTrue = !keys.some(
+                        (key) => !filterState.name.object[key]
+                      )
+
+                      const isAllFalse = !keys.some(
+                        (key) => filterState.name.object[key]
+                      )
+
+                      const trueKeys = keys.filter(
+                        (key) => filterState.name.object[key]
+                      )
+
                       let trueKeysLabel = ''
+
                       trueKeys.forEach((key, index) => {
-                        trueKeysLabel += `${key}${index === trueKeys.length - 1 ? '' : ', '
-                          }`
+                        trueKeysLabel += `${key}${
+                          index === trueKeys.length - 1 ? '' : ', '
+                        }`
                       })
-                      return `${isAllTrue
-                        ? 'All'
-                        : isAllFalse
+
+                      return `${
+                        isAllTrue
+                          ? 'All'
+                          : isAllFalse
                           ? 'None'
                           : `${trueKeysLabel}`
-                        }`
+                      }`
                     },
                     verbs: [
                       {
                         label: 'Sort',
                         value: 'Sort',
-                        object: (e) => selectorObject(e, filterState?.name?.object),
+                        object: (e) =>
+                          SelectorObject(e, filterState.name.object),
                       },
                     ],
                   },

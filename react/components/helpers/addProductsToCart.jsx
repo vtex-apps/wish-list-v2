@@ -1,13 +1,14 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 import { useContext } from 'react'
 import { ToastContext } from 'vtex.styleguide'
 import { useOrderItems } from 'vtex.order-items/OrderItems'
+import { usePixel } from 'vtex.pixel-manager'
 
 import extractProductData from './extractProductData'
 
-const addProductsToCart = (props, wishlist) => {
+const AddProductsToCart = (props, wishlist) => {
   const { addItems } = useOrderItems()
   const { showToast } = useContext(ToastContext)
+  const { push } = usePixel()
 
   const dataExtract = extractProductData(wishlist)
   const infoP = dataExtract.find((item) => props.name === item.name)
@@ -23,7 +24,6 @@ const addProductsToCart = (props, wishlist) => {
 
   try {
     addItems(items).then(async () => {
-      // eslint-disable-next-line no-undef
       push({
         event: 'addToCart',
         id: 'addToCart',
@@ -35,4 +35,4 @@ const addProductsToCart = (props, wishlist) => {
   }
 }
 
-export default addProductsToCart
+export default AddProductsToCart

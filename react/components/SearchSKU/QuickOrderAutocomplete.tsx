@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { FunctionComponent } from 'react'
 import React, { useState, useRef } from 'react'
 import { AutocompleteInput } from 'vtex.styleguide'
@@ -108,25 +107,27 @@ const QuickOrderAutocomplete: FunctionComponent<
     }
   }
 
+  const renderOptionRender = (props: any) => <CustomOption {...props} />
+
   const options = {
     onSelect: (...args: any) => {
       onSelect(args)
     },
     loading,
-      value: !term.length
+    value: !term.length
       ? []
       : optionsResult
-        .filter((item: any) => {
-          return !!item.items[0].images[0].imageUrl
-        })
-        .map((item: any) => {
-          return {
-            value: item.items[0].itemId,
-            label: item.items[0].name,
-            slug: item.linkText,
-            thumb: getImageSrc(item.items[0].images[0].imageUrl),
-          }
-        }),
+          .filter((item: any) => {
+            return !!item.items[0].images[0].imageUrl
+          })
+          .map((item: any) => {
+            return {
+              value: item.items[0].itemId,
+              label: item.items[0].name,
+              slug: item.linkText,
+              thumb: getImageSrc(item.items[0].images[0].imageUrl),
+            }
+          }),
     lastSearched: {
       value: lastSearched,
       label: 'Last searched products',
@@ -134,8 +135,8 @@ const QuickOrderAutocomplete: FunctionComponent<
         option && setLastSearched([...new Set([...lastSearched, option])]),
     },
     // --- This is what makes the custom option work!
-    // eslint-disable-next-line react/display-name
-    renderOption: (props: any) => <CustomOption {...props} />,
+
+    renderOption: renderOptionRender,
   }
 
   const input = {

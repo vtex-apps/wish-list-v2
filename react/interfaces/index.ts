@@ -2,29 +2,29 @@ export interface SelectWishList {
   isShowForm: boolean
   setIsShowForm: any
   nameListWishlist: any
-  handleChange: any
+  handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void
   isButton: boolean
   setIsButton?: any
   isMessage: boolean
   isShowForm2: boolean
-  addList: any
+  handleAddList: () => void
   listTypeWishlist?: any
   emailInfo?: any
-  sendData1: any
-  sendData2: any
+  handleSendData1: (e: React.FormEvent) => void
+  handleSendData2: (e: React.FormEvent) => void
   showFormClick?: boolean
   clickCreate: boolean
-  closeModal?: any
-  createLengthZero: any
+  handleCloseModal?: () => void
+  handleCreateLengthZero: () => void
   selectRef: any
-  captureValue: any
+  handleCaptureValue: (e: React.ChangeEvent<HTMLSelectElement>) => void
   selectSize: number
-  handleSelectFocus: any
-  handleSelectBlur: any
-  addToList: any
+  handleSelectFocus: () => void
+  handleSelectBlur: () => void
+  handleAddToList: () => void
   closeSlect: boolean
   errorName: string
-  errorSelect: string,
+  errorSelect: string
   isLoading: boolean
 }
 

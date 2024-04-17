@@ -23,7 +23,7 @@ const ModalCreateList = (props) => {
         <div className={`${handles.containerButtonCloseBox}`}>
           <button
             onClick={props.handleButtonCloseModal}
-            className={`${handles.containerButtonClose}`}
+            className={`${handles.buttonCloseModal}`}
           >
             X
           </button>

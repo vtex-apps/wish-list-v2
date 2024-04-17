@@ -68,7 +68,7 @@ const useSelectWishlist = () => {
     }
 
     const existingWishlist = listWishlist.find(
-      (typeWish: any) =>
+      (typeWish: { wishlistType: string; id: string }) =>
         typeWish.wishlistType === textSelect && typeWish.id === valueSelect
     )
 
@@ -90,7 +90,7 @@ const useSelectWishlist = () => {
 
     if (existingWishlist) {
       const productExists = existingWishlist.products.some(
-        (item: any) => item.ID === newProduct.ID
+        (item: { ID: string | number }) => item.ID === newProduct.ID
       )
 
       if (!productExists) {
@@ -122,7 +122,7 @@ const useSelectWishlist = () => {
 
   const addProductToFavouriteList = (selectedProduct, selectedWishList) => {
     const existingWishlist = listWishlist.find(
-      (typeWish: any) =>
+      (typeWish: { email: string; id: string | number }) =>
         typeWish.email === emailInfo && typeWish.id === selectedWishList
     )
 
@@ -130,7 +130,7 @@ const useSelectWishlist = () => {
       selectedProduct.quantityProduct *= selectedProduct.bundle
     if (existingWishlist) {
       const productExists = existingWishlist.products.some(
-        (item: any) => item.ID === selectedProduct.ID
+        (item: { ID: any }) => item.ID === selectedProduct.ID
       )
 
       if (!productExists) {

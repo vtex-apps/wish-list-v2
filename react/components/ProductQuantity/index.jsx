@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from 'react'
+import React, { useState, useEffect, useCallback, useRef } from 'react'
 import { NumericStepper } from 'vtex.styleguide'
 import debounce from 'lodash.debounce'
 
@@ -20,11 +20,11 @@ export const ProductStepper = ({
     wishlistRef.current = initialWishlist
   }, [initialWishlist])
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const debouncedUpdateProducts = useCallback(
-    debounce((wishlistId, productName, newQty) => {
-      // eslint-disable-next-line
-      const updatedProducts = wishlistRef?.current?.products?.map((product) =>
-        product?.nameProduct === productName
+    debounce((wishlistId, tempProductName, newQty) => {
+      const updatedProducts = wishlistRef.current.products.map((product) =>
+        product.nameProduct === tempProductName
           ? { ...product, quantityProduct: newQty }
           : product
       )
@@ -50,7 +50,7 @@ export const ProductStepper = ({
   }, [debouncedUpdateProducts])
 
   const modifyProductQTY = (newValue, eventType) => {
-    let finalValue = 0 + newValue
+    let finalValue = 0 + Number(newValue)
 
     if (bundle) {
       if (eventType === 'click') {
@@ -59,7 +59,7 @@ export const ProductStepper = ({
         } else if (finalValue < QTY) {
           finalValue = QTY - bundle
         } else {
-          finalValue = QTY + bundle
+          finalValue = Number(QTY) + Number(bundle)
         }
       }
 
@@ -67,7 +67,7 @@ export const ProductStepper = ({
         if (finalValue < bundle) {
           finalValue = bundle
         } else {
-          finalValue = finalValue - (finalValue % bundle)
+          finalValue -= finalValue % bundle
         }
       }
     }

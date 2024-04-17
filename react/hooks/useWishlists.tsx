@@ -8,7 +8,10 @@ const useWishList = () => {
   const { product, selectedQuantity, selectedItem } = useProduct()
 
   const emailInfo = orderForm?.clientProfileData?.email
-  const isLoggedIn = orderForm?.loggedIn || (orderForm?.userType === 'CALL_CENTER_OPERATOR' && emailInfo != null)
+  const isLoggedIn =
+    orderForm?.loggedIn ||
+    (orderForm?.userType === 'CALL_CENTER_OPERATOR' && emailInfo != null)
+
   const nameProduct = product?.productName
   const linkProduct = product?.link
   const idProduct = Number(selectedItem?.itemId)
@@ -17,7 +20,7 @@ const useWishList = () => {
   const price = Number(product?.priceRange?.sellingPrice?.highPrice)
   const skuCodeReference = product?.items[0]?.referenceId?.[0]?.Value
   const departmentArray = product?.categoryTree
-  const department = departmentArray && departmentArray[0]?.name
+  const department = departmentArray?.[0]?.name
 
   return {
     navigate,

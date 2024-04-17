@@ -11,8 +11,7 @@ export default function WishlistPrivacyOptions({
 
   const linkToCopy =
     typeof window !== 'undefined'
-      ? // eslint-disable-next-line no-undef
-        `${window.location.host}/wishlist-share?id=${
+      ? `${window.location.host}/wishlist-share?id=${
           selectedWishlist || wishlists[0].id
         }`
       : ''

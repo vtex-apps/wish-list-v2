@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect, useCallback, useRef } from 'react'
 import { NumericStepper } from 'vtex.styleguide'
 import debounce from 'lodash.debounce'
@@ -17,7 +18,6 @@ export const ProductStepper = ({
     qtyRef.current = QTY
   }, [QTY])
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   const debouncedUpdateProducts = useCallback(
     debounce((newQty) => {
       // Lógica para manejar la actualización de la cantidad de productos...

@@ -4,9 +4,7 @@
     "jsx": "react",
     "noEmitOnError": false,
     "noImplicitAny": false,
-    "lib": [
-      "dom"
-    ],
+    "lib": ["dom"],
     "module": "esnext",
     "moduleResolution": "node",
     "target": "es2017"
@@ -14,6 +12,11 @@
   "include": [
     "./typings/*.d.ts",
     "./**/*.tsx",
-    "./**/*.ts"
+    "./**/*.ts",
+    "components/Wishlist.jsx",
+    "components/helpers/addProductsToCart.jsx",
+    "components/ProductQuantity/index.jsx",
+    "components/helpers/extractProductData.js",
+    "hooks/useAddToCart.ts"
   ]
 }

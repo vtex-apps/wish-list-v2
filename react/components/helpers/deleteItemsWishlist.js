@@ -1,25 +1,28 @@
 import formatProductForWishlist from './formatProductForWishlist'
 import extractProductData from './extractProductData'
 
-const deleteItemsWishlist = async (
-  props,
+const deleteItemsWishlist = async ({
+  rowData,
   wishlist,
   selectedWishlist,
-  updateWishlist
-) => {
+  updateWishlist,
+}) => {
   const dataExtract = extractProductData(wishlist)
-  const productIndex = dataExtract?.find((item) => {
-    return props?.rowData?.name === item?.name
+
+  const productIndex = dataExtract.find((item) => {
+    return rowData.rowData.name === item.name
   })
-  let updatedList = dataExtract?.filter((item) => item?.id !== productIndex?.id)
+
+  let updatedList = dataExtract.filter((item) => item.id !== productIndex.id)
+
   updatedList = formatProductForWishlist(updatedList)
   await updateWishlist({
     variables: {
       wishlist: {
         id: selectedWishlist,
-        products: updatedList
-      }
-    }
+        products: updatedList,
+      },
+    },
   })
 }
 

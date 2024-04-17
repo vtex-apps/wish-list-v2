@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable react/prop-types */
 import type { FunctionComponent } from 'react'
 import React, { useState } from 'react'
 import type { WrappedComponentProps } from 'react-intl'
@@ -19,7 +17,11 @@ const AutocompleteBlock: FunctionComponent<any & WrappedComponentProps> = ({
   onAddToWishlist,
 }) => {
   const client = useApolloClient()
-  const [state, setState] = useState<any>({
+  const [state, setState] = useState<{
+    selectedItem: any
+    quantitySelected: number
+    unitMultiplier: number
+  }>({
     selectedItem: null,
     quantitySelected: 1,
     unitMultiplier: 1,
@@ -49,9 +51,11 @@ const AutocompleteBlock: FunctionComponent<any & WrappedComponentProps> = ({
         data.product.items.length === 1 ? data.product.items[0].itemId : null
 
       const seller = selectedSku
-        ? data.product.items[0].sellers.find((item: any) => {
-            return item.sellerDefault === true
-          }).sellerId
+        ? data.product.items[0].sellers.find(
+            (item: { sellerDefault: boolean }) => {
+              return item.sellerDefault === true
+            }
+          ).sellerId
         : null
 
       let multiplier = 1
@@ -76,10 +80,10 @@ const AutocompleteBlock: FunctionComponent<any & WrappedComponentProps> = ({
 
   const selectSku = (value: string) => {
     const seller = selectedItem.data.product.items
-      .find((item: any) => {
+      .find((item: { itemId: string }) => {
         return item.itemId === value
       })
-      .sellers.find((s: any) => {
+      .sellers.find((s: { sellerDefault: boolean }) => {
         return s.sellerDefault === true
       }).sellerId
 
@@ -90,7 +94,7 @@ const AutocompleteBlock: FunctionComponent<any & WrappedComponentProps> = ({
     }
 
     const matchedItem = selectedItem.data.product.items.find(
-      (item) => item.itemId === value
+      (item: { itemId: string }) => item.itemId === value
     )
 
     setState({
@@ -229,6 +233,7 @@ AutocompleteBlock.propTypes = {
   componentOnly: PropTypes.bool,
   text: PropTypes.string,
   description: PropTypes.string,
+  onAddToWishlist: PropTypes.func,
 }
 
 export default injectIntl(AutocompleteBlock)

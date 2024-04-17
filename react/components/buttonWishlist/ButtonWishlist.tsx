@@ -33,7 +33,7 @@ const ButtonWishlist = () => {
     clickCreate,
     setIsButton,
     errorName,
-    isLoading
+    isLoading,
   } = useGetWishlist()
 
   const { navigate, isLoggedIn, emailInfo } = useWishList()
@@ -105,20 +105,20 @@ const ButtonWishlist = () => {
                   handleChange={handleChange}
                   isShowForm2={isShowForm2}
                   emailInfo={emailInfo}
-                  addList={addList}
-                  sendData1={sendData1}
-                  sendData2={sendData2}
+                  handleAddList={addList}
+                  handleSendData1={sendData1}
+                  handleSendData2={sendData2}
                   clickCreate={clickCreate}
-                  closeModal={() => setIsShowSelect(false)}
+                  handleCloseModal={() => setIsShowSelect(false)}
                   setIsButton={setIsButton}
-                  createLengthZero={createLengthZero}
+                  handleCreateLengthZero={createLengthZero}
                   selectRef={selectRef}
                   selectSize={selectSize}
-                  captureValue={captureValue}
+                  handleCaptureValue={captureValue}
                   handleSelectFocus={handleSelectFocus}
                   handleSelectBlur={handleSelectBlur}
                   errorSelect={errorSelect}
-                  addToList={addToList}
+                  handleAddToList={addToList}
                   closeSlect={closeSelect}
                   errorName={errorName}
                   isLoading={isLoading}

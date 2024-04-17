@@ -1,11 +1,11 @@
 import axios from 'axios'
 
-const createWishlist = async (
+const createWishlist = async ({
   emailInfo,
   nameListWishlist,
   getList,
-  products = []
-) => {
+  products = [],
+}) => {
   const urlCreate =
     '/api/dataentities/whitebird_my_wishlists_wishlist/documents?_schema=0.0.2-mywishlists'
 

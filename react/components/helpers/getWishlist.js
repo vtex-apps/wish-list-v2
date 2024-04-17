@@ -1,12 +1,13 @@
 import axios from 'axios'
+
 import extractProductData from './extractProductData'
 
-const getWishlist = async (
+const getWishlist = async ({
   setWishlist,
   setAllProducts,
   setDisplayedProducts,
-  selectedWishlist
-) => {
+  selectedWishlist,
+}) => {
   const getWishlistURL = `/api/dataentities/whitebird_my_wishlists_wishlist/documents/${selectedWishlist}?_fields=id,email,wishlistType,products&_schema=0.0.2-mywishlists`
 
   try {
@@ -16,9 +17,9 @@ const getWishlist = async (
       },
     })
 
-    setWishlist(response?.data)
-    const products = extractProductData({ products: response?.data?.products })
-    let sortedProducts = products.sort((a, b) =>
+    setWishlist(response.data)
+    const products = extractProductData({ products: response.data.products })
+    const sortedProducts = products.sort((a, b) =>
       a.department.localeCompare(b.department)
     )
 
