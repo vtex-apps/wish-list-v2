@@ -38,6 +38,7 @@ input ProductsInput {
   skuCodeReference: String
   department: String
   bundle: Int
+  notes: String
 }
 
 type Products {
@@ -50,6 +51,7 @@ type Products {
   skuCodeReference: String
   department: String
   bundle: Int
+  notes: String
 }
 
 type DocumentCreatedResponse {

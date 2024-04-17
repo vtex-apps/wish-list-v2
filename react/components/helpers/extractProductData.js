@@ -12,6 +12,7 @@ const extractProductData = ({ products }) => {
         unitValue: item.unitValue,
         totalValue: item.unitValue * item.quantityProduct,
         linkProduct: item.linkProduct,
+        notes: item.notes,
       }
 
       if (item.bundle) {

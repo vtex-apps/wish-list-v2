@@ -1,0 +1,24 @@
+.addNotesIcons {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.notesSubmitButton {
+  font-size: 1rem;
+  line-height: 1.25rem;
+  margin: 0;
+  overflow: visible;
+  text-transform: capitalize;
+  border-radius: 50px;
+  border-color: transparent;
+  font-weight: 700;
+  cursor: pointer;
+  color: #FFFFFF;
+  background-color: #002266;
+  width: auto;
+  height: auto;
+  padding: 10px;
+}

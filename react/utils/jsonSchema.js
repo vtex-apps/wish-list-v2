@@ -3,6 +3,7 @@ import { handleQuantityChange } from '../components/helpers/index'
 import { IconDelete } from 'vtex.styleguide'
 import { useRuntime } from 'vtex.render-runtime'
 import ProductPrice from '../components/ProductPrice'
+import Notes from '../components/Notes'
 
 import styles from '../styles.css'
 
@@ -123,6 +124,16 @@ export const jsonSchema = (
 
           return (
             <ProductPrice skuId={rowData?.skuId} skuReference={rowData?.skuReferenceCode} productQuantity={rowData?.qty} currency={currency} />
+          )
+        },
+      },      
+      notes: {
+        title: 'Notes',
+        width: 110,
+        cellRenderer: ({ rowData }) => {
+
+          return (
+            <Notes wishlist={selectedWishlist !== null ? wishlist : wishlists[0]} updateWishlist={updateWishlist} skuReference={rowData?.skuReferenceCode} currentNotes={rowData?.notes} />
           )
         },
       },
