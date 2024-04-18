@@ -31,6 +31,8 @@ export const createWishlist = async (
 
     return newWishlist
   } catch (error) {
+    console.error('error:', error)
+
     return error
   }
 }

@@ -1,11 +1,13 @@
-const useBundleMinQuantity = (productContextValue): number | undefined => {
+const useBundleMinQuantity = (productContextValue: {
+  properties: any[]
+}): number => {
   const productBundleMinQty = productContextValue?.properties.find(
-    (property) => property.name === 'UnitMultiplier'
+    (property: { name: string }) => property.name === 'UnitMultiplier'
   )?.values[0]
 
   const productBundleMinQtyNumber = productBundleMinQty
     ? Number(productBundleMinQty)
-    : undefined
+    : 1
 
   return productBundleMinQtyNumber
 }

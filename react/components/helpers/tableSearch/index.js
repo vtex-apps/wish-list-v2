@@ -1,15 +1,3 @@
-import deleteWishlist from '../deleteWishlist'
-
-export const handleDeleteWishlist = ({
-  wishlistId,
-  wishlist,
-  fetchData,
-  setIsDeleting,
-}) => {
-  if (wishlist === null) return
-  deleteWishlist(wishlistId, fetchData, setIsDeleting)
-}
-
 export const handleInputSearchChange = ({
   e,
   allProducts,

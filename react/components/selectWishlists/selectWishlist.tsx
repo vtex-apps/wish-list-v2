@@ -55,15 +55,17 @@ const SelectWishlist = (props: SelectWishList) => {
                     <option value="" disabled selected>
                       Select List
                     </option>
-                    {props.listTypeWishlist?.map((newDates: any) => (
-                      <option
-                        value={newDates.id}
-                        key={newDates.id}
-                        id={newDates.id}
-                      >
-                        {newDates.wishlistType}
-                      </option>
-                    ))}
+                    {props.listTypeWishlist?.map(
+                      (newDates: { id: string; wishlistType: string }) => (
+                        <option
+                          value={newDates.id}
+                          key={newDates.id}
+                          id={newDates.id}
+                        >
+                          {newDates.wishlistType}
+                        </option>
+                      )
+                    )}
                   </select>
 
                   {props.isLoading ? (

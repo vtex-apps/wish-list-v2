@@ -199,7 +199,6 @@ function Wishlist({ wishlists, fetchData }) {
       return
     }
 
-    // if (svgContainer) {
     const svg = svgContainer.querySelector('svg')
 
     if (svg) {
@@ -212,7 +211,6 @@ function Wishlist({ wishlists, fetchData }) {
       return
     }
 
-    // if (!editViewText) {
     editViewText = document.createElement('span')
     editViewText.classList.add('edit-view-text')
     editViewText.textContent = 'Edit View'
@@ -225,8 +223,6 @@ function Wishlist({ wishlists, fetchData }) {
     }
 
     svgContainer.appendChild(editViewText)
-    // }
-    // }
   }, [])
 
   useEffect(() => {
@@ -358,7 +354,6 @@ function Wishlist({ wishlists, fetchData }) {
               {isModalAccountTable && (
                 <ModalCreateList
                   handleButtonCloseModal={buttonCloseModalTable}
-                  // handleButtonCloseModal={closeModalCreateList}
                   handleNameList={handleNameListTable}
                   fieldValidation={fieldValidationTable}
                   handleSubmitData={(event) =>
@@ -382,7 +377,9 @@ function Wishlist({ wishlists, fetchData }) {
               />
               <button
                 className={styles.wishlistDeleteWishList}
-                onClick={() => deleteWishlist()}
+                onClick={() => {
+                  deleteWishlist()
+                }}
               >
                 Delete Selected List
               </button>

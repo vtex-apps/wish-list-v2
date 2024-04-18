@@ -22,17 +22,17 @@ const AddProductsToCart = (props, wishlist) => {
     },
   ]
 
-  try {
-    addItems(items).then(async () => {
+  addItems(items)
+    .then(async () => {
       push({
         event: 'addToCart',
         id: 'addToCart',
       })
       showToast('Item added to the cart')
     })
-  } catch (error) {
-    console.error(error)
-  }
+    .catch((error) => {
+      console.error(error)
+    })
 }
 
 export default AddProductsToCart

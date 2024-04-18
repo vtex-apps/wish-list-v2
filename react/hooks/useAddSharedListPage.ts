@@ -3,10 +3,10 @@ import { useOrderForm } from 'vtex.order-manager/OrderForm'
 import { useRuntime } from 'vtex.render-runtime'
 
 import useCreateListAccount from './useCreateListAccount'
-import { getWishlists } from '../components/helpers'
 import { useUserEmail } from './useUserEmail'
 import useStoreGlobal from '../globalStore/globalStore'
 import useMutationCreateWishlist from './actions/useMutationCreateWishlist'
+import useQueryWishlists from './actions/useQueryWishlists'
 
 interface UseAddSharedListPageProps {
   queryId: string
@@ -42,6 +42,7 @@ export default function useAddSharedListPage({
   const { updatedProducts } = useStoreGlobal.getState()
 
   const { createWishlist } = useMutationCreateWishlist(() => {})
+  const { data: wishlistsByEmail, refetch } = useQueryWishlists()
 
   // CREATE WISH LIST
   const {
@@ -59,7 +60,8 @@ export default function useAddSharedListPage({
   const userEmail = useUserEmail()
   const fetchData = async () => {
     setIsLoading(true)
-    const data = await getWishlists(userEmail)
+    refetch()
+    const data = wishlistsByEmail
 
     setWishlists(data || [])
     setIsLoading(false)

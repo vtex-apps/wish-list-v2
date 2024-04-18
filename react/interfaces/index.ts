@@ -1,10 +1,10 @@
 export interface SelectWishList {
   isShowForm: boolean
-  setIsShowForm: any
-  nameListWishlist: any
+  setIsShowForm: React.Dispatch<React.SetStateAction<boolean>>
+  nameListWishlist: string
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void
   isButton: boolean
-  setIsButton?: any
+  setIsButton?: React.Dispatch<React.SetStateAction<boolean>>
   isMessage: boolean
   isShowForm2: boolean
   handleAddList: () => void

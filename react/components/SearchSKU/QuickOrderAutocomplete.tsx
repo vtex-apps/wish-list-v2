@@ -16,6 +16,10 @@ const getImageSrc = (img: string) => {
   return img.replace(ids, `${ids}-50-50`)
 }
 
+interface Item {
+  items: any
+}
+
 const CustomOption = (props: any) => {
   const { roundedBottom, searchTerm, value, selected, onClick } = props
   const [highlightOption, setHighlightOption] = useState(false)
@@ -82,7 +86,7 @@ interface QuickOrderAutocompleteInt {
 }
 const QuickOrderAutocomplete: FunctionComponent<
   WrappedComponentProps & QuickOrderAutocompleteInt
-> = ({ onSelect }: any) => {
+> = ({ onSelect }: { onSelect: (...args: any) => void }) => {
   const client = useApolloClient()
   const [optionsResult, setOptions] = useState([])
   const [term, setTerm] = useState('')
@@ -90,7 +94,7 @@ const QuickOrderAutocomplete: FunctionComponent<
   const [lastSearched, setLastSearched] = useState([])
   const timeoutRef: any = useRef(null)
 
-  const handleSearch = async ({ value }: any) => {
+  const handleSearch = async ({ value }: { value: string }) => {
     if (value.length > 1) {
       const { data } = await client.query({
         query: autocomplete,
@@ -117,7 +121,7 @@ const QuickOrderAutocomplete: FunctionComponent<
     value: !term.length
       ? []
       : optionsResult
-          .filter((item: any) => {
+          .filter((item: Item) => {
             return !!item.items[0].images[0].imageUrl
           })
           .map((item: any) => {
@@ -140,7 +144,7 @@ const QuickOrderAutocomplete: FunctionComponent<
   }
 
   const input = {
-    onChange: (nterm: any) => {
+    onChange: (nterm: string) => {
       if (nterm) {
         setLoading(true)
         if (timeoutRef.current) {

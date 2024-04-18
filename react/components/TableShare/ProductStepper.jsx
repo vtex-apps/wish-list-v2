@@ -1,7 +1,5 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect, useCallback, useRef } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { NumericStepper } from 'vtex.styleguide'
-import debounce from 'lodash.debounce'
 
 export const ProductStepper = ({
   initialQty,
@@ -17,23 +15,6 @@ export const ProductStepper = ({
   useEffect(() => {
     qtyRef.current = QTY
   }, [QTY])
-
-  const debouncedUpdateProducts = useCallback(
-    debounce((newQty) => {
-      // Lógica para manejar la actualización de la cantidad de productos...
-      handleQuantityChange(productId, newQty)
-      // Asegúrate de que esta función actualice el estado global según sea necesario
-      handleQuantityChange(newQty)
-    }, 2000),
-    [productId, handleQuantityChange]
-  )
-
-  // Efectos y funciones relacionadas con el stepper...
-  useEffect(() => {
-    return () => {
-      debouncedUpdateProducts.cancel()
-    }
-  }, [debouncedUpdateProducts])
 
   useEffect(() => {
     setQTY(initialQty)
@@ -66,8 +47,9 @@ export const ProductStepper = ({
     }
 
     setQTY(finalValue)
-    debouncedUpdateProducts(finalValue)
-    // Asegúrate de que esta línea está llamando a handleQuantityChange
+    handleQuantityChange(productId, finalValue)
+    handleQuantityChange(finalValue)
+
     handleQuantityChange(productId, finalValue)
   }
 

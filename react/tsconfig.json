@@ -15,7 +15,7 @@
     "./**/*.ts",
     "components/Wishlist.jsx",
     "components/helpers/addProductsToCart.jsx",
-    "components/ProductQuantity/index.jsx",
+    "components/ProductQuantity/index.tsx",
     "components/helpers/extractProductData.js",
     "hooks/useAddToCart.ts"
   ]

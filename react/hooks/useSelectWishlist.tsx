@@ -30,7 +30,8 @@ const useSelectWishlist = () => {
   const selectRef = useRef<HTMLSelectElement | null>(null)
 
   const [closeSelect, setCloseSelect] = useState(true)
-  const [productBundle, setProductBundle] = useState<any>(null)
+  const [productBundle, setProductBundle] = useState<number>(1)
+
   const { product, selectedQuantity } = useProduct()
   const { showToast } = useContext<any>(ToastContext)
   const bundle = useBundleMinQuantity(product)
