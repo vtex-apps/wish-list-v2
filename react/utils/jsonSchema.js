@@ -133,7 +133,17 @@ export const jsonSchema = (
         cellRenderer: ({ rowData }) => {
 
           return (
-            <Notes wishlist={selectedWishlist !== null ? wishlist : wishlists[0]} updateWishlist={updateWishlist} skuReference={rowData?.skuReferenceCode} currentNotes={rowData?.notes} />
+            <Notes 
+              wishlist={selectedWishlist !== null ? wishlist : wishlists[0]} 
+              updateWishlist={updateWishlist} 
+              skuReference={rowData?.skuReferenceCode} 
+              currentNotes={rowData?.notes} 
+              productName={rowData?.name || ''}
+              productImage={rowData?.image || ''}
+              partNumber={rowData?.skuReferenceCode || ''}
+              price={rowData?.totalValue ? rowData?.totalValue : rowData?.unitValue }
+              currency={currency}
+            />
           )
         },
       },

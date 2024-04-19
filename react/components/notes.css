@@ -6,19 +6,147 @@
   cursor: pointer;
 }
 
+.notesButtonContainer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  padding-top: 1rem;
+}
+
+.notesSubmitButtonContainer {
+  
+}
+
 .notesSubmitButton {
   font-size: 1rem;
-  line-height: 1.25rem;
   margin: 0;
   overflow: visible;
   text-transform: capitalize;
   border-radius: 50px;
-  border-color: transparent;
+  border-color: #000000;
   font-weight: 700;
   cursor: pointer;
   color: #FFFFFF;
   background-color: #002266;
-  width: auto;
-  height: auto;
+  width: 80px;
+  height: 34px;
   padding: 10px;
+  font-weight: 400;
+  line-height: 19.36px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.notesCancelButton {
+  font-size: 1rem;
+  margin: 0;
+  overflow: visible;
+  text-transform: capitalize;
+  border-radius: 50px;
+  border-color: #000000;
+  font-weight: 700;
+  cursor: pointer;
+  color: #000000;
+  width: 80px;
+  height: 34px;
+  padding: 10px;
+  font-weight: 400;
+  line-height: 19.36px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.productSummary {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  padding-left: 2rem;
+  border-bottom: 1px solid #9C9C9C;
+}
+
+.productSummaryImageContainer {
+
+}
+
+.productSummaryImage {
+  object-fit: contain;
+}
+
+.productSummaryInfo {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.productSummaryInfoName {
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 24.2px;
+  text-align: left;
+  color: #7A8094;
+}
+
+.productSummaryInfoDetails {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+.productSummaryInfoDetailsPartNumber {
+  font-size: 17px;
+  font-weight: 400;
+  line-height: 20.57px;
+  text-align: left;
+  color: #7A8094;
+}
+
+.productSummaryInfoDetailsPrice {
+  font-size: 17px;
+  font-weight: 400;
+  line-height: 20.57px;
+  text-align: left;
+  color: #7A8094;
+}
+
+:global(.vtex-modal__modal)>div:first-child {
+  background: #002266;
+  border-radius: 5px 5px 0 0;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+:global(.vtex-modal__modal)>div:first-child>span {
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 29.05px;
+  text-align: center;
+  color: #ffffff
+}
+
+:global(.vtex-modal__close-icon) {
+  padding-top: unset;
+  padding-bottom: unset;
+  padding-left: unset;
+  padding-right: 1rem;
+  height: 100%;
+} 
+
+:global(.vtex-modal__close-icon) :global(.vtex__icon-close)  {
+  color: #ffffff
+}
+
+.noteSubTitle {
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 19.36px;
+  text-align: left;
+  color: #7A8094;
+  height: 50px;
 }
