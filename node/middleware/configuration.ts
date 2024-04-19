@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { Apps } from '@vtex/api'
 
 import { DATA_ENTITY_NAME, SCHEMA, SCHEMA_NAME } from '../utils/constant'

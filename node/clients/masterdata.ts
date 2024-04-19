@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import type { InstanceOptions, IOContext } from '@vtex/api'
 import { JanusClient } from '@vtex/api'
 
@@ -35,9 +34,6 @@ export default class MasterDataClient extends JanusClient {
     pagination?: { page: number; pageSize: number }
   ): Promise<Wishlist[]> {
     const { page, pageSize } = pagination ?? {}
-
-    console.log('field : ', field)
-    console.log('value : ', value)
 
     try {
       return await this.http.get(
