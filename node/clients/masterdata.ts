@@ -1,7 +1,8 @@
+/* eslint-disable no-console */
 import type { InstanceOptions, IOContext } from '@vtex/api'
 import { JanusClient } from '@vtex/api'
 
-import { DATA_ENTITY_NAME, FIELDS, SCHEMA } from '../utils/constant'
+import { DATA_ENTITY_NAME, FIELDS, SCHEMA_NAME } from '../utils/constant'
 import { Wishlist } from '../typings/wishlist'
 
 export default class MasterDataClient extends JanusClient {
@@ -21,7 +22,7 @@ export default class MasterDataClient extends JanusClient {
   public async getWishlist(id: string): Promise<Wishlist> {
     try {
       return await this.http.get(
-        `/api/dataentities/${DATA_ENTITY_NAME}/documents/${id}?_fields=${FIELDS}&_schema=${SCHEMA}`
+        `/api/dataentities/${DATA_ENTITY_NAME}/documents/${id}?_fields=${FIELDS}&_schema=${SCHEMA_NAME}`
       )
     } catch (error) {
       return error
@@ -35,9 +36,12 @@ export default class MasterDataClient extends JanusClient {
   ): Promise<Wishlist[]> {
     const { page, pageSize } = pagination ?? {}
 
+    console.log('field : ', field)
+    console.log('value : ', value)
+
     try {
       return await this.http.get(
-        `/api/dataentities/${DATA_ENTITY_NAME}/search?_where=${field}=${value}&_fields=${FIELDS}&_sort=createdIn&_schema=${SCHEMA}`,
+        `/api/dataentities/${DATA_ENTITY_NAME}/search?_where=${field}=${value}&_fields=${FIELDS}&_sort=createdIn&_schema=${SCHEMA_NAME}`,
         {
           headers: {
             'REST-Range': `resources=${page ?? 0}-${pageSize ?? 100}`,
@@ -52,7 +56,7 @@ export default class MasterDataClient extends JanusClient {
   public async createWishlist(payload: Wishlist) {
     try {
       return await this.http.post(
-        `/api/dataentities/${DATA_ENTITY_NAME}/documents?_schema=${SCHEMA}`,
+        `/api/dataentities/${DATA_ENTITY_NAME}/documents?_schema=${SCHEMA_NAME}`,
         payload
       )
     } catch (error) {
@@ -63,7 +67,7 @@ export default class MasterDataClient extends JanusClient {
   public async updateWishlist(id: string, payload: Wishlist) {
     try {
       return await this.http.patch(
-        `/api/dataentities/${DATA_ENTITY_NAME}/documents/${id}?_schema=${SCHEMA}`,
+        `/api/dataentities/${DATA_ENTITY_NAME}/documents/${id}?_schema=${SCHEMA_NAME}`,
         payload
       )
     } catch (error) {
@@ -74,7 +78,7 @@ export default class MasterDataClient extends JanusClient {
   public async deleteWishlist(id: string) {
     try {
       return await this.http.delete(
-        `/api/dataentities/${DATA_ENTITY_NAME}/documents/${id}?_schema=${SCHEMA}`
+        `/api/dataentities/${DATA_ENTITY_NAME}/documents/${id}?_schema=${SCHEMA_NAME}`
       )
     } catch (error) {
       return error

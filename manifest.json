@@ -53,6 +53,12 @@
       "name": "POWER_USER_DS"
     },
     {
+      "name": "vbase-read-write"
+    },
+    {
+      "name": "update-app-settings"
+    },
+    {
       "name": "outbound-access",
       "attrs": {
         "host": "api.vtex.com",
@@ -64,6 +70,13 @@
       "attrs": {
         "host": "portal.vtexcommercestable.com.br",
         "path": "/api/dataentities/*"
+      }
+    },
+    {
+      "name": "outbound-access",
+      "attrs": {
+        "host": "{{account}}.vtexcommercestable.com.br",
+        "path": "/dataentities/*"
       }
     }
   ],

@@ -12,7 +12,7 @@ declare module 'vtex.styleguide' {
   export const AutocompleteInput
   export const Tag
   export const IconClear
-
+  export const Table
   export const withToast
 
   interface InputProps {

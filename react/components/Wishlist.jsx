@@ -81,7 +81,7 @@ function Wishlist({ wishlists, fetchData }) {
 
   const { createWishlist } = useCreateWishlist(async (data) => {
     await fetchData()
-    if (data && data.createWishlist) {
+    if (data.createWishlist) {
       setSelectedWishlist(data.createWishlist.DocumentId)
     }
   })
@@ -190,8 +190,6 @@ function Wishlist({ wishlists, fetchData }) {
       button.style.backgroundColor = ''
       button.style.color = ''
     })
-
-    if (!button) return
 
     const svgContainer = button.querySelector('.vtex-button__label')
 
@@ -554,7 +552,7 @@ function Wishlist({ wishlists, fetchData }) {
 
                       const keys = filterState.department.object
                         ? Object.keys(filterState.department.object)
-                        : {}
+                        : []
 
                       const isAllTrue = !keys.some(
                         (key) => !filterState.department.object[key]
@@ -602,7 +600,7 @@ function Wishlist({ wishlists, fetchData }) {
 
                       const keys = filterState.name.object
                         ? Object.keys(filterState.name.object)
-                        : {}
+                        : []
 
                       const isAllTrue = !keys.some(
                         (key) => !filterState.name.object[key]

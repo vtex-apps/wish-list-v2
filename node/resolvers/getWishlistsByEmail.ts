@@ -1,4 +1,5 @@
 import { auth } from '../middleware/auth'
+import { configuration } from '../middleware/configuration'
 
 export const getWishlistsByEmail = async (
   _: unknown,
@@ -21,6 +22,7 @@ export const getWishlistsByEmail = async (
   }
 
   try {
+    await configuration(ctx)
     const { email } = await auth(ctx)
 
     const wishlists = await md.searchWistlist('email', email, pagination)

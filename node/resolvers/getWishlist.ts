@@ -1,6 +1,7 @@
 import { AuthenticationError } from '@vtex/api'
 
 import { auth } from '../middleware/auth'
+import { configuration } from '../middleware/configuration'
 
 export const getWishlist = async (
   _: unknown,
@@ -14,6 +15,8 @@ export const getWishlist = async (
   const { id } = args
 
   try {
+    await configuration(ctx)
+
     const { email } = await auth(ctx)
 
     const wishlist = await md.getWishlist(id)
