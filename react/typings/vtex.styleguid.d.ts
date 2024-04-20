@@ -14,6 +14,7 @@ declare module 'vtex.styleguide' {
   export const IconClear
   export const Table
   export const withToast
+  export const IconDelete
 
   interface InputProps {
     [key: string]

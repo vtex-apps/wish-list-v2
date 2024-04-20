@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useOrderForm } from 'vtex.order-manager/OrderForm'
 import { useRuntime } from 'vtex.render-runtime'
 
@@ -12,6 +12,18 @@ interface UseAddSharedListPageProps {
   queryId: string
   products: any
   updatedProducts: any
+}
+
+interface Product {
+  id: string
+  image: string
+  bundle: string
+  unitValue: string
+  linkProduct: string
+  name: string
+  qty: number
+  skuReferenceCode: string
+  department: string
 }
 
 export default function useAddSharedListPage({
@@ -87,7 +99,7 @@ export default function useAddSharedListPage({
     setIsListNameInputVisible((state) => !state)
   }
 
-  const createNewList = async (event) => {
+  const createNewList = async (event: React.FormEvent) => {
     event.preventDefault()
 
     if (nameListAccountTable.trim() === '') {
@@ -112,8 +124,8 @@ export default function useAddSharedListPage({
           listProducts.push(newProduct)
         })
       } else {
-        products.forEach((prod) => {
-          const newProduct: any = {
+        products.forEach((prod: Product) => {
+          const newProduct = {
             ID: prod.id,
             Image: prod.image,
             bundle: prod.bundle,

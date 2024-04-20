@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { useContext } from 'react'
 import { ToastContext } from 'vtex.styleguide'
 import { usePixel } from 'vtex.pixel-manager'
@@ -18,36 +19,57 @@ const useAddToCart = () => {
       (item: { name: string }) => item.name === props.name
     )
 
+    console.log('rowData : ', props)
+
     const quantityAlreadyAdd = findProductQuantity?.quantity
       ? findProductQuantity?.quantity
       : 0
 
-    const dataExtract = extractProductData(wishlist)
+    console.log('wishlist : ', wishlist)
+
+    const dataExtract = extractProductData({
+      items: wishlist?.products?.map((product) => {
+        console.log('product : ', product)
+
+        return {
+          ...product,
+          quantity: Number(product.quantityProduct),
+          name: product.nameProduct,
+        }
+      }),
+    })
+
+    console.log('dataExtract : ', dataExtract)
 
     const productInfo = dataExtract.find(
       (item: { name: string }) => props.name === item.name
     )
 
+    console.log('productInfo : ', productInfo)
+
     const items = [
       {
         id: productInfo.id,
         seller: 1,
-        quantity: Number(productInfo.qty) + Number(quantityAlreadyAdd),
+        quantity:
+          Number(productInfo.quantity) + Number(quantityAlreadyAdd ?? 0),
         name: productInfo.name,
       },
     ]
 
-    try {
-      addItems(items).then(async () => {
+    console.log('items : ', items)
+
+    addItems(items)
+      .then(async () => {
         push({
           event: 'addToCart',
           id: 'addToCart',
         })
         showToast('Item added to the cart')
       })
-    } catch (error) {
-      console.error(error)
-    }
+      .catch((error: any) => {
+        console.error(error)
+      })
   }
 
   return addProductsToCart

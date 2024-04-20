@@ -22,27 +22,13 @@ export const ProductStepper = ({
   }, [initialWishlist])
 
   const modifyProductQTY = (newValue: string, eventType: string) => {
-    let finalValue = 0 + Number(newValue)
+    const quantity = Number(newValue)
+    const roundedQuantity =
+      eventType === 'change'
+        ? Math.max(quantity - (quantity % bundle), bundle)
+        : Math.max(bundle, quantity)
 
-    if (bundle) {
-      if (eventType === 'click') {
-        if (finalValue < bundle) {
-          finalValue = bundle
-        } else if (finalValue < QTY) {
-          finalValue = QTY - bundle
-        } else {
-          finalValue = Number(QTY) + Number(bundle)
-        }
-      }
-
-      if (eventType === 'change') {
-        if (finalValue < bundle) {
-          finalValue = bundle
-        } else {
-          finalValue -= finalValue % bundle
-        }
-      }
-    }
+    const finalValue = roundedQuantity + (quantity - roundedQuantity)
 
     setQTY(finalValue)
 

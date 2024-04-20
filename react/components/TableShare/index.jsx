@@ -164,7 +164,7 @@ export default function TableWishList({ products, queryId }) {
     },
   }
 
-  const addProductsToCart = (props) => {
+  const addProductsToCart = async (props) => {
     // Lógica para añadir productos al carrito...
     const productInfo = localProducts.find((item) => props.name === item.name)
     const items = [
@@ -176,17 +176,17 @@ export default function TableWishList({ products, queryId }) {
       },
     ]
 
-    try {
-      addItems(items).then(async () => {
+    addItems(items)
+      .then(async () => {
         push({
           event: 'addToCart',
           id: 'addToCart',
         })
         showToast('Item added to the cart')
       })
-    } catch (error) {
-      console.error(error)
-    }
+      .catch((error) => {
+        console.error(error)
+      })
   }
 
   // ADD SHARED LIST PAGE

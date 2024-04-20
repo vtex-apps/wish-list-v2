@@ -38,11 +38,7 @@ const MyWishLists = () => {
   } = useCreateListAccount()
 
   useEffect(() => {
-    if (
-      data &&
-      data.getWishlistsByEmail &&
-      data.getWishlistsByEmail.length > 0
-    ) {
+    if (data?.getWishlistsByEmail?.length > 0) {
       setWishlists(data.getWishlistsByEmail)
 
       if (!selectedWishlist) {

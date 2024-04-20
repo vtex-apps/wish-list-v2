@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 // Hooks
 import React, { useEffect, useState, useContext, useCallback } from 'react'
 import { Table, Spinner, ToastContext } from 'vtex.styleguide'
@@ -16,7 +17,7 @@ import useUpdateWishlist from '../hooks/actions/useMutationUpdateWishlist'
 import useDeleteWishlist from '../hooks/actions/useMutationDeleteWishlist'
 import useAddToCart from '../hooks/useAddToCart'
 import useBulkAction from '../hooks/useBulkAction'
-import { useUserEmail } from '../hooks/useUserEmail'
+// import { useUserEmail } from '../hooks/useUserEmail'
 import { JsonSchema } from '../utils/jsonSchema'
 import useStoreGlobal from '../globalStore/globalStore'
 // Table config
@@ -39,8 +40,8 @@ import styles from '../styles.css'
 function Wishlist({ wishlists, fetchData }) {
   const emailIDInfo = getEmailID(wishlists)
   const { selectedWishlist, setSelectedWishlist } = useStoreGlobal()
-  const { showToast } = useContext(ToastContext)
-  const [filterState, setfilterState] = useState({})
+  const { showToast } = useContext<any>(ToastContext)
+  const [filterState, setfilterState] = useState<any>([])
 
   const handleSelectWishlist = useCallback(
     (id) => {
@@ -49,26 +50,32 @@ function Wishlist({ wishlists, fetchData }) {
     [setSelectedWishlist]
   )
 
+  console.log('wishlists[0]?.products : ', wishlists[0]?.products)
+
   const [allProducts, setAllProducts] = useState(
-    wishlists.length > 0 ? extractProductData(wishlists[0]) : []
+    wishlists.length > 0
+      ? extractProductData({ items: wishlists[0]?.products })
+      : []
   )
 
   const [displayedProducts, setDisplayedProducts] = useState(
-    wishlists.length > 0 ? extractProductData(wishlists[0]) : []
+    wishlists.length > 0
+      ? extractProductData({ items: wishlists[0]?.products })
+      : []
   )
 
   const [, setIsLoadingSKU] = useState(false)
   const [searchValue, setSearchValue] = useState('')
   // const [isUpdatingQty, setIsUpdatingQty] = useState(false)
   const [updatedSelectedRows, setUpdatedSelectedRows] = useState([])
-  const [wishlist, setWishlist] = useState([])
+  const [wishlist, setWishlist] = useState<any>([])
   const [initialState, setInitialState] = useState(initialJsonState)
   const { refetch } = useQueryWishlistById(selectedWishlist, (data) => {
     if (!data || !data.getWishlist) return
 
     setWishlist(data.getWishlist)
     const products = extractProductData({
-      products: data.getWishlist.products,
+      items: data.getWishlist.products,
     })
 
     const sortedProducts = products.sort((a, b) =>
@@ -91,11 +98,12 @@ function Wishlist({ wishlists, fetchData }) {
       if (!data || !data.getWishlist) return
 
       setWishlist(data.getWishlist)
+
       const products = extractProductData({
-        products: data.getWishlist.products,
+        items: data.getWishlist.products,
       })
 
-      const sortedProducts = products.sort((a, b) =>
+      const sortedProducts = (products || []).sort((a, b) =>
         a.department.localeCompare(b.department)
       )
 
@@ -118,7 +126,7 @@ function Wishlist({ wishlists, fetchData }) {
   const [totalItems, setTotalItems] = useState(0)
   const [paginatedData, setPaginatedData] = useState([])
   const addProductsToCart = useAddToCart()
-  const userEmail = useUserEmail()
+  // const userEmail = useUserEmail()
   const handleBulkAction = useBulkAction(
     wishlist,
     setWishlist,
@@ -156,7 +164,7 @@ function Wishlist({ wishlists, fetchData }) {
     const updateStylesForMobile = () => {
       const targetElement = document.querySelector(
         'body > div.render-container.render-route-store-account > div > div.vtex-store__template.bg-base > div > div:nth-child(3) > div > div > div > div > div > div:nth-child(7) > div > div:nth-child(3) > div.whitebird-my-wishlists-0-x-componentContainer.w-two-thirds-l.w-100-ns.fr-l > div > div'
-      )
+      ) as HTMLDivElement
 
       if (window.innerWidth <= 768) {
         if (targetElement) {
@@ -177,7 +185,9 @@ function Wishlist({ wishlists, fetchData }) {
   }, [])
 
   useEffect(() => {
-    const button = document.querySelector('#toggleFieldsBtn > button')
+    const button = document.querySelector(
+      '#toggleFieldsBtn > button'
+    ) as HTMLButtonElement
 
     button.style.minHeight = '28.10px'
     button.style.minWidth = 'min-content'
@@ -203,7 +213,9 @@ function Wishlist({ wishlists, fetchData }) {
       svg.style.display = 'none'
     }
 
-    let editViewText = svgContainer.querySelector('.edit-view-text')
+    let editViewText = svgContainer.querySelector(
+      '.edit-view-text'
+    ) as HTMLSpanElement
 
     if (editViewText) {
       return
@@ -224,7 +236,9 @@ function Wishlist({ wishlists, fetchData }) {
   }, [])
 
   useEffect(() => {
-    const button = document.querySelector('#toggleFieldsBtn')
+    const button = document.querySelector(
+      '#toggleFieldsBtn'
+    ) as HTMLButtonElement
 
     if (window.innerWidth <= 768) {
       button.style.minHeight = '28px !important'
@@ -234,7 +248,9 @@ function Wishlist({ wishlists, fetchData }) {
 
     const handleButtonClick = () => {
       setTimeout(() => {
-        const elementToStyle = document.querySelector('#toggleFieldsBtn > div')
+        const elementToStyle = document.querySelector(
+          '#toggleFieldsBtn > div'
+        ) as HTMLDivElement
 
         if (elementToStyle) {
           if (window.innerWidth <= 1046) {
@@ -272,6 +288,10 @@ function Wishlist({ wishlists, fetchData }) {
     const data = displayedProducts || []
     const slicedData = data.slice(startIndex, endIndex)
 
+    console.log('data : ', data)
+
+    console.log('slicedData : ', slicedData)
+
     setPaginatedData(slicedData)
   }, [currentPage, itemsPerPage, displayedProducts])
 
@@ -283,16 +303,16 @@ function Wishlist({ wishlists, fetchData }) {
   }, [displayedProducts])
 
   // Handlers to change page and rows per page
-  const handleRowsChange = (e, value) => {
+  const handleRowsChange = (value) => {
     setItemsPerPage(parseInt(value, 10))
     setCurrentPage(1) // Return to the first page when the number of rows per page changes
   }
 
-  const bulkActionsrowsSelected = (qty) => (
+  const bulkActionsrowsSelected = (qty: number) => (
     <React.Fragment>Selected rows: {qty}</React.Fragment>
   )
 
-  const bulkActionsAllRowsSelected = (qty) => (
+  const bulkActionsAllRowsSelected = (qty: number) => (
     <React.Fragment>All rows selected {qty}</React.Fragment>
   )
 
@@ -358,7 +378,6 @@ function Wishlist({ wishlists, fetchData }) {
                     handleSubmitDataTable({
                       event,
                       createWishlist,
-                      userEmail,
                       setFieldValidationTable,
                       nameListAccountTable,
                       setNameListAccountTable,
@@ -387,13 +406,13 @@ function Wishlist({ wishlists, fetchData }) {
             text="Add SKU"
             description="Search and add to your list"
             componentOnly={false}
-            onAddToWishlist={async (product) => {
+            onAddToWishlist={async (product: any) => {
               setIsLoadingSKU(true)
               const { product: productData } = product.data || {}
               const item = productData.items[0] || {}
 
               const unitMultiplierProperty = productData.properties.find(
-                (prop) => prop.name === 'UnitMultiplier'
+                (prop: { name: string }) => prop.name === 'UnitMultiplier'
               )
 
               const unitMultiplierValue = unitMultiplierProperty
@@ -419,7 +438,11 @@ function Wishlist({ wishlists, fetchData }) {
               }
 
               try {
-                if (wishlist.products.some((p) => p.ID === newProduct.ID)) {
+                if (
+                  wishlist.products.some(
+                    (p: { ID: number }) => p.ID === newProduct.ID
+                  )
+                ) {
                   showToast('You have already added this product to the list')
 
                   return false
@@ -438,6 +461,8 @@ function Wishlist({ wishlists, fetchData }) {
                 return true
               } catch (error) {
                 console.error('Error adding to the list:', error)
+
+                return false
               } finally {
                 setIsLoadingSKU(false)
               }
@@ -506,12 +531,12 @@ function Wishlist({ wishlists, fetchData }) {
               }}
               pagination={{
                 onNextClick: () =>
-                  handleNextClick(
+                  handleNextClick({
                     currentPage,
                     setCurrentPage,
                     totalItems,
-                    itemsPerPage
-                  ),
+                    itemsPerPage,
+                  }),
                 onPrevClick: () => handlePrevClick(currentPage, setCurrentPage),
                 currentItemFrom: (currentPage - 1) * itemsPerPage + 1,
                 currentItemTo: Math.min(currentPage * itemsPerPage, totalItems),
@@ -525,17 +550,18 @@ function Wishlist({ wishlists, fetchData }) {
                 alwaysVisibleFilters: ['department', 'name'],
                 statements: initialState.filterStatements,
                 onChangeStatements: (e) => {
-                  handleFiltersChange(
-                    initialState.filterStatements,
+                  console.log('onChangeStatements : ', e)
+                  handleFiltersChange({
+                    statements: initialState.filterStatements,
                     initialState,
                     setInitialState,
                     paginatedData,
                     setPaginatedData,
                     setDisplayedProducts,
-                    e[2],
+                    onChangeStatements: e[2],
                     setfilterState,
-                    filterState
-                  )
+                    filterState,
+                  })
                 },
                 clearAllFiltersButtonLabel: 'Clear Filters',
                 collapseLeft: true,
@@ -586,8 +612,12 @@ function Wishlist({ wishlists, fetchData }) {
                       {
                         label: 'Sort',
                         value: 'Sort',
-                        object: (e) =>
-                          SelectorObject(e, filterState.department.object),
+                        object: (e: React.ChangeEvent<HTMLSelectElement>) => {
+                          return SelectorObject(
+                            e,
+                            filterState?.department?.object
+                          )
+                        },
                       },
                     ],
                   },
@@ -634,7 +664,7 @@ function Wishlist({ wishlists, fetchData }) {
                       {
                         label: 'Sort',
                         value: 'Sort',
-                        object: (e) =>
+                        object: (e: React.ChangeEvent<HTMLSelectElement>) =>
                           SelectorObject(e, filterState.name.object),
                       },
                     ],

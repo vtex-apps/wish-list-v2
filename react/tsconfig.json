@@ -13,10 +13,10 @@
     "./typings/*.d.ts",
     "./**/*.tsx",
     "./**/*.ts",
-    "components/Wishlist.jsx",
-    "components/helpers/addProductsToCart.jsx",
+    "components/Wishlist.tsx",
+    "components/helpers/addProductsToCart.tsx",
     "components/ProductQuantity/index.tsx",
-    "components/helpers/extractProductData.js",
+    "components/helpers/extractProductData.ts",
     "hooks/useAddToCart.ts"
   ]
 }

@@ -21,7 +21,7 @@ export default function WishlistShare() {
 
       if (res.ok) {
         const data = await res.json()
-        const productsTemp = extractProductData(data)
+        const productsTemp = extractProductData({ items: data })
 
         setProducts(productsTemp)
         setNameWishList(data.wishlistType)

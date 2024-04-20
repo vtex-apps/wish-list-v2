@@ -26,24 +26,18 @@ export const ProductStepper = ({
 
     let finalValue = 0 + newValue
 
-    if (bundle) {
-      if (eventType === 'click') {
-        if (finalValue < bundle) {
-          finalValue = bundle
-        } else if (finalValue < QTY) {
-          finalValue = QTY - bundle
-        } else {
-          finalValue = QTY + bundle
-        }
-      }
+    const qty = finalValue
+    const minQty = bundle || 1
+    const maxQty = qtyRef.current
 
-      if (eventType === 'change') {
-        if (finalValue < bundle) {
-          finalValue = bundle
-        } else {
-          finalValue -= finalValue % bundle
-        }
-      }
+    if (eventType === 'click') {
+      finalValue =
+        qty < minQty ? minQty : qty === maxQty ? qty - minQty + 1 : qty + minQty
+    } else if (eventType === 'change') {
+      finalValue = Math.max(
+        minQty,
+        Math.min(Math.ceil(qty / minQty) * minQty, maxQty)
+      )
     }
 
     setQTY(finalValue)

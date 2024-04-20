@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React, { useState } from 'react'
 import { Checkbox } from 'vtex.styleguide'
 
@@ -8,11 +9,14 @@ export const handleNextClick = ({
   itemsPerPage,
 }) => {
   if (currentPage < Math.ceil(totalItems / itemsPerPage)) {
-    setCurrentPage(currentPage + 1)
+    setCurrentPage(Number(currentPage) + 1)
   }
 }
 
-export const handlePrevClick = (currentPage, setCurrentPage) => {
+export const handlePrevClick = (
+  currentPage: number,
+  setCurrentPage: React.Dispatch<React.SetStateAction<number>>
+) => {
   if (currentPage > 1) {
     setCurrentPage(currentPage - 1)
   }
@@ -22,7 +26,6 @@ export const handlePrevClick = (currentPage, setCurrentPage) => {
 export const handleSubmitDataTable = ({
   event,
   createWishlist,
-  _,
   setFieldValidationTable,
   nameListAccountTable,
   setNameListAccountTable,
@@ -50,8 +53,11 @@ export const handleSubmitDataTable = ({
 }
 
 // Filter Table
-export const SelectorObject = (props, filterState) => {
+export const SelectorObject = (props: any, filterState: any) => {
   const [, setNewValueObject] = useState({})
+
+  console.log('props : ', props)
+  console.log('filterState : ', filterState)
 
   const initialValue = {
     Ascending: false,
@@ -77,6 +83,8 @@ export const SelectorObject = (props, filterState) => {
   return (
     <div>
       {Object.keys(initialValue).map((opt, index) => {
+        console.log('opt : ', opt)
+
         return (
           <div className="mb3" key={`class-statement-object-${opt}-${index}`}>
             <Checkbox
@@ -114,7 +122,9 @@ export const handleFiltersChange = ({
 }) => {
   const newData = paginatedData ? [...paginatedData] : []
 
-  if (onChangeStatements && onChangeStatements.object) {
+  console.log('onChangeStatements : ', onChangeStatements)
+
+  if (onChangeStatements?.object) {
     const { subject, object } = onChangeStatements
 
     setfilterState({ ...filterState, [subject]: onChangeStatements })

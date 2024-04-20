@@ -26,7 +26,7 @@ const useBulkAction = (
 
   const handleBulkAction = async (selectedRows, actionId) => {
     if (actionId === 'addToCart') {
-      const dataExtract = extractProductData(wishlist)
+      const dataExtract = extractProductData({ items: wishlist.products })
       const itemsToAdd = selectedRows.map((row) => {
         const productDetails = dataExtract.find(
           (item) => row.name === item.name
@@ -41,17 +41,17 @@ const useBulkAction = (
       })
 
       if (itemsToAdd.length > 0) {
-        try {
-          addItems(itemsToAdd).then(() => {
+        addItems(itemsToAdd)
+          .then(() => {
             push({
               event: 'addToCart',
               id: 'addToCart',
             })
             showToast('Items added to the cart')
           })
-        } catch (error) {
-          console.error(error)
-        }
+          .catch((error) => {
+            console.error(error)
+          })
       }
     }
 
@@ -59,7 +59,7 @@ const useBulkAction = (
       return // Early return if action is not 'deleteRowsWishlist'
     }
 
-    const dataExtract = extractProductData(wishlist)
+    const dataExtract = extractProductData({ items: wishlist.products })
     const itemsToDelete = selectedRows.map((row) => {
       const selectedProduct = dataExtract.find((item) => {
         return row.name === item.name
