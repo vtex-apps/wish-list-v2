@@ -141,7 +141,7 @@ export default function TableWishList({ products, queryId }) {
         width: 250,
         cellRenderer: nameCellRenderer,
       },
-      qty: {
+      quantity: {
         title: 'Qty',
         width: 130,
         cellRenderer: qtyCellRenderer,

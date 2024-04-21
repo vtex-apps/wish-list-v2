@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 // Hooks
 import React, { useEffect, useState, useContext, useCallback } from 'react'
 import { Table, Spinner, ToastContext } from 'vtex.styleguide'
@@ -17,7 +16,6 @@ import useUpdateWishlist from '../hooks/actions/useMutationUpdateWishlist'
 import useDeleteWishlist from '../hooks/actions/useMutationDeleteWishlist'
 import useAddToCart from '../hooks/useAddToCart'
 import useBulkAction from '../hooks/useBulkAction'
-// import { useUserEmail } from '../hooks/useUserEmail'
 import { JsonSchema } from '../utils/jsonSchema'
 import useStoreGlobal from '../globalStore/globalStore'
 // Table config
@@ -50,8 +48,6 @@ function Wishlist({ wishlists, fetchData }) {
     [setSelectedWishlist]
   )
 
-  console.log('wishlists[0]?.products : ', wishlists[0]?.products)
-
   const [allProducts, setAllProducts] = useState(
     wishlists.length > 0
       ? extractProductData({ items: wishlists[0]?.products })
@@ -66,7 +62,6 @@ function Wishlist({ wishlists, fetchData }) {
 
   const [, setIsLoadingSKU] = useState(false)
   const [searchValue, setSearchValue] = useState('')
-  // const [isUpdatingQty, setIsUpdatingQty] = useState(false)
   const [updatedSelectedRows, setUpdatedSelectedRows] = useState([])
   const [wishlist, setWishlist] = useState<any>([])
   const [initialState, setInitialState] = useState(initialJsonState)
@@ -126,18 +121,12 @@ function Wishlist({ wishlists, fetchData }) {
   const [totalItems, setTotalItems] = useState(0)
   const [paginatedData, setPaginatedData] = useState([])
   const addProductsToCart = useAddToCart()
-  // const userEmail = useUserEmail()
-  const handleBulkAction = useBulkAction(
+  const handleBulkAction = useBulkAction({
     wishlist,
-    setWishlist,
-    setAllProducts,
-    setDisplayedProducts,
     selectedWishlist,
     setUpdatedSelectedRows,
-    fetchData,
-    setSelectedWishlist,
-    updateWishlist
-  )
+    updateWishlist,
+  })
 
   const tableSchema = JsonSchema({
     addProductsToCart,
@@ -288,10 +277,6 @@ function Wishlist({ wishlists, fetchData }) {
     const data = displayedProducts || []
     const slicedData = data.slice(startIndex, endIndex)
 
-    console.log('data : ', data)
-
-    console.log('slicedData : ', slicedData)
-
     setPaginatedData(slicedData)
   }, [currentPage, itemsPerPage, displayedProducts])
 
@@ -325,9 +310,6 @@ function Wishlist({ wishlists, fetchData }) {
           <EditableWishlistTitle
             initialTitle={
               selectedWishlist !== null ? wishlist.wishlistType : ''
-            }
-            wishlistId={
-              selectedWishlist !== null ? selectedWishlist : wishlists[0].id
             }
             wishlist={selectedWishlist !== null ? wishlist : wishlists[0]}
             fetchData={fetchData}
@@ -477,7 +459,7 @@ function Wishlist({ wishlists, fetchData }) {
                 inputSearch: {
                   label: 'Search This List',
                   value: searchValue,
-                  onChange: (e) =>
+                  onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
                     handleInputSearchChange({
                       e,
                       allProducts,
@@ -515,8 +497,9 @@ function Wishlist({ wishlists, fetchData }) {
                 others: [
                   {
                     label: 'Add to cart',
-                    handleCallback: (params) =>
-                      handleBulkAction(params.selectedRows, 'addToCart'),
+                    handleCallback: (params) => {
+                      handleBulkAction(params.selectedRows, 'addToCart')
+                    },
                   },
                   {
                     label: 'Remove item(s)',
@@ -549,8 +532,9 @@ function Wishlist({ wishlists, fetchData }) {
               filters={{
                 alwaysVisibleFilters: ['department', 'name'],
                 statements: initialState.filterStatements,
-                onChangeStatements: (e) => {
-                  console.log('onChangeStatements : ', e)
+                onChangeStatements: (
+                  e: React.ChangeEvent<HTMLInputElement>
+                ) => {
                   handleFiltersChange({
                     statements: initialState.filterStatements,
                     initialState,
@@ -665,7 +649,7 @@ function Wishlist({ wishlists, fetchData }) {
                         label: 'Sort',
                         value: 'Sort',
                         object: (e: React.ChangeEvent<HTMLSelectElement>) =>
-                          SelectorObject(e, filterState.name.object),
+                          SelectorObject(e, filterState?.name?.object),
                       },
                     ],
                   },

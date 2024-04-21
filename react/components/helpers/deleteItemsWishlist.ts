@@ -7,11 +7,15 @@ const deleteItemFromWishlist = async ({
   selectedWishlist,
   updateWishlist,
 }) => {
+  const selectedRow = row.rowData
+
   const wishlistProducts = extractProductData({ items: wishlist.products })
-  const wishlistItem = wishlistProducts.find((item) => item.name === row.name)
+  const wishlistItem = wishlistProducts.find(
+    (item: { name: string }) => item.name === selectedRow.name
+  )
 
   const updatedWishlistProducts = wishlistProducts.filter(
-    (item) => item.id !== wishlistItem.id
+    (item: { id: number }) => item.id !== wishlistItem.id
   )
 
   const formattedWishlistProducts = formatProductForWishlist(

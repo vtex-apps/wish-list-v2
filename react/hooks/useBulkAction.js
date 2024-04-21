@@ -8,21 +8,15 @@ import {
   formatProductForWishlist,
 } from '../components/helpers'
 
-const useBulkAction = (
+const useBulkAction = ({
   wishlist,
-  setWishlist,
-  setAllProducts,
-  setDisplayedProducts,
   selectedWishlist,
   setUpdatedSelectedRows,
-  fetchData,
-  setSelectedWishlist,
-  updateWishlist
-) => {
+  updateWishlist,
+}) => {
   const { push } = usePixel()
   const { addItems } = useOrderItems()
   const { showToast } = useContext(ToastContext)
-  // const { selectedWishlist: mirandoLaWishlistId } = useStoreGlobal()
 
   const handleBulkAction = async (selectedRows, actionId) => {
     if (actionId === 'addToCart') {
@@ -35,7 +29,7 @@ const useBulkAction = (
         return {
           id: Number(productDetails.id),
           seller: 1,
-          quantity: productDetails.qty,
+          quantity: productDetails.quantity,
           name: productDetails.name,
         }
       })
@@ -56,7 +50,7 @@ const useBulkAction = (
     }
 
     if (actionId !== 'deleteRowsWishlist') {
-      return // Early return if action is not 'deleteRowsWishlist'
+      return
     }
 
     const dataExtract = extractProductData({ items: wishlist.products })

@@ -120,7 +120,7 @@ export const JsonSchema = ({
         className={styles.wishlistDeleteItem}
         onClick={async () => {
           deleteItemsWishlist({
-            rowData,
+            row: rowData,
             wishlist,
             selectedWishlist,
             updateWishlist,

@@ -17,20 +17,20 @@ export default class RequestHub extends ExternalClient {
     return this.context.account
   }
 
-  public get(url: string, headers: any, data?: any) {
+  public get(url: string, headers: string | string[], data?: any) {
     return this.http.getRaw(url, {
       headers,
       data,
     })
   }
 
-  public post(url: string, data: any, headers?: any) {
+  public post(url: string, data: any, headers?: string | string[]) {
     return this.http.postRaw(url, data, {
       headers,
     })
   }
 
-  public put(url: string, data: any, headers?: any) {
+  public put(url: string, data: any, headers?: string | string[]) {
     return this.http.putRaw(url, data, {
       headers,
     })

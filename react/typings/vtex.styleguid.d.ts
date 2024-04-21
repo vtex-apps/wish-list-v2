@@ -17,6 +17,6 @@ declare module 'vtex.styleguide' {
   export const IconDelete
 
   interface InputProps {
-    [key: string]
+    [key: string]: any
   }
 }

@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import React, { useState } from 'react'
 import { Checkbox } from 'vtex.styleguide'
 
@@ -56,9 +55,6 @@ export const handleSubmitDataTable = ({
 export const SelectorObject = (props: any, filterState: any) => {
   const [, setNewValueObject] = useState({})
 
-  console.log('props : ', props)
-  console.log('filterState : ', filterState)
-
   const initialValue = {
     Ascending: false,
     Descending: false,
@@ -83,12 +79,10 @@ export const SelectorObject = (props: any, filterState: any) => {
   return (
     <div>
       {Object.keys(initialValue).map((opt, index) => {
-        console.log('opt : ', opt)
-
         return (
           <div className="mb3" key={`class-statement-object-${opt}-${index}`}>
             <Checkbox
-              checked={props.value ? props.value[opt] : filterState[opt]}
+              checked={props.value ? props?.value?.[opt] : filterState?.[opt]}
               label={opt}
               name="default-checkbox-group"
               onChange={() => {
@@ -121,8 +115,6 @@ export const handleFiltersChange = ({
   filterState,
 }) => {
   const newData = paginatedData ? [...paginatedData] : []
-
-  console.log('onChangeStatements : ', onChangeStatements)
 
   if (onChangeStatements?.object) {
     const { subject, object } = onChangeStatements

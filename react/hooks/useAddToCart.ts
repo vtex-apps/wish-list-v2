@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { useContext } from 'react'
 import { ToastContext } from 'vtex.styleguide'
 import { usePixel } from 'vtex.pixel-manager'
@@ -19,18 +18,12 @@ const useAddToCart = () => {
       (item: { name: string }) => item.name === props.name
     )
 
-    console.log('rowData : ', props)
-
     const quantityAlreadyAdd = findProductQuantity?.quantity
       ? findProductQuantity?.quantity
       : 0
 
-    console.log('wishlist : ', wishlist)
-
     const dataExtract = extractProductData({
       items: wishlist?.products?.map((product) => {
-        console.log('product : ', product)
-
         return {
           ...product,
           quantity: Number(product.quantityProduct),
@@ -39,13 +32,9 @@ const useAddToCart = () => {
       }),
     })
 
-    console.log('dataExtract : ', dataExtract)
-
     const productInfo = dataExtract.find(
       (item: { name: string }) => props.name === item.name
     )
-
-    console.log('productInfo : ', productInfo)
 
     const items = [
       {
@@ -56,8 +45,6 @@ const useAddToCart = () => {
         name: productInfo.name,
       },
     ]
-
-    console.log('items : ', items)
 
     addItems(items)
       .then(async () => {

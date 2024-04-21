@@ -4,6 +4,7 @@ declare module '*.css' {
   }
 
   const styles: Styles
+  const css: any
 
   export default styles
 }
