@@ -1,5 +1,13 @@
 import { ExternalClient, InstanceOptions, IOContext } from '@vtex/api'
 
+type Headers = {
+  [key: string]: string
+}
+
+type Data = {
+  [key: string]: any
+}
+
 export default class RequestHub extends ExternalClient {
   constructor(context: IOContext, options?: InstanceOptions) {
     super(
@@ -17,20 +25,20 @@ export default class RequestHub extends ExternalClient {
     return this.context.account
   }
 
-  public get(url: string, headers: string | string[], data?: any) {
+  public get(url: string, headers?: Headers, data?: Data) {
     return this.http.getRaw(url, {
       headers,
       data,
     })
   }
 
-  public post(url: string, data: any, headers?: string | string[]) {
+  public post(url: string, data: Data, headers?: Headers) {
     return this.http.postRaw(url, data, {
       headers,
     })
   }
 
-  public put(url: string, data: any, headers?: string | string[]) {
+  public put(url: string, data: Data, headers?: Headers) {
     return this.http.putRaw(url, data, {
       headers,
     })
