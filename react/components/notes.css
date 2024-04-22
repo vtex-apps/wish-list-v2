@@ -1,3 +1,11 @@
+.notesContainer {
+  width: 100%;
+  min-width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .addNotesIcons {
   display: flex;
   width: 100%;
@@ -14,11 +22,29 @@
   text-transform: capitalize;
   border-radius: 50px;
   border-color: transparent;
-  font-weight: 700;
+  font-weight: 600;
   cursor: pointer;
   color: #FFFFFF;
   background-color: #002266;
   width: auto;
   height: auto;
   padding: 10px;
+}
+
+.notesSubmitDisabledButton {
+  opacity: 0.5;
+}
+
+.notesModalContainer {
+  display: flex;
+  flex-direction: column;
+  row-gap: 1rem;
+}
+
+.notesModalTitle {
+  padding-top: 1rem;
+}
+
+.notesModalBottomRow {
+
 }

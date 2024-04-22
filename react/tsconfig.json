@@ -15,5 +15,5 @@
     "./typings/*.d.ts",
     "./**/*.tsx",
     "./**/*.ts"
-, "components/ProductPrice.jsx"  ]
+, "components/ProductPriceTotal.jsx"  ]
 }

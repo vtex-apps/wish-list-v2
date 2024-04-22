@@ -43,7 +43,7 @@
   display: flex;
 }
 
-:global(.ReactVirtualized__Grid__innerScrollContainer) > :global(div):nth-child(3) > :global(div) {
+/* :global(.ReactVirtualized__Grid__innerScrollContainer) > :global(div):nth-child(3) > :global(div) {
   width: auto;
 }
 
@@ -53,7 +53,7 @@
 
 :global(.ReactVirtualized__Grid__innerScrollContainer) > :global(div):nth-child(5) > :global(div) {
   width: auto;
-}
+} */
 
 :global(.ReactVirtualized__Grid__innerScrollContainer) :global(div>a>img) {
   width: 75% !important;
@@ -251,6 +251,10 @@
   margin-left    : 1.5rem;
   align-items : center;
   width       : 100%;
+}
+
+.wishlistCreationOptions button {
+  min-height: 2.5rem;
 }
 
 .wishlistCreateNew,

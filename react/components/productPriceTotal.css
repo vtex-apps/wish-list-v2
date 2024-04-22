@@ -1,0 +1,7 @@
+.productPriceContainer {
+    width: 100%;
+    min-width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}

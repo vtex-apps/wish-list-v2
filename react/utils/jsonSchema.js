@@ -2,7 +2,8 @@ import { ProductStepper } from '../components/ProductQuantity'
 import { handleQuantityChange } from '../components/helpers/index'
 import { IconDelete } from 'vtex.styleguide'
 import { useRuntime } from 'vtex.render-runtime'
-import ProductPrice from '../components/ProductPrice'
+import ProductPriceTotal from '../components/ProductPriceTotal'
+import UnitPrice from '../components/UnitPrice'
 import Notes from '../components/Notes'
 
 import styles from '../styles.css'
@@ -108,12 +109,10 @@ export const jsonSchema = (
       unitValue: {
         title: 'Unit Value',
         width: 110,
-        cellRenderer: ({ cellData }) => {
-          const formattedValue = `${currency} ${parseFloat(cellData).toFixed(2)}`
+        cellRenderer: ({ rowData }) => {
+          
           return (
-            <span className={styles.wishlistProductUnitValue}>
-              {formattedValue || null}
-            </span>
+            <UnitPrice skuReference={rowData?.skuReferenceCode} currency={currency} />
           )
         },
       },
@@ -123,7 +122,7 @@ export const jsonSchema = (
         cellRenderer: ({ rowData }) => {
 
           return (
-            <ProductPrice skuId={rowData?.skuId} skuReference={rowData?.skuReferenceCode} productQuantity={rowData?.qty} currency={currency} />
+            <ProductPriceTotal skuReference={rowData?.skuReferenceCode} productQuantity={rowData?.qty} currency={currency} />
           )
         },
       },      
