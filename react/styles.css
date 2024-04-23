@@ -55,6 +55,53 @@
   width: auto;
 } */
 
+.wishlistSearchContainer :global(.vtex-input-prefix__group) {
+  display: flex;
+  align-items: center;
+  border-radius: .3125rem;
+  border: .25rem solid #E3E4E6;
+  height: 2.375rem;
+}
+
+.wishlistSearchContainer :global(.vtex-styleguide-9-x-input) {
+  border-right: .125rem solid #e3e4e6;
+}
+
+.wishlistSearchContainer :global(.vtex-input-prefix__group) :global(.vtex-input__suffix) {
+  width: 1.375rem;
+  height: 1.375rem;
+  padding: 0 0.5rem;
+}
+
+.wishlistSearchContainer :global(.vtex-input-prefix__group) :global(.vtex-input__suffix) div div {
+  display: none;
+}
+
+.wishlistSearchContainer :global(.vtex-input-prefix__group) :global(.vtex-input__suffix) span {
+  padding: 0;
+}
+
+.wishlistSearchContainer :global(.vtex-input-prefix__group) :global(.vtex-input__suffix) svg {
+  width: .8125rem;
+  color: #002266;
+}
+
+.wishlistSearchContainer :global(.vtex-input-prefix__group) :global(.vtex__icon-clear) {
+  margin-left: .375rem;
+}
+
+.wishlistSearchContainer :global(.vtex-table__container)>div:nth-child(2) button {
+  color: #002266;
+}
+
+:global(#toggleFieldsBtn) :global(.vtex-button__label)>span {
+  color: #002266;
+}
+
+:global(#toggleFieldsBtn) :global(.vtex-button__label)>span:first-child {
+  display: none;
+}
+
 :global(.ReactVirtualized__Grid__innerScrollContainer) :global(div>a>img) {
   width: 75% !important;
   display: flex;
@@ -137,8 +184,6 @@
 
 .wishlistSearchContainer :global(.vtex-input-prefix__group) {
   width : 30%;
-  height: 30px;
-
 }
 
 .wishlistSelector :global(.vtex-dropdown__label),
@@ -151,7 +196,7 @@
     sans-serif,
     Inter !important;
   font-weight : 700 !important;
-  font-size   : 16px !important;
+  font-size   : 16px;
   line-height : 30.26px !important;
   color       : #7A8094 !important;
   width       : fit-content !important;
@@ -277,7 +322,7 @@
   background-color: red;
   cursor          : pointer;
   margin-left     : 1em;
-  height          : auto;
+  height          : 2.375rem;
   border-radius   : 50px;
   text-transform  : capitalize;
   border-radius   : 50px;
@@ -319,7 +364,7 @@
 }
 .wishlistCreateNew {
   width : auto;
-  height: auto !important;
+  height: 2.375rem;
 }
 
 .wishlistAddItem {
@@ -345,7 +390,7 @@
   width : 100%;
   height : 40px !important;
   padding      : 5px 10px;
-  border-width : 0.125rem;
+  border-width : .25rem;
   border-style : solid;
   border-color : #e3e4e6;
   box-sizing   : border-box;
@@ -365,9 +410,10 @@
 .wishlistSelectListOneText {
   font-family : Roboto, HelveticaNeue, "Helvetica Neue", sans-serif, Inter !important;
   font-weight : 700 !important;
-  font-size   : 18px !important;
+  font-size   : 18px;
   line-height : 30.26px !important;
   min-width   : 150px !important;
+  color: #7A8094;
 }
 
 .wishlistSelectListOneOption {
@@ -428,11 +474,11 @@
 .wishlistSearchContainer :global(.vtex-input-prefix__group) {
   width : 100%;
   margin-left: -2em;
-  height : 40px !important;
+  height: 2.375rem;  
 }
-.wishlistSearchContainer :global( .vtex-input__suffix) {
+/* .wishlistSearchContainer :global( .vtex-input__suffix) {
   display: none;
-}
+} */
 
 .wishlistSearchContainer :global(.w-40),
 #toolbar {
@@ -490,6 +536,24 @@
   position: relative;
   top: -1px;
   width: auto;
+}
+
+.createListandAndSelectFav {
+  display: flex;
+  width: 100%;
+  column-gap: 2rem;
+}
+
+.nameAndOptionsMobile {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.optionsMobile {
+  display: flex;
+  column-gap: 1rem;
+  align-items: center;
 }
 
 @media screen and(min-width: 1300px) {
@@ -555,8 +619,7 @@
 @media (max-width: 768px) {
 
   .wishlistDeleteWishList {
-    margin-left: 0.5em;
-    height     : auto !important;
+    margin-left: 0.5em;    
     padding    : 6px 5.3px 6px;
     font-size  : 12.5px;
   }
@@ -727,6 +790,22 @@
     transform: translateY(100%);
     z-index  : 9;
   }
+
+  .wishlistCreateNew,
+  .wishlistDeleteWishList {
+    height: 2rem;
+    width: 4.5rem;
+  }
+
+  .wishlistName {
+    margin-right: 0;
+  }
+
+  .wishlistSearchContainer :global(.vtex-input__label),
+  .textContainerTitle,
+  .wishlistSelectListOneText {
+  font-size   : 1.5625rem;
+}
 }
 
 @media (max-width: 380px) {

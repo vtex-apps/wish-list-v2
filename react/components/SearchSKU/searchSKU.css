@@ -1,0 +1,32 @@
+.autocompleteInputWrapper {
+  display: flex;
+  align-items: center;
+  border-radius: 5px;
+  border: 4px solid #E3E4E6;
+  height: 38px;
+}
+
+.autocompleteInputWrapper label div {
+  border-radius: 0 !important;
+  border-top: none;
+  border-bottom: none;
+  border-left: none;
+  height: auto;
+}
+
+.autocompleteInputWrapper label div:focus {
+  outline: none;
+}
+
+.autocompleteInputWrapper :global(.vtex-styleguide-9-x-noAppearance) {
+  border: none;
+  border-radius: 0;
+}
+
+.autocompleteInputWrapper :global(.vtex-styleguide-9-x-noAppearance):focus {
+  outline: none;
+}
+
+.autocompleteInputWrapper svg{
+  padding: 0 0.5rem;
+}
