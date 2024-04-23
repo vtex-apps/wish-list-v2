@@ -1,19 +1,19 @@
-import React from 'react'
-import { useCssHandles } from 'vtex.css-handles'
-import { ToastProvider, ToastConsumer, Button } from 'vtex.styleguide'
+import React from "react";
+import { useCssHandles } from "vtex.css-handles";
+import { ToastProvider, ToastConsumer, Button } from "vtex.styleguide";
 
-import SelectWishlist from '../selectWishlists/selectWishlist'
-import useWishList from '../../hooks/useWishlists'
-import ModalWishList from '../modal'
-import useSelectWishlist from '../../hooks/useSelectWishlist'
-import useGetWishlist from '../../hooks/useGetWishlists'
+import SelectWishlist from "../selectWishlists/selectWishlist";
+import useWishList from "../../hooks/useWishlists";
+import ModalWishList from "../modal";
+import useSelectWishlist from "../../hooks/useSelectWishlist";
+import useGetWishlist from "../../hooks/useGetWishlists";
 
-const CSS_HANDLES = ['container', 'containerLoggedIn'] as const
+const CSS_HANDLES = ["container", "containerLoggedIn"] as const;
 
 const ButtonWishlist = () => {
-  const { handles } = useCssHandles(CSS_HANDLES)
-  const pathname = encodeURIComponent(window.location.pathname)
-  const loginUrl = `/login?returnUrl=${pathname}`
+  const { handles } = useCssHandles(CSS_HANDLES);
+  const pathname = encodeURIComponent(window.location.pathname);
+  const loginUrl = `/login?returnUrl=${pathname}`;
 
   const {
     listWishlist,
@@ -33,10 +33,10 @@ const ButtonWishlist = () => {
     clickCreate,
     setIsButton,
     errorName,
-    isLoading
-  } = useGetWishlist()
+    isLoading,
+  } = useGetWishlist();
 
-  const { navigate, isLoggedIn, emailInfo } = useWishList()
+  const { navigate, isLoggedIn, emailInfo } = useWishList();
 
   const {
     addToList,
@@ -48,12 +48,12 @@ const ButtonWishlist = () => {
     handleSelectFocus,
     handleSelectBlur,
     errorSelect,
-  } = useSelectWishlist()
+  } = useSelectWishlist();
 
   const close = () => {
-    setIsShowSelect(true)
-    setCloseSelect(true)
-  }
+    setIsShowSelect(true);
+    setCloseSelect(true);
+  };
 
   return (
     <div className={`${handles.container}`}>
@@ -69,9 +69,9 @@ const ButtonWishlist = () => {
                     onClick={() =>
                       showToast({
                         message:
-                          'You need to log in before adding it to the list',
+                          "You need to log in before adding it to the list",
                         action: {
-                          label: 'LOG IN',
+                          label: "LOG IN",
                           onClick: () =>
                             navigate({
                               to: loginUrl,
@@ -129,7 +129,7 @@ const ButtonWishlist = () => {
         </div>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default ButtonWishlist
+export default ButtonWishlist;
