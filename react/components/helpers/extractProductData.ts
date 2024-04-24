@@ -1,4 +1,7 @@
+/* eslint-disable no-console */
 const extractProductData = ({ items }) => {
+  console.log('items : ', items)
+
   return items?.map(
     ({
       ID,
@@ -10,6 +13,7 @@ const extractProductData = ({ items }) => {
       unitValue,
       linkProduct,
       bundle,
+      notes,
     }) => {
       const pr = {
         id: ID,
@@ -22,6 +26,7 @@ const extractProductData = ({ items }) => {
         totalValue: unitValue * quantityProduct,
         linkProduct,
         bundle: bundle || null,
+        notes,
       }
 
       return pr

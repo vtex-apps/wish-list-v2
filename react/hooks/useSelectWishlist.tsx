@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { useState, useEffect, useRef, useContext } from 'react'
-import { useProduct } from 'vtex.product-context'
+import useProduct from 'vtex.product-context/useProduct'
 import { ToastContext } from 'vtex.styleguide'
 
 import useWishList from './useWishlists'

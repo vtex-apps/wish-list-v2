@@ -4,6 +4,9 @@ import { IconDelete } from 'vtex.styleguide'
 import { useRuntime } from 'vtex.render-runtime'
 
 import { ProductStepper } from '../components/ProductQuantity'
+import ProductPriceTotal from '../components/ProductPriceTotal'
+import Notes from '../components/Notes'
+import UnitPrice from '../components/UnitPrice'
 import styles from '../styles.css'
 
 export const JsonSchema = ({
@@ -64,9 +67,6 @@ export const JsonSchema = ({
     const parts = linkUrl.split('.br/')
     const productUrl = `${window.location.origin}/${parts[parts.length - 1]}`
 
-    console.log('cellData : ', cellData)
-    console.log('rowData : ', rowData)
-
     return (
       <a
         href={productUrl || ''}
@@ -80,8 +80,6 @@ export const JsonSchema = ({
   }
 
   const qtyCellRenderer = ({ rowData }) => {
-    console.log('rowData qty : ', rowData)
-
     return (
       <ProductStepper
         initialQty={rowData.quantity || null}
@@ -93,13 +91,9 @@ export const JsonSchema = ({
     )
   }
 
-  const unitValueCellRenderer = ({ cellData }) => {
-    const formattedValue = `${currency} ${parseFloat(cellData).toFixed(2)}`
-
+  const unitValueCellRenderer = ({ rowData }) => {
     return (
-      <span className={styles.wishlistProductUnitValue}>
-        {formattedValue || null}
-      </span>
+      <UnitPrice skuReference={rowData?.skuReferenceCode} currency={currency} />
     )
   }
 
@@ -129,6 +123,34 @@ export const JsonSchema = ({
       >
         <IconDelete />
       </button>
+    )
+  }
+
+  const priceCellRenderer = ({ rowData }) => {
+    console.log('rowData : ', rowData)
+
+    return (
+      <ProductPriceTotal
+        skuReference={rowData?.skuReferenceCode}
+        productQuantity={rowData?.quantity}
+        currency={currency}
+      />
+    )
+  }
+
+  const notesCellRenderer = ({ rowData }) => {
+    return (
+      <Notes
+        wishlist={selectedWishlist !== null ? wishlist : wishlists[0]}
+        updateWishlist={updateWishlist}
+        skuReference={rowData?.skuReferenceCode}
+        currentNotes={rowData?.notes}
+        productName={rowData?.name || ''}
+        productImage={rowData?.image || ''}
+        partNumber={rowData?.skuReferenceCode || ''}
+        price={rowData?.totalValue ? rowData?.totalValue : rowData?.unitValue}
+        currency={currency}
+      />
     )
   }
 
@@ -166,6 +188,16 @@ export const JsonSchema = ({
         title: 'Unit Value',
         width: 110,
         cellRenderer: unitValueCellRenderer,
+      },
+      totalValue: {
+        title: 'Price',
+        width: 110,
+        cellRenderer: priceCellRenderer,
+      },
+      notes: {
+        title: 'Notes',
+        width: 110,
+        cellRenderer: notesCellRenderer,
       },
       add: {
         title: 'Add',

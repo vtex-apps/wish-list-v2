@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 // Hooks
 import React, { useEffect, useState, useContext, useCallback } from 'react'
 import { Table, Spinner, ToastContext } from 'vtex.styleguide'
@@ -278,6 +279,9 @@ function Wishlist({ wishlists, fetchData }) {
     const endIndex = startIndex + itemsPerPage
     const data = displayedProducts || []
     const slicedData = data.slice(startIndex, endIndex)
+
+    console.log('displayedProducts : ', displayedProducts)
+    console.log('slicedData : ', slicedData)
 
     setPaginatedData(slicedData)
   }, [currentPage, itemsPerPage, displayedProducts])

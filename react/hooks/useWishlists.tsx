@@ -1,6 +1,6 @@
 import { useRuntime } from 'vtex.render-runtime'
 import { useOrderForm } from 'vtex.order-manager/OrderForm'
-import { useProduct } from 'vtex.product-context'
+import useProduct from 'vtex.product-context/useProduct'
 
 const useWishList = () => {
   const { navigate } = useRuntime()

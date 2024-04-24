@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React, { useState, useEffect, useRef, useContext } from 'react'
 import { Modal, ToastContext } from 'vtex.styleguide'
 
@@ -19,7 +20,7 @@ const Notes = ({
 
   const wishlistRef = useRef(initialWishlist)
 
-  const { showToast } = useContext(ToastContext)
+  const { showToast } = useContext<any>(ToastContext)
 
   useEffect(() => {
     if (currentNotes) {
@@ -32,8 +33,11 @@ const Notes = ({
   }, [initialWishlist])
 
   const handleNotesSubmit = async () => {
+    console.log('wishlistRef : ', wishlistRef.current.products)
+    console.log('notes : ', notes)
+    console.log('skuReference : ', skuReference)
     try {
-      const updatedProducts = wishlistRef.current.products.map((product) => {
+      const updatedProducts = wishlistRef.current.products?.map((product) => {
         if (product.skuCodeReference === skuReference) {
           product.notes = notes
 
