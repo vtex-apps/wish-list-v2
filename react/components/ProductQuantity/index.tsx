@@ -50,7 +50,7 @@ export const ProductStepper = ({
       .then(() => {
         showToast('Quantity updated')
       })
-      .catch((error: any) => {
+      .catch((error: unknown) => {
         console.error('Error updating products:', error)
       })
   }

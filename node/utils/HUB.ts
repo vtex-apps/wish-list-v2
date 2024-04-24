@@ -5,7 +5,7 @@ type Headers = {
 }
 
 type Data = {
-  [key: string]: any
+  [key: string]: unknown
 }
 
 export default class RequestHub extends ExternalClient {
