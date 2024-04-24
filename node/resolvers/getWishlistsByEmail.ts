@@ -21,14 +21,10 @@ export const getWishlistsByEmail = async (
     pageSize,
   }
 
-  try {
-    await configuration(ctx)
-    const { email } = await auth(ctx)
+  await configuration(ctx)
+  const { email } = await auth(ctx)
 
-    const wishlists = await md.searchWistlist('email', email, pagination)
+  const wishlists = await md.searchWistlist('email', email, pagination)
 
-    return wishlists || []
-  } catch (error) {
-    return error
-  }
+  return wishlists || []
 }

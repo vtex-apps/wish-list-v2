@@ -9,14 +9,5 @@
     "moduleResolution": "node",
     "target": "es2017"
   },
-  "include": [
-    "./typings/*.d.ts",
-    "./**/*.tsx",
-    "./**/*.ts",
-    "components/Wishlist.tsx",
-    "components/helpers/addProductsToCart.tsx",
-    "components/ProductQuantity/index.tsx",
-    "components/helpers/extractProductData.ts",
-    "hooks/useAddToCart.ts"
-  ]
+  "include": ["./typings/*.d.ts", "./**/*.tsx", "./**/*.ts"]
 }

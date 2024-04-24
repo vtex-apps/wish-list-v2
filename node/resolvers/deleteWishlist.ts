@@ -13,28 +13,24 @@ export const deleteWishlist = async (
 
   const { id } = args
 
-  try {
-    const { email } = await auth(ctx)
+  const { email } = await auth(ctx)
 
-    const getWishlist = await md.getWishlist(id)
+  const getWishlist = await md.getWishlist(id)
 
-    const existWishlist = getWishlist?.id
+  const existWishlist = getWishlist?.id
 
-    if (!existWishlist) {
-      throw new Error('An wishlist with this id does not exist')
-    }
+  if (!existWishlist) {
+    throw new Error('An wishlist with this id does not exist')
+  }
 
-    if (getWishlist?.email !== email) {
-      throw new AuthenticationError('Unauthorized access')
-    }
+  if (getWishlist?.email !== email) {
+    throw new AuthenticationError('Unauthorized access')
+  }
 
-    await md.deleteWishlist(id)
+  await md.deleteWishlist(id)
 
-    return {
-      id,
-      success: true,
-    }
-  } catch (error) {
-    return error
+  return {
+    id,
+    success: true,
   }
 }

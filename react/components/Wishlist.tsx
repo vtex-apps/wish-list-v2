@@ -1,6 +1,7 @@
 // Hooks
 import React, { useEffect, useState, useContext, useCallback } from 'react'
 import { Table, Spinner, ToastContext } from 'vtex.styleguide'
+import { useRuntime } from 'vtex.render-runtime'
 
 // Components
 import AutocompleteBlock from './SearchSKU/AutocompleteBlock'
@@ -36,6 +37,7 @@ import { initialJsonState } from '../utils/tableRowsSchema'
 import styles from '../styles.css'
 
 function Wishlist({ wishlists, fetchData }) {
+  const { deviceInfo } = useRuntime()
   const emailIDInfo = getEmailID(wishlists)
   const { selectedWishlist, setSelectedWishlist } = useStoreGlobal()
   const { showToast } = useContext<any>(ToastContext)
@@ -307,83 +309,185 @@ function Wishlist({ wishlists, fetchData }) {
         <Spinner />
       ) : (
         <>
-          <EditableWishlistTitle
-            initialTitle={
-              selectedWishlist !== null ? wishlist.wishlistType : ''
-            }
-            wishlist={selectedWishlist !== null ? wishlist : wishlists[0]}
-            fetchData={fetchData}
-          />
+          {deviceInfo.type === 'phone' ? (
+            <div id="wish-list-mobile">
+              {/* Mobile Design */}
 
-          <div className={styles.wishlistOptionsContainer}>
-            <div className={styles.wishlistSelector}>
-              <p className={styles.wishlistSelectListOneText}>
-                Favourites List
-              </p>
-              <select
-                className={styles.wishlistSelectListOne}
-                id="selectListTable"
-                onChange={(e) => {
-                  handleSelectWishlist(e.target.value)
-                }}
-                size={1}
-                value={selectedWishlist}
-              >
-                <option value="" disabled selected>
-                  Select an option
-                </option>
-                {emailIDInfo.map((newDates) => (
-                  <option
-                    className={styles.wishlistSelectListOneOption}
-                    value={newDates.value}
-                    key={newDates.value}
-                    id={newDates.value}
-                  >
-                    {newDates.label}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <section className={styles.wishlistCreationOptions}>
-              <button
-                className={`${styles.wishlistCreateNew} ${styles.wishlistCreateNewHelper}`}
-                onClick={buttonModalTable}
-              >
-                Create New List
-              </button>
-              {isModalAccountTable && (
-                <ModalCreateList
-                  handleButtonCloseModal={buttonCloseModalTable}
-                  handleNameList={handleNameListTable}
-                  fieldValidation={fieldValidationTable}
-                  handleSubmitData={(event) =>
-                    handleSubmitDataTable({
-                      event,
-                      createWishlist,
-                      setFieldValidationTable,
-                      nameListAccountTable,
-                      setNameListAccountTable,
-                      setIsModalAccountTable,
-                    })
+              <div className={styles.wishlistOptionsContainer}>
+                <div className={styles.wishlistSelector}>
+                  <p className={styles.wishlistSelectListOneText}>
+                    Favourites List
+                  </p>
+                  <div className={`${styles.createListandAndSelectFav}`}>
+                    <select
+                      className={styles.wishlistSelectListOne}
+                      id="selectListTable"
+                      onChange={(e) => {
+                        handleSelectWishlist(e.target.value)
+                      }}
+                      size={1}
+                      value={selectedWishlist}
+                    >
+                      <option value="" disabled selected>
+                        Select an option
+                      </option>
+                      {emailIDInfo.map((newDates) => (
+                        <option
+                          className={styles.wishlistSelectListOneOption}
+                          value={newDates.value}
+                          key={newDates.value}
+                          id={newDates.value}
+                        >
+                          {newDates.label}
+                        </option>
+                      ))}
+                    </select>
+                    <section>
+                      <button
+                        className={`${styles.wishlistCreateNew} ${styles.wishlistCreateNewHelper}`}
+                        onClick={buttonModalTable}
+                      >
+                        New
+                      </button>
+                      {isModalAccountTable && (
+                        <ModalCreateList
+                          buttonCloseModal={buttonCloseModalTable}
+                          handleNameList={handleNameListTable}
+                          fieldValidation={fieldValidationTable}
+                          handleSubmitData={(event: React.FormEvent) =>
+                            handleSubmitDataTable({
+                              event,
+                              createWishlist,
+                              setFieldValidationTable,
+                              nameListAccountTable,
+                              setNameListAccountTable,
+                              setIsModalAccountTable,
+                            })
+                          }
+                        />
+                      )}
+                    </section>
+                  </div>
+                </div>
+              </div>
+
+              <div className={`${styles.nameAndOptionsMobile}`}>
+                <EditableWishlistTitle
+                  initialTitle={
+                    selectedWishlist !== null ? wishlist.wishlistType : ''
                   }
+                  wishlistId={
+                    selectedWishlist !== null
+                      ? selectedWishlist
+                      : wishlists[0].id
+                  }
+                  wishlist={selectedWishlist !== null ? wishlist : wishlists[0]}
+                  fetchData={fetchData}
                 />
-              )}
-              <WishlistPrivacyOptions
-                selectedWishlist={
+                <div className={`${styles.optionsMobile}`}>
+                  <WishlistPrivacyOptions
+                    selectedWishlist={
+                      selectedWishlist !== null
+                        ? selectedWishlist
+                        : wishlists[0].id
+                    }
+                    wishlists={wishlists}
+                    buttonLabel="Share"
+                  />
+                  <button
+                    className={styles.wishlistDeleteWishList}
+                    onClick={() => deleteWishlist()}
+                  >
+                    Delete
+                  </button>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div id="wish-list-desktop">
+              <EditableWishlistTitle
+                initialTitle={
+                  selectedWishlist !== null ? wishlist.wishlistType : ''
+                }
+                wishlistId={
                   selectedWishlist !== null ? selectedWishlist : wishlists[0].id
                 }
-                wishlists={wishlists}
+                wishlist={selectedWishlist !== null ? wishlist : wishlists[0]}
+                fetchData={fetchData}
               />
-              <button
-                className={styles.wishlistDeleteWishList}
-                onClick={() => {
-                  deleteWishlist()
-                }}
-              >
-                Delete Selected List
-              </button>
-            </section>
-          </div>
+              <div className={styles.wishlistOptionsContainer}>
+                <div className={styles.wishlistSelector}>
+                  <p className={styles.wishlistSelectListOneText}>
+                    Favourites List
+                  </p>
+                  <select
+                    className={styles.wishlistSelectListOne}
+                    id="selectListTable"
+                    onChange={(e) => {
+                      handleSelectWishlist(e.target.value)
+                    }}
+                    size={1}
+                    value={selectedWishlist}
+                  >
+                    <option value="" disabled selected>
+                      Select an option
+                    </option>
+                    {emailIDInfo.map((newDates) => (
+                      <option
+                        className={styles.wishlistSelectListOneOption}
+                        value={newDates.value}
+                        key={newDates.value}
+                        id={newDates.value}
+                      >
+                        {newDates.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <section className={styles.wishlistCreationOptions}>
+                  <button
+                    className={`${styles.wishlistCreateNew} ${styles.wishlistCreateNewHelper}`}
+                    onClick={buttonModalTable}
+                  >
+                    Create New List
+                  </button>
+                  {isModalAccountTable && (
+                    <ModalCreateList
+                      buttonCloseModal={buttonCloseModalTable}
+                      handleNameList={handleNameListTable}
+                      fieldValidation={fieldValidationTable}
+                      handleSubmitData={(event) =>
+                        handleSubmitDataTable({
+                          event,
+                          createWishlist,
+                          setFieldValidationTable,
+                          nameListAccountTable,
+                          setNameListAccountTable,
+                          setIsModalAccountTable,
+                        })
+                      }
+                    />
+                  )}
+                  <WishlistPrivacyOptions
+                    selectedWishlist={
+                      selectedWishlist !== null
+                        ? selectedWishlist
+                        : wishlists[0].id
+                    }
+                    wishlists={wishlists}
+                    buttonLabel="Share This List"
+                  />
+                  <button
+                    className={styles.wishlistDeleteWishList}
+                    onClick={() => deleteWishlist()}
+                  >
+                    Delete Selected List
+                  </button>
+                </section>
+              </div>
+            </div>
+          )}
+
           <AutocompleteBlock
             text="Add SKU"
             description="Search and add to your list"

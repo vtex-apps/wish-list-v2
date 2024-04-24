@@ -12,27 +12,21 @@ export const createWishlist = async (
 
   const { wishlistType } = args?.wishlist || {}
 
-  try {
-    const { email } = await auth(ctx)
+  const { email } = await auth(ctx)
 
-    const foundWishlist = await md.searchWistlist('wishlistType', wishlistType)
-    const existWishlistName = foundWishlist?.length > 0
+  const foundWishlist = await md.searchWistlist('wishlistType', wishlistType)
+  const existWishlistName = foundWishlist?.length > 0
 
-    if (existWishlistName) {
-      throw new Error(`Already exist wishlist with name ${wishlistType}`)
-    }
-
-    const wishlist = {
-      ...args?.wishlist,
-      email,
-    }
-
-    const newWishlist = await md.createWishlist(wishlist)
-
-    return newWishlist
-  } catch (error) {
-    console.error('error:', error)
-
-    return error
+  if (existWishlistName) {
+    throw new Error(`Already exist wishlist with name ${wishlistType}`)
   }
+
+  const wishlist = {
+    ...args?.wishlist,
+    email,
+  }
+
+  const newWishlist = await md.createWishlist(wishlist)
+
+  return newWishlist
 }

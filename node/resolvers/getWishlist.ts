@@ -14,19 +14,15 @@ export const getWishlist = async (
 
   const { id } = args
 
-  try {
-    await configuration(ctx)
+  await configuration(ctx)
 
-    const { email } = await auth(ctx)
+  const { email } = await auth(ctx)
 
-    const wishlist = await md.getWishlist(id)
+  const wishlist = await md.getWishlist(id)
 
-    if (email !== wishlist.email) {
-      throw new AuthenticationError('Unauthorized access')
-    }
-
-    return wishlist
-  } catch (error) {
-    return error
+  if (email !== wishlist.email) {
+    throw new AuthenticationError('Unauthorized access')
   }
+
+  return wishlist
 }

@@ -6,6 +6,7 @@ import styles from '../../styles.css'
 export default function WishlistPrivacyOptions({
   selectedWishlist,
   wishlists,
+  buttonLabel,
 }) {
   const [textCopied, setTextCopied] = useState(false)
 
@@ -23,7 +24,7 @@ export default function WishlistPrivacyOptions({
         onClick={() => copyToClipboard(linkToCopy, setTextCopied)}
         id="link_wishlist"
       >
-        Share This List
+        {buttonLabel}
       </button>
       {textCopied && (
         <p className={styles.popupCopy}>Link copied to clipboard!</p>
