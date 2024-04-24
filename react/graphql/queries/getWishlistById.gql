@@ -18,6 +18,7 @@ query getWishlist($id: ID!) {
       skuCodeReference
       department
       bundle
+      notes
     }
   }
 }

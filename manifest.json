@@ -1,5 +1,5 @@
 {
-  "vendor": "whitebird",
+  "vendor": "alfonsob2b",
   "name": "my-wishlists",
   "version": "1.0.11",
   "title": "My Wish Lists",
@@ -66,6 +66,20 @@
       "attrs": {
         "host": "portal.vtexcommercestable.com.br",
         "path": "/api/dataentities/*"
+      }
+    },
+    {
+      "name": "outbound-access",
+      "attrs": {
+        "host": "{{account}}.vtexcommercestable.com.br",
+        "path": "/api/dataentities/*"
+      }
+    },
+    {
+      "name": "outbound-access",
+      "attrs": {
+        "host": "api.vtex.com",
+        "path": "/*"
       }
     }
   ],

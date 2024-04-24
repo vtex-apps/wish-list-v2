@@ -1,0 +1,11 @@
+query ProductPrice($identifier: ProductUniqueIdentifier) {
+  product(identifier: $identifier) @context(provider: "vtex.search-graphql") {
+    items {
+      sellers {
+        commertialOffer {
+          Price
+        }
+      }
+    }
+  }
+}

@@ -2,6 +2,9 @@ import { ProductStepper } from '../components/ProductQuantity'
 import { handleQuantityChange } from '../components/helpers/index'
 import { IconDelete } from 'vtex.styleguide'
 import { useRuntime } from 'vtex.render-runtime'
+import ProductPriceTotal from '../components/ProductPriceTotal'
+import UnitPrice from '../components/UnitPrice'
+import Notes from '../components/Notes'
 
 import styles from '../styles.css'
 
@@ -106,12 +109,40 @@ export const jsonSchema = (
       unitValue: {
         title: 'Unit Value',
         width: 110,
-        cellRenderer: ({ cellData }) => {
-          const formattedValue = `${currency} ${parseFloat(cellData).toFixed(2)}`
+        cellRenderer: ({ rowData }) => {
+          
           return (
-            <span className={styles.wishlistProductUnitValue}>
-              {formattedValue || null}
-            </span>
+            <UnitPrice skuReference={rowData?.skuReferenceCode} currency={currency} />
+          )
+        },
+      },
+      price: {
+        title: 'Price',
+        width: 110,
+        cellRenderer: ({ rowData }) => {
+
+          return (
+            <ProductPriceTotal skuReference={rowData?.skuReferenceCode} productQuantity={rowData?.qty} currency={currency} />
+          )
+        },
+      },      
+      notes: {
+        title: 'Notes',
+        width: 110,
+        cellRenderer: ({ rowData }) => {
+
+          return (
+            <Notes 
+              wishlist={selectedWishlist !== null ? wishlist : wishlists[0]} 
+              updateWishlist={updateWishlist} 
+              skuReference={rowData?.skuReferenceCode} 
+              currentNotes={rowData?.notes} 
+              productName={rowData?.name || ''}
+              productImage={rowData?.image || ''}
+              partNumber={rowData?.skuReferenceCode || ''}
+              price={rowData?.totalValue ? rowData?.totalValue : rowData?.unitValue }
+              currency={currency}
+            />
           )
         },
       },

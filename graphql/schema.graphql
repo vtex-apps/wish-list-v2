@@ -38,6 +38,7 @@ input ProductsInput {
   skuCodeReference: String
   department: String
   bundle: Int
+  notes: String
 }
 
 type Products {
@@ -50,6 +51,7 @@ type Products {
   skuCodeReference: String
   department: String
   bundle: Int
+  notes: String
 }
 
 type DocumentCreatedResponse {
@@ -68,6 +70,19 @@ type UpdateWishlistResponse {
   success: Boolean
 }
 
+type DateRange {
+  from: String
+  to: String
+}
+
+type FixedPrices {
+  tradePolicyId: String
+  value: Float
+  listPrice: Float
+  minQuantity: Int
+  dateRange: DateRange
+}
+
 type Query {
   """
   Return a wishlist
@@ -77,11 +92,7 @@ type Query {
   """
   Returns a list of wishlist by email user
   """
-  getWishlistsByEmail(
-    page: Int,
-    pageSize: Int
-  ): [Wishlist]
-
+  getWishlistsByEmail(page: Int, pageSize: Int): [Wishlist]
 }
 
 type Mutation {
