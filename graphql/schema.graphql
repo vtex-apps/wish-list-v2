@@ -83,15 +83,6 @@ type FixedPrices {
   dateRange: DateRange
 }
 
-type ProductPrice {
-  itemId: String
-  listPrice: Float
-  costPrice: Float
-  markup: Float
-  basePrice: Float
-  fixedPrices: FixedPrices
-}
-
 type Query {
   """
   Return a wishlist
@@ -101,20 +92,7 @@ type Query {
   """
   Returns a list of wishlist by email user
   """
-  getWishlistsByEmail(
-    page: Int,
-    pageSize: Int
-  ): [Wishlist]
-
-  """
-  Returns price data for given a SKU ID
-  """
-  getPriceBySkuId(
-    skuId: Int,
-    skuReference: String,
-    productQuantity: Int
-  ): [ProductPrice]
-
+  getWishlistsByEmail(page: Int, pageSize: Int): [Wishlist]
 }
 
 type Mutation {

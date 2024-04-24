@@ -50,19 +50,12 @@ const Notes = ({
             products: updatedProducts,
           },
         },
-      })
-        .then(() => {
-          showToast("Notes saved successfully!");
-        })
-        .catch((error) => {
-          showToast("Error saving notes!");
-          console.error("Error updating products: ", error);
-        });
+      });
 
-      setTimeout(function updateShow() {
-        setShow(false);
-      }, 3000);
+      showToast("Notes saved successfully!");
+      setShow(false);
     } catch (error) {
+      showToast("Error saving notes!");
       console.error("Notes submit error: ", error);
     }
   };

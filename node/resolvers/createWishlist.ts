@@ -1,5 +1,5 @@
-import type { WishlistInput } from '../typings/wishlist'
-import { auth } from '../middleware/auth'
+import type { WishlistInput } from "../typings/wishlist";
+import { auth } from "../middleware/auth";
 
 export const createWishlist = async (
   _: unknown,
@@ -8,29 +8,29 @@ export const createWishlist = async (
 ) => {
   const {
     clients: { md },
-  } = ctx
+  } = ctx;
 
-  const { wishlistType } = args?.wishlist || {}
+  const { wishlistType } = args?.wishlist || {};
 
   try {
-    const { email } = await auth(ctx)
+    const { email } = await auth(ctx);
 
-    const foundWishlist = await md.searchWistlist('wishlistType', wishlistType)
-    const existWishlistName = foundWishlist?.length > 0
+    const foundWishlist = await md.searchWistlist("wishlistType", wishlistType);
+    const existWishlistName = foundWishlist?.length > 0;
 
     if (existWishlistName) {
-      throw new Error(`Already exist wishlist with name ${wishlistType}`)
+      throw new Error(`Already exist wishlist with name ${wishlistType}`);
     }
 
     const wishlist = {
       ...args?.wishlist,
       email,
-    }
+    };
 
-    const newWishlist = await md.createWishlist(wishlist)
+    const newWishlist = await md.createWishlist(wishlist);
 
-    return newWishlist
+    return newWishlist;
   } catch (error) {
-    return error
+    return error;
   }
-}
+};

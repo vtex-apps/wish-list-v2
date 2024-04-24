@@ -1,6 +1,6 @@
-import { AuthenticationError } from '@vtex/api'
+import { AuthenticationError } from "@vtex/api";
 
-import { auth } from '../middleware/auth'
+import { auth } from "../middleware/auth";
 
 export const getWishlist = async (
   _: unknown,
@@ -9,22 +9,17 @@ export const getWishlist = async (
 ) => {
   const {
     clients: { md },
-  } = ctx
+  } = ctx;
 
-  const { id } = args
+  const { id } = args;
 
-  try {
-    const { email } = await auth(ctx)
+  const { email } = await auth(ctx);
 
-    const wishlist = await md.getWishlist(id)
+  const wishlist = await md.getWishlist(id);
 
-    if (email !== wishlist.email) {
-      throw new AuthenticationError('Unauthorized access')
-    }
-
-    return wishlist
-
-  } catch (error) {
-    return error
+  if (email !== wishlist.email) {
+    throw new AuthenticationError("Unauthorized access");
   }
-}
+
+  return wishlist;
+};
