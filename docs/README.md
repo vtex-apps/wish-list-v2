@@ -28,54 +28,40 @@ In your theme's `manifest.json`, add the Search Result app as a dependency:
 }
 ```
 
-Now, you can use all the blocks exported by the `search-result` app. Check out the full list below:
+Now, you can use all the blocks exported by the `my-wishlists` app.
 
-Next, add the **props table** containing your block's props.
+Add the `wishlist-button` to Product Details page. In the example below, the `wishlist-button` is added to the `flex-layout.row` block from the `store.product` template, which uses the product context:
 
-If the app exports more than one block, create several tables - one for each block. For example:
+```json
+  "store.product": {
+    "children": [
+      "flex-layout.row#wishlist-button-pdp",
+    ]
+  },
+  "flex-layout.row#wishlist-button-pdp": {
+    "children": [
+      "button-wishlist-pdp"
+    ]
+  }
+```
 
-### `button-wishlist-pdp` props
+Add the `wishlist-button` to Search page. In the example below, the `wishlist-button` is added to the `product-summary.shelf` block under the `gallery` in `store.search` template:
 
-| Prop name | Type | Description | Default value |
-| --------- | ---- | ----------- | ------------- |
-| `-`       | `-`  | -           | `-`           |
-
-### `my-account-link.my-wishlists-link` props
-
-| Prop name | Type     | Description | Default value |
-| --------- | -------- | ----------- | ------------- |
-| `XXXXX`   | `XXXXXX` | XXXXXXXX    | `XXXXXX`      |
-
-### `my-account-page.my-wishlists-page` props
-
-| Prop name | Type | Description | Default value |
-| --------- | ---- | ----------- | ------------- |
-| `-`       | `-`  | -           | `-`           |
-
-### `wishlist-share` props
-
-| Prop name | Type | Description | Default value |
-| --------- | ---- | ----------- | ------------- |
-| `-`       | `-`  | -           | `-`           |
-
-Prop types are:
-
-- `string`
-- `enum`
-- `number`
-- `boolean`
-- `object`
-- `array`
-
-When documenting a prop whose type is `object` or `array` another prop table will be needed. You can create it following the example below:
-
-- `propName` object:
-
-| Prop name | Type     | Description | Default value |
-| --------- | -------- | ----------- | ------------- |
-| `XXXXX`   | `XXXXXX` | XXXXXXXX    | `XXXXXX`      |
-
-Remember to also use this Configuration section to **showcase any necessary disclaimer** related to the app and its blocks, such as the different behavior it may display during its configuration.
+```json
+  "product-summary.shelf": {
+    "children": ["responsive-layout.desktop#productSummary"]
+  },
+  "responsive-layout.desktop#productSummary": {
+    "children": [
+      "flex-layout.row#wishlist-button-plp"
+    ]
+  },
+  "flex-layout.row#wishlist-button-plp": {
+    "children": [
+      "button-wishlist-pdp"
+    ]
+  }
+```
 
 ## Customization
 
