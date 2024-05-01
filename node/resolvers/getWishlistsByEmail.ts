@@ -20,9 +20,14 @@ export const getWishlistsByEmail = async (
     pageSize,
   };
 
-  const { email } = await auth(ctx);
+  try {
+    const { email } = await auth(ctx);
 
-  const wishlists = await md.searchWistlist("email", email, pagination);
+    const wishlists = await md.searchWistlist("email", email, pagination);
 
-  return wishlists || [];
+    return wishlists ?? [];
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
 };
