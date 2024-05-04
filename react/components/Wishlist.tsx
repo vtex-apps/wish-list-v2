@@ -51,17 +51,11 @@ function Wishlist({ wishlists, fetchData }) {
     [setSelectedWishlist]
   )
 
-  const [allProducts, setAllProducts] = useState(
-    wishlists.length > 0
-      ? extractProductData({ items: wishlists[0]?.products })
-      : []
-  )
-
-  const [displayedProducts, setDisplayedProducts] = useState(
-    wishlists.length > 0
-      ? extractProductData({ items: wishlists[0]?.products })
-      : []
-  )
+  const initialProducts = wishlists.length > 0
+    ? extractProductData({ items: wishlists[0]?.products })
+    : [];
+  const [allProducts, setAllProducts] = useState(initialProducts)
+  const [displayedProducts, setDisplayedProducts] = useState(initialProducts)
 
   const [, setIsLoadingSKU] = useState(false)
   const [searchValue, setSearchValue] = useState('')

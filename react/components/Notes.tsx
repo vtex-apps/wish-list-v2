@@ -29,13 +29,10 @@ const Notes = ({
 
   const handleNotesSubmit = async () => {
     try {
-      const updatedProducts = wishlistRef.current.products?.map((product) => {
-        if (product.skuCodeReference === skuReference) {
-          product.notes = notes;
-        }
-
-        return product
-      })
+      const updatedProducts = wishlistRef.current.products?.map(product => ({
+        ...product,
+        ...(product.skuCodeReference === skuReference ? { notes } : {})
+      }));
 
       await updateWishlist({
         variables: {

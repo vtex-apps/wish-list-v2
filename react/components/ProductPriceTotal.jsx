@@ -18,16 +18,23 @@ const ProductPriceTotal = ({
   const handlePrice = () =>
     price ? `${currency} ${parseFloat(price).toFixed(2)}` : null;
 
+  const Wrapper = ({ children }) => {
+    return (
+      <div className={`${styles.productPriceContainer}`}>
+        {children}
+      </div>
+    )
+  }
   return productError ? (
-    <div className={`${styles.productPriceContainer}`}>
+    <Wrapper>
       <span>Error</span>
-    </div>
+    </Wrapper>
   ) : loading ? (
-    <div className={`${styles.productPriceContainer}`}>
+    <Wrapper>
       <Spinner size={20} />
-    </div>
+    </Wrapper>
   ) : (
-    <div className={`${styles.productPriceContainer}`}>{handlePrice()}</div>
+    <Wrapper>{handlePrice()}</Wrapper>
   )
 }
 

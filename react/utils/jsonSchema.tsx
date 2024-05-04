@@ -127,7 +127,6 @@ export const JsonSchema = ({
   }
 
   const priceCellRenderer = ({ rowData }) => {
-    console.log('rowData : ', rowData)
 
     return (
       <ProductPriceTotal

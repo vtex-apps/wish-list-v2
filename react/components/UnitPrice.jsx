@@ -11,18 +11,26 @@ const UnitPrice = ({ skuReference = 0, currency = '$' }) => {
     1
   )
 
+  const Wrapper = ({ children }) => {
+    return (
+      <div className={`${styles.unitPriceContainer}`}>
+        {children}
+      </div>
+    )
+  }
+
   return productError ? (
-    <div className={`${styles.unitPriceContainer}`}>
+    <Wrapper>
       <span>Error</span>
-    </div>
+    </Wrapper>
   ) : loading ? (
-    <div className={`${styles.unitPriceContainer}`}>
+    <Wrapper>
       <Spinner size={20} />
-    </div>
+    </Wrapper>
   ) : (
-    <div className={`${styles.unitPriceContainer}`}>
+    <Wrapper>
       {`${currency} ${price ? parseFloat(price).toFixed(2) : null}`}
-    </div>
+    </Wrapper>
   )
 }
 
