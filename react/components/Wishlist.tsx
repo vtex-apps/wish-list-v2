@@ -1,6 +1,5 @@
 /* eslint-disable no-console */
 // Hooks
-<<<<<<< HEAD:react/components/Wishlist.tsx
 import React, { useEffect, useState, useContext, useCallback } from 'react'
 import { Table, Spinner, ToastContext } from 'vtex.styleguide'
 import { useRuntime } from 'vtex.render-runtime'
@@ -21,30 +20,6 @@ import useAddToCart from '../hooks/useAddToCart'
 import useBulkAction from '../hooks/useBulkAction'
 import { JsonSchema } from '../utils/jsonSchema'
 import useStoreGlobal from '../globalStore/globalStore'
-=======
-import React, { useEffect, useState, useContext } from "react";
-import { Table, Spinner, ToastContext } from "vtex.styleguide";
-import { useRuntime } from "vtex.render-runtime";
-
-// Components
-import AutocompleteBlock from "../components/SearchSKU/AutocompleteBlock";
-import EditableWishlistTitle from "./WishlistName/WishlistName";
-import WishlistPrivacyOptions from "./WishlistPrivacyOptions";
-import ModalCreateList from "./ModalCreateList";
-import useCreateListAccount from "../hooks/useCreateListAccount";
-
-// Helpers & Utils
-import { extractProductData, deleteItemsWishlist, getEmailID } from "./helpers";
-import useQueryWishlistById from "../hooks/actions/useQueryWishlistById";
-import useCreateWishlist from "../hooks/actions/useMutationCreateWishlist";
-import useUpdateWishlist from "../hooks/actions/useMutationUpdateWishlist";
-import useDeleteWishlist from "../hooks/actions/useMutationDeleteWishlist";
-import useAddToCart from "../hooks/useAddToCart";
-import useBulkAction from "../hooks/useBulkAction";
-import { useUserEmail } from "../hooks/useUserEmail";
-import { jsonSchema } from "../utils/jsonSchema";
-import useStoreGlobal from "../globalStore/globalStore";
->>>>>>> main:react/components/Wishlist.jsx
 // Table config
 import {
   handleNextClick,
@@ -57,21 +32,12 @@ import {
   handleInputSearchChange,
   handleInputSearchClear,
   handleInputSearchSubmit,
-<<<<<<< HEAD:react/components/Wishlist.tsx
 } from './helpers/tableSearch'
 import { initialJsonState } from '../utils/tableRowsSchema'
-=======
-} from "./helpers/tableSearch";
-import { initialJsonState } from "../utils/tableRowsSchema";
-import WishlistDesktop from "./WishlistDesktop";
-import WishlistMobile from "./WishlistMobile";
-
->>>>>>> main:react/components/Wishlist.jsx
 // Styles
 import styles from "../styles.css";
 
 function Wishlist({ wishlists, fetchData }) {
-<<<<<<< HEAD:react/components/Wishlist.tsx
   const { deviceInfo } = useRuntime()
   const emailIDInfo = getEmailID(wishlists)
   const { selectedWishlist, setSelectedWishlist } = useStoreGlobal()
@@ -102,42 +68,13 @@ function Wishlist({ wishlists, fetchData }) {
   const [updatedSelectedRows, setUpdatedSelectedRows] = useState([])
   const [wishlist, setWishlist] = useState<any>([])
   const [initialState, setInitialState] = useState(initialJsonState)
-=======
-  const { deviceInfo } = useRuntime();
-  const emailIDInfo = getEmailID(wishlists);
-  const { selectedWishlist, setSelectedWishlist } = useStoreGlobal();
-  const { showToast } = useContext(ToastContext);
-  const [filterState, setfilterState] = useState({});
-
-  const handleSelectWishlist = (id) => {
-    setSelectedWishlist(id);
-  };
-  const [allProducts, setAllProducts] = useState(
-    wishlists.length > 0 ? extractProductData(wishlists[0]) : []
-  );
-  const [displayedProducts, setDisplayedProducts] = useState(
-    wishlists.length > 0 ? extractProductData(wishlists[0]) : []
-  );
-
-  const [isLoadingSKU, setIsLoadingSKU] = useState(false);
-  const [searchValue, setSearchValue] = useState("");
-  const [isUpdatingQty, setIsUpdatingQty] = useState(false);
-  const [updatedSelectedRows, setUpdatedSelectedRows] = useState([]);
-  const [wishlist, setWishlist] = useState([]);
-  const [initialState, setInitialState] = useState(initialJsonState);
->>>>>>> main:react/components/Wishlist.jsx
   const { refetch } = useQueryWishlistById(selectedWishlist, (data) => {
     if (!data || !data.getWishlist) return;
 
     setWishlist(data.getWishlist);
     const products = extractProductData({
-<<<<<<< HEAD:react/components/Wishlist.tsx
       items: data.getWishlist.products,
     })
-=======
-      products: data.getWishlist.products,
-    });
->>>>>>> main:react/components/Wishlist.jsx
 
     const sortedProducts = products.sort((a, b) =>
       a.department.localeCompare(b.department)
@@ -148,15 +85,9 @@ function Wishlist({ wishlists, fetchData }) {
   });
 
   const { createWishlist } = useCreateWishlist(async (data) => {
-<<<<<<< HEAD:react/components/Wishlist.tsx
     await fetchData()
     if (data.createWishlist) {
       setSelectedWishlist(data.createWishlist.DocumentId)
-=======
-    await fetchData();
-    if (data && data.createWishlist) {
-      setSelectedWishlist(data.createWishlist.DocumentId);
->>>>>>> main:react/components/Wishlist.jsx
     }
   });
 
@@ -164,18 +95,11 @@ function Wishlist({ wishlists, fetchData }) {
     refetch().then(({ data }) => {
       if (!data || !data.getWishlist) return;
 
-<<<<<<< HEAD:react/components/Wishlist.tsx
       setWishlist(data.getWishlist)
 
       const products = extractProductData({
         items: data.getWishlist.products,
       })
-=======
-      setWishlist(data.getWishlist);
-      const products = extractProductData({
-        products: data.getWishlist.products,
-      });
->>>>>>> main:react/components/Wishlist.jsx
 
       const sortedProducts = (products || []).sort((a, b) =>
         a.department.localeCompare(b.department)
@@ -195,34 +119,17 @@ function Wishlist({ wishlists, fetchData }) {
   );
 
   // Pagination Logic
-<<<<<<< HEAD:react/components/Wishlist.tsx
   const [currentPage, setCurrentPage] = useState(1)
   const [itemsPerPage, setItemsPerPage] = useState(30)
   const [totalItems, setTotalItems] = useState(0)
   const [paginatedData, setPaginatedData] = useState([])
   const addProductsToCart = useAddToCart()
   const handleBulkAction = useBulkAction({
-=======
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(30);
-  const [totalItems, setTotalItems] = useState(0);
-  const [paginatedData, setPaginatedData] = useState([]);
-  const addProductsToCart = useAddToCart();
-  const userEmail = useUserEmail();
-  const handleBulkAction = useBulkAction(
->>>>>>> main:react/components/Wishlist.jsx
     wishlist,
     selectedWishlist,
     setUpdatedSelectedRows,
-<<<<<<< HEAD:react/components/Wishlist.tsx
     updateWishlist,
   })
-=======
-    fetchData,
-    setSelectedWishlist,
-    updateWishlist
-  );
->>>>>>> main:react/components/Wishlist.jsx
 
   const tableSchema = JsonSchema({
     addProductsToCart,
@@ -230,13 +137,8 @@ function Wishlist({ wishlists, fetchData }) {
     selectedWishlist,
     wishlist,
     wishlists,
-<<<<<<< HEAD:react/components/Wishlist.tsx
     updateWishlist,
   })
-=======
-    updateWishlist
-  );
->>>>>>> main:react/components/Wishlist.jsx
 
   const {
     fieldValidationTable,
@@ -253,28 +155,16 @@ function Wishlist({ wishlists, fetchData }) {
   useEffect(() => {
     const updateStylesForMobile = () => {
       const targetElement = document.querySelector(
-<<<<<<< HEAD:react/components/Wishlist.tsx
         'body > div.render-container.render-route-store-account > div > div.vtex-store__template.bg-base > div > div:nth-child(3) > div > div > div > div > div > div:nth-child(7) > div > div:nth-child(3) > div.whitebird-my-wishlists-0-x-componentContainer.w-two-thirds-l.w-100-ns.fr-l > div > div'
       ) as HTMLDivElement
-=======
-        "body > div.render-container.render-route-store-account > div > div.vtex-store__template.bg-base > div > div:nth-child(3) > div > div > div > div > div > div:nth-child(7) > div > div:nth-child(3) > div.whitebird-my-wishlists-0-x-componentContainer.w-two-thirds-l.w-100-ns.fr-l > div > div"
-      );
->>>>>>> main:react/components/Wishlist.jsx
 
       if (window.innerWidth <= 768) {
         if (targetElement) {
           targetElement.classList.remove("pa7");
           targetElement.style.setProperty("padding-left", "0rem", "important");
         }
-<<<<<<< HEAD:react/components/Wishlist.tsx
       } else if (targetElement) {
         targetElement.classList.add('pa7')
-=======
-      } else {
-        if (targetElement) {
-          targetElement.classList.add("pa7");
-        }
->>>>>>> main:react/components/Wishlist.jsx
       }
     };
 
@@ -287,18 +177,12 @@ function Wishlist({ wishlists, fetchData }) {
   }, []);
 
   useEffect(() => {
-<<<<<<< HEAD:react/components/Wishlist.tsx
     const button = document.querySelector(
       '#toggleFieldsBtn > button'
     ) as HTMLButtonElement
 
     button.style.minHeight = '28.10px'
     button.style.minWidth = 'min-content'
-=======
-    const button = document.querySelector("#toggleFieldsBtn > button");
-    button.style.minHeight = "28.10px";
-    button.style.minWidth = "min-content";
->>>>>>> main:react/components/Wishlist.jsx
 
     button.addEventListener("mouseenter", () => {
       button.style.backgroundColor = "#f2f4f5";
@@ -309,7 +193,6 @@ function Wishlist({ wishlists, fetchData }) {
       button.style.color = "";
     });
 
-<<<<<<< HEAD:react/components/Wishlist.tsx
     const svgContainer = button.querySelector('.vtex-button__label')
 
     if (!svgContainer) {
@@ -348,37 +231,6 @@ function Wishlist({ wishlists, fetchData }) {
     const button = document.querySelector(
       '#toggleFieldsBtn'
     ) as HTMLButtonElement
-=======
-    if (!button) return;
-
-    const svgContainer = button.querySelector(".vtex-button__label");
-    if (svgContainer) {
-      const svg = svgContainer.querySelector("svg");
-      if (svg) {
-        svg.style.display = "none";
-      }
-
-      let editViewText = svgContainer.querySelector(".edit-view-text");
-      if (!editViewText) {
-        editViewText = document.createElement("span");
-        editViewText.classList.add("edit-view-text");
-        editViewText.textContent = "Edit View";
-
-        if (window.innerWidth <= 768) {
-          button.style.minHeight = "28.09px !important";
-          editViewText.textContent = "Edit";
-          editViewText.style.cssText += "font-weight: 500; font-size: 13px";
-          editViewText.style.cssText += "top: initial";
-        }
-
-        svgContainer.appendChild(editViewText);
-      }
-    }
-  }, []);
-
-  useEffect(() => {
-    const button = document.querySelector("#toggleFieldsBtn");
->>>>>>> main:react/components/Wishlist.jsx
 
     if (window.innerWidth <= 768) {
       button.style.minHeight = "28px !important";
@@ -388,14 +240,10 @@ function Wishlist({ wishlists, fetchData }) {
 
     const handleButtonClick = () => {
       setTimeout(() => {
-<<<<<<< HEAD:react/components/Wishlist.tsx
         const elementToStyle = document.querySelector(
           '#toggleFieldsBtn > div'
         ) as HTMLDivElement
 
-=======
-        const elementToStyle = document.querySelector("#toggleFieldsBtn > div");
->>>>>>> main:react/components/Wishlist.jsx
         if (elementToStyle) {
           if (window.innerWidth <= 1046) {
             elementToStyle.style.setProperty("position", "fixed", "important");
@@ -420,7 +268,6 @@ function Wishlist({ wishlists, fetchData }) {
   }, []);
 
   useEffect(() => {
-<<<<<<< HEAD:react/components/Wishlist.tsx
     setSelectedWishlist(selectedWishlist)
     handleSelectWishlist(selectedWishlist)
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -451,32 +298,6 @@ function Wishlist({ wishlists, fetchData }) {
     setItemsPerPage(parseInt(value, 10))
     setCurrentPage(1) // Return to the first page when the number of rows per page changes
   }
-=======
-    setSelectedWishlist(selectedWishlist);
-    handleSelectWishlist(selectedWishlist);
-  }, [selectedWishlist]);
-
-  // Logic to get paginated data
-  useEffect(() => {
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    const data = displayedProducts || [];
-    const slicedData = data.slice(startIndex, endIndex);
-    setPaginatedData(slicedData);
-  }, [currentPage, itemsPerPage, displayedProducts]);
-
-  // Logic to update the total number of items
-  useEffect(() => {
-    const data = displayedProducts || [];
-    setTotalItems(data.length);
-  }, [displayedProducts]);
-
-  // Handlers to change page and rows per page
-  const handleRowsChange = (e, value) => {
-    setItemsPerPage(parseInt(value));
-    setCurrentPage(1); // Return to the first page when the number of rows per page changes
-  };
->>>>>>> main:react/components/Wishlist.jsx
 
   const bulkActionsrowsSelected = (qty: number) => (
     <React.Fragment>Selected rows: {qty}</React.Fragment>
@@ -492,7 +313,6 @@ function Wishlist({ wishlists, fetchData }) {
         <Spinner />
       ) : (
         <>
-<<<<<<< HEAD:react/components/Wishlist.tsx
           {deviceInfo.type === 'phone' ? (
             <div id="wish-list-mobile">
               {/* Mobile Design */}
@@ -670,59 +490,12 @@ function Wishlist({ wishlists, fetchData }) {
                 </section>
               </div>
             </div>
-=======
-          {deviceInfo.type === "phone" ? (
-            <WishlistMobile
-              selectedWishlist={selectedWishlist}
-              wishlists={wishlists}
-              wishlist={wishlist}
-              fetchData={fetchData}
-              handleSelectWishlist={handleSelectWishlist}
-              emailIDInfo={emailIDInfo}
-              buttonModalTable={buttonModalTable}
-              isModalAccountTable={isModalAccountTable}
-              handleSubmitDataTable={handleSubmitDataTable}
-              createWishlist={createWishlist}
-              userEmail={userEmail}
-              setFieldValidationTable={setFieldValidationTable}
-              nameListAccountTable={nameListAccountTable}
-              setNameListAccountTable={setNameListAccountTable}
-              setIsModalAccountTable={setIsModalAccountTable}
-              deleteWishlist={deleteWishlist}
-              buttonCloseModalTable={buttonCloseModalTable}
-              handleNameListTable={handleNameListTable}
-              fieldValidationTable={fieldValidationTable}
-            />
-          ) : (
-            <WishlistDesktop
-              selectedWishlist={selectedWishlist}
-              wishlists={wishlists}
-              wishlist={wishlist}
-              fetchData={fetchData}
-              handleSelectWishlist={handleSelectWishlist}
-              emailIDInfo={emailIDInfo}
-              buttonModalTable={buttonModalTable}
-              isModalAccountTable={isModalAccountTable}
-              handleSubmitDataTable={handleSubmitDataTable}
-              createWishlist={createWishlist}
-              userEmail={userEmail}
-              setFieldValidationTable={setFieldValidationTable}
-              nameListAccountTable={nameListAccountTable}
-              setNameListAccountTable={setNameListAccountTable}
-              setIsModalAccountTable={setIsModalAccountTable}
-              deleteWishlist={deleteWishlist}
-              buttonCloseModalTable={buttonCloseModalTable}
-              handleNameListTable={handleNameListTable}
-              fieldValidationTable={fieldValidationTable}
-            />
->>>>>>> main:react/components/Wishlist.jsx
           )}
 
           <AutocompleteBlock
             text="Add SKU"
             description="Search and add to your list"
             componentOnly={false}
-<<<<<<< HEAD:react/components/Wishlist.tsx
             onAddToWishlist={async (product: any) => {
               setIsLoadingSKU(true)
               const { product: productData } = product.data || {}
@@ -737,20 +510,6 @@ function Wishlist({ wishlists, fetchData }) {
                 : 1
 
               const hasBundle = unitMultiplierValue > 1
-=======
-            onAddToWishlist={async (product) => {
-              setIsLoadingSKU(true);
-              const { product: productData } = product?.data || {};
-              const item = productData?.items?.[0] || {};
-
-              const unitMultiplierProperty = productData?.properties?.find(
-                (prop) => prop.name === "UnitMultiplier"
-              );
-              const unitMultiplierValue = unitMultiplierProperty
-                ? parseInt(unitMultiplierProperty.values[0], 10)
-                : 1;
-              const hasBundle = unitMultiplierValue > 1;
->>>>>>> main:react/components/Wishlist.jsx
 
               const newProduct = {
                 ID: Number(item.itemId),
@@ -759,24 +518,16 @@ function Wishlist({ wishlists, fetchData }) {
                 linkProduct: productData.link,
                 nameProduct: productData.productName,
                 quantityProduct: 1,
-<<<<<<< HEAD:react/components/Wishlist.tsx
                 skuCodeReference: item.referenceId[0].Value,
                 department: productData.categoryTree[0].name,
                 bundle: hasBundle ? unitMultiplierValue : item.unitMultiplier,
               }
-=======
-                skuCodeReference: item?.referenceId?.[0]?.Value,
-                department: productData?.categoryTree?.[0]?.name,
-                bundle: hasBundle ? unitMultiplierValue : item?.unitMultiplier,
-              };
->>>>>>> main:react/components/Wishlist.jsx
 
               if (newProduct.bundle > 1) {
                 newProduct.quantityProduct *= newProduct.bundle;
               }
 
               try {
-<<<<<<< HEAD:react/components/Wishlist.tsx
                 if (
                   wishlist.products.some(
                     (p: { ID: number }) => p.ID === newProduct.ID
@@ -785,11 +536,6 @@ function Wishlist({ wishlists, fetchData }) {
                   showToast('You have already added this product to the list')
 
                   return false
-=======
-                if (wishlist.products.some((p) => p.ID === newProduct.ID)) {
-                  showToast("You have already added this product to the list");
-                  return false;
->>>>>>> main:react/components/Wishlist.jsx
                 }
 
                 await updateWishlist({
@@ -799,7 +545,6 @@ function Wishlist({ wishlists, fetchData }) {
                       products: [...wishlist.products, newProduct],
                     },
                   },
-<<<<<<< HEAD:react/components/Wishlist.tsx
                 })
                 showToast('Successfully added to the Favourites List')
 
@@ -808,13 +553,6 @@ function Wishlist({ wishlists, fetchData }) {
                 console.error('Error adding to the list:', error)
 
                 return false
-=======
-                });
-                showToast("Successfully added to the Favourites List");
-                return true;
-              } catch (error) {
-                console.error("Error adding to the list:", error);
->>>>>>> main:react/components/Wishlist.jsx
               } finally {
                 setIsLoadingSKU(false);
               }
@@ -855,21 +593,10 @@ function Wishlist({ wishlists, fetchData }) {
               bulkActions={{
                 selectedRows: updatedSelectedRows,
                 texts: {
-<<<<<<< HEAD:react/components/Wishlist.tsx
                   secondaryActionsLabel: 'Actions',
                   rowsSelected: bulkActionsrowsSelected,
                   selectAll: 'Select all',
                   allRowsSelected: bulkActionsAllRowsSelected,
-=======
-                  secondaryActionsLabel: "Actions",
-                  rowsSelected: (qty) => (
-                    <React.Fragment>Selected rows: {qty}</React.Fragment>
-                  ),
-                  selectAll: "Select all",
-                  allRowsSelected: (qty) => (
-                    <React.Fragment>All rows selected {qty}</React.Fragment>
-                  ),
->>>>>>> main:react/components/Wishlist.jsx
                 },
                 totalItems: "",
                 onChange: (params) => {
@@ -877,16 +604,10 @@ function Wishlist({ wishlists, fetchData }) {
                 },
                 others: [
                   {
-<<<<<<< HEAD:react/components/Wishlist.tsx
                     label: 'Add to cart',
                     handleCallback: (params) => {
                       handleBulkAction(params.selectedRows, 'addToCart')
                     },
-=======
-                    label: "Add to cart",
-                    handleCallback: (params) =>
-                      handleBulkAction(params.selectedRows, "addToCart"),
->>>>>>> main:react/components/Wishlist.jsx
                   },
                   {
                     label: "Remove item(s)",
@@ -919,17 +640,11 @@ function Wishlist({ wishlists, fetchData }) {
               filters={{
                 alwaysVisibleFilters: ["department", "name"],
                 statements: initialState.filterStatements,
-<<<<<<< HEAD:react/components/Wishlist.tsx
                 onChangeStatements: (
                   e: React.ChangeEvent<HTMLInputElement>
                 ) => {
                   handleFiltersChange({
                     statements: initialState.filterStatements,
-=======
-                onChangeStatements: (e) => {
-                  handleFiltersChange(
-                    initialState.filterStatements,
->>>>>>> main:react/components/Wishlist.jsx
                     initialState,
                     setInitialState,
                     paginatedData,
@@ -937,30 +652,19 @@ function Wishlist({ wishlists, fetchData }) {
                     setDisplayedProducts,
                     onChangeStatements: e[2],
                     setfilterState,
-<<<<<<< HEAD:react/components/Wishlist.tsx
                     filterState,
                   })
-=======
-                    filterState
-                  );
->>>>>>> main:react/components/Wishlist.jsx
                 },
                 clearAllFiltersButtonLabel: "Clear Filters",
                 collapseLeft: true,
                 options: {
                   department: {
-<<<<<<< HEAD:react/components/Wishlist.tsx
                     label: 'Department',
                     renderFilterLabel: () => {
-=======
-                    label: "Department",
-                    renderFilterLabel: (st) => {
->>>>>>> main:react/components/Wishlist.jsx
                       if (
                         !filterState.department ||
                         !filterState.department.object
                       ) {
-<<<<<<< HEAD:react/components/Wishlist.tsx
                         return 'All'
                       }
 
@@ -1006,57 +710,15 @@ function Wishlist({ wishlists, fetchData }) {
                             filterState?.department?.object
                           )
                         },
-=======
-                        return "All";
-                      }
-                      const keys = filterState.department.object
-                        ? Object.keys(filterState.department.object)
-                        : {};
-                      const isAllTrue = !keys.some(
-                        (key) => !filterState.department.object[key]
-                      );
-                      const isAllFalse = !keys.some(
-                        (key) => filterState.department.object[key]
-                      );
-                      const trueKeys = keys.filter(
-                        (key) => filterState.department.object[key]
-                      );
-                      let trueKeysLabel = "";
-                      trueKeys.forEach((key, index) => {
-                        trueKeysLabel += `${key}${
-                          index === trueKeys.length - 1 ? "" : ", "
-                        }`;
-                      });
-                      return `${
-                        isAllTrue
-                          ? "All"
-                          : isAllFalse
-                          ? "None"
-                          : `${trueKeysLabel}`
-                      }`;
-                    },
-                    verbs: [
-                      {
-                        label: "Sort",
-                        value: "Sort",
-                        object: (e) =>
-                          selectorObject(e, filterState?.department?.object),
->>>>>>> main:react/components/Wishlist.jsx
                       },
                     ],
                   },
                   name: {
-<<<<<<< HEAD:react/components/Wishlist.tsx
                     label: 'Description',
                     renderFilterLabel: () => {
-=======
-                    label: "Description",
-                    renderFilterLabel: (st) => {
->>>>>>> main:react/components/Wishlist.jsx
                       if (!filterState.name || !filterState.name.object) {
                         return "All";
                       }
-<<<<<<< HEAD:react/components/Wishlist.tsx
 
                       const keys = filterState.name.object
                         ? Object.keys(filterState.name.object)
@@ -1096,40 +758,6 @@ function Wishlist({ wishlists, fetchData }) {
                         value: 'Sort',
                         object: (e: React.ChangeEvent<HTMLSelectElement>) =>
                           SelectorObject(e, filterState?.name?.object),
-=======
-                      const keys = filterState.name.object
-                        ? Object.keys(filterState.name.object)
-                        : {};
-                      const isAllTrue = !keys.some(
-                        (key) => !filterState.name.object[key]
-                      );
-                      const isAllFalse = !keys.some(
-                        (key) => filterState.name.object[key]
-                      );
-                      const trueKeys = keys.filter(
-                        (key) => filterState.name.object[key]
-                      );
-                      let trueKeysLabel = "";
-                      trueKeys.forEach((key, index) => {
-                        trueKeysLabel += `${key}${
-                          index === trueKeys.length - 1 ? "" : ", "
-                        }`;
-                      });
-                      return `${
-                        isAllTrue
-                          ? "All"
-                          : isAllFalse
-                          ? "None"
-                          : `${trueKeysLabel}`
-                      }`;
-                    },
-                    verbs: [
-                      {
-                        label: "Sort",
-                        value: "Sort",
-                        object: (e) =>
-                          selectorObject(e, filterState?.name?.object),
->>>>>>> main:react/components/Wishlist.jsx
                       },
                     ],
                   },
