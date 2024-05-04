@@ -15,13 +15,8 @@ const ProductPriceTotal = ({
     productQuantity
   )
 
-  const handlePrice = () => {
-    if (price) {
-      return `${currency} ${parseFloat(price).toFixed(2)}`
-    }
-
-    return null
-  }
+  const handlePrice = () =>
+    price ? `${currency} ${parseFloat(price).toFixed(2)}` : null;
 
   return productError ? (
     <div className={`${styles.productPriceContainer}`}>
