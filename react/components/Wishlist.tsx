@@ -6,9 +6,6 @@ import { useRuntime } from 'vtex.render-runtime'
 
 // Components
 import AutocompleteBlock from './SearchSKU/AutocompleteBlock'
-import EditableWishlistTitle from './WishlistName/WishlistName'
-import WishlistPrivacyOptions from './WishlistPrivacyOptions'
-import ModalCreateList from './ModalCreateList'
 import useCreateListAccount from '../hooks/useCreateListAccount'
 // Helpers & Utils
 import { extractProductData, deleteItemsWishlist, getEmailID } from './helpers'
@@ -27,15 +24,17 @@ import {
   handleSubmitDataTable,
   SelectorObject,
   handleFiltersChange,
-} from "./helpers/tableConfig";
+} from './helpers/tableConfig'
 import {
   handleInputSearchChange,
   handleInputSearchClear,
   handleInputSearchSubmit,
 } from './helpers/tableSearch'
 import { initialJsonState } from '../utils/tableRowsSchema'
+import WishlistDesktop from './WishlistDesktop'
+import WishlistMobile from './WishlistMobile'
 // Styles
-import styles from "../styles.css";
+import styles from '../styles.css'
 
 function Wishlist({ wishlists, fetchData }) {
   const { deviceInfo } = useRuntime()
@@ -51,9 +50,11 @@ function Wishlist({ wishlists, fetchData }) {
     [setSelectedWishlist]
   )
 
-  const initialProducts = wishlists.length > 0
-    ? extractProductData({ items: wishlists[0]?.products })
-    : [];
+  const initialProducts =
+    wishlists.length > 0
+      ? extractProductData({ items: wishlists[0]?.products })
+      : []
+
   const [allProducts, setAllProducts] = useState(initialProducts)
   const [displayedProducts, setDisplayedProducts] = useState(initialProducts)
 
@@ -63,31 +64,31 @@ function Wishlist({ wishlists, fetchData }) {
   const [wishlist, setWishlist] = useState<any>([])
   const [initialState, setInitialState] = useState(initialJsonState)
   const { refetch } = useQueryWishlistById(selectedWishlist, (data) => {
-    if (!data || !data.getWishlist) return;
+    if (!data || !data.getWishlist) return
 
-    setWishlist(data.getWishlist);
+    setWishlist(data.getWishlist)
     const products = extractProductData({
       items: data.getWishlist.products,
     })
 
     const sortedProducts = products.sort((a, b) =>
       a.department.localeCompare(b.department)
-    );
+    )
 
-    setAllProducts(sortedProducts);
-    setDisplayedProducts(sortedProducts);
-  });
+    setAllProducts(sortedProducts)
+    setDisplayedProducts(sortedProducts)
+  })
 
   const { createWishlist } = useCreateWishlist(async (data) => {
     await fetchData()
     if (data.createWishlist) {
       setSelectedWishlist(data.createWishlist.DocumentId)
     }
-  });
+  })
 
   const { updateWishlist } = useUpdateWishlist(() => {
     refetch().then(({ data }) => {
-      if (!data || !data.getWishlist) return;
+      if (!data || !data.getWishlist) return
 
       setWishlist(data.getWishlist)
 
@@ -97,20 +98,20 @@ function Wishlist({ wishlists, fetchData }) {
 
       const sortedProducts = (products || []).sort((a, b) =>
         a.department.localeCompare(b.department)
-      );
+      )
 
-      setAllProducts(sortedProducts);
-      setDisplayedProducts(sortedProducts);
-    });
-  });
+      setAllProducts(sortedProducts)
+      setDisplayedProducts(sortedProducts)
+    })
+  })
 
   const { deleteWishlist, loading: isDeleting } = useDeleteWishlist(
     selectedWishlist,
     async () => {
-      await fetchData();
-      setSelectedWishlist(wishlists[0].id);
+      await fetchData()
+      setSelectedWishlist(wishlists[0].id)
     }
-  );
+  )
 
   // Pagination Logic
   const [currentPage, setCurrentPage] = useState(1)
@@ -144,7 +145,7 @@ function Wishlist({ wishlists, fetchData }) {
     buttonCloseModalTable,
     buttonModalTable,
     handleNameListTable,
-  } = useCreateListAccount();
+  } = useCreateListAccount()
 
   useEffect(() => {
     const updateStylesForMobile = () => {
@@ -154,21 +155,21 @@ function Wishlist({ wishlists, fetchData }) {
 
       if (window.innerWidth <= 768) {
         if (targetElement) {
-          targetElement.classList.remove("pa7");
-          targetElement.style.setProperty("padding-left", "0rem", "important");
+          targetElement.classList.remove('pa7')
+          targetElement.style.setProperty('padding-left', '0rem', 'important')
         }
       } else if (targetElement) {
         targetElement.classList.add('pa7')
       }
-    };
+    }
 
-    updateStylesForMobile();
-    window.addEventListener("resize", updateStylesForMobile);
+    updateStylesForMobile()
+    window.addEventListener('resize', updateStylesForMobile)
 
     return () => {
-      window.removeEventListener("resize", updateStylesForMobile);
-    };
-  }, []);
+      window.removeEventListener('resize', updateStylesForMobile)
+    }
+  }, [])
 
   useEffect(() => {
     const button = document.querySelector(
@@ -178,14 +179,14 @@ function Wishlist({ wishlists, fetchData }) {
     button.style.minHeight = '28.10px'
     button.style.minWidth = 'min-content'
 
-    button.addEventListener("mouseenter", () => {
-      button.style.backgroundColor = "#f2f4f5";
-    });
+    button.addEventListener('mouseenter', () => {
+      button.style.backgroundColor = '#f2f4f5'
+    })
 
-    button.addEventListener("mouseleave", () => {
-      button.style.backgroundColor = "";
-      button.style.color = "";
-    });
+    button.addEventListener('mouseleave', () => {
+      button.style.backgroundColor = ''
+      button.style.color = ''
+    })
 
     const svgContainer = button.querySelector('.vtex-button__label')
 
@@ -227,10 +228,10 @@ function Wishlist({ wishlists, fetchData }) {
     ) as HTMLButtonElement
 
     if (window.innerWidth <= 768) {
-      button.style.minHeight = "28px !important";
+      button.style.minHeight = '28px !important'
     }
 
-    if (!button) return;
+    if (!button) return
 
     const handleButtonClick = () => {
       setTimeout(() => {
@@ -240,26 +241,26 @@ function Wishlist({ wishlists, fetchData }) {
 
         if (elementToStyle) {
           if (window.innerWidth <= 1046) {
-            elementToStyle.style.setProperty("position", "fixed", "important");
-            elementToStyle.style.setProperty("top", "50%", "important");
-            elementToStyle.style.setProperty("left", "50%", "important");
+            elementToStyle.style.setProperty('position', 'fixed', 'important')
+            elementToStyle.style.setProperty('top', '50%', 'important')
+            elementToStyle.style.setProperty('left', '50%', 'important')
             elementToStyle.style.setProperty(
-              "transform",
-              "translate(-50%, -50%)",
-              "important"
-            );
-            elementToStyle.style.setProperty("z-index", "1000", "important");
+              'transform',
+              'translate(-50%, -50%)',
+              'important'
+            )
+            elementToStyle.style.setProperty('z-index', '1000', 'important')
           }
         }
-      }, 0);
-    };
+      }, 0)
+    }
 
-    button.addEventListener("click", handleButtonClick);
+    button.addEventListener('click', handleButtonClick)
 
     return () => {
-      button.removeEventListener("click", handleButtonClick);
-    };
-  }, []);
+      button.removeEventListener('click', handleButtonClick)
+    }
+  }, [])
 
   useEffect(() => {
     setSelectedWishlist(selectedWishlist)
@@ -273,9 +274,6 @@ function Wishlist({ wishlists, fetchData }) {
     const endIndex = startIndex + itemsPerPage
     const data = displayedProducts || []
     const slicedData = data.slice(startIndex, endIndex)
-
-    console.log('displayedProducts : ', displayedProducts)
-    console.log('slicedData : ', slicedData)
 
     setPaginatedData(slicedData)
   }, [currentPage, itemsPerPage, displayedProducts])
@@ -308,182 +306,47 @@ function Wishlist({ wishlists, fetchData }) {
       ) : (
         <>
           {deviceInfo.type === 'phone' ? (
-            <div id="wish-list-mobile">
-              {/* Mobile Design */}
-
-              <div className={styles.wishlistOptionsContainer}>
-                <div className={styles.wishlistSelector}>
-                  <p className={styles.wishlistSelectListOneText}>
-                    Favourites List
-                  </p>
-                  <div className={`${styles.createListandAndSelectFav}`}>
-                    <select
-                      className={styles.wishlistSelectListOne}
-                      id="selectListTable"
-                      onChange={(e) => {
-                        handleSelectWishlist(e.target.value)
-                      }}
-                      size={1}
-                      value={selectedWishlist}
-                    >
-                      <option value="" disabled selected>
-                        Select an option
-                      </option>
-                      {emailIDInfo.map((newDates) => (
-                        <option
-                          className={styles.wishlistSelectListOneOption}
-                          value={newDates.value}
-                          key={newDates.value}
-                          id={newDates.value}
-                        >
-                          {newDates.label}
-                        </option>
-                      ))}
-                    </select>
-                    <section>
-                      <button
-                        className={`${styles.wishlistCreateNew} ${styles.wishlistCreateNewHelper}`}
-                        onClick={buttonModalTable}
-                      >
-                        New
-                      </button>
-                      {isModalAccountTable && (
-                        <ModalCreateList
-                          buttonCloseModal={buttonCloseModalTable}
-                          handleNameList={handleNameListTable}
-                          fieldValidation={fieldValidationTable}
-                          handleSubmitData={(event: React.FormEvent) =>
-                            handleSubmitDataTable({
-                              event,
-                              createWishlist,
-                              setFieldValidationTable,
-                              nameListAccountTable,
-                              setNameListAccountTable,
-                              setIsModalAccountTable,
-                            })
-                          }
-                        />
-                      )}
-                    </section>
-                  </div>
-                </div>
-              </div>
-
-              <div className={`${styles.nameAndOptionsMobile}`}>
-                <EditableWishlistTitle
-                  initialTitle={
-                    selectedWishlist !== null ? wishlist.wishlistType : ''
-                  }
-                  wishlistId={
-                    selectedWishlist !== null
-                      ? selectedWishlist
-                      : wishlists[0].id
-                  }
-                  wishlist={selectedWishlist !== null ? wishlist : wishlists[0]}
-                  fetchData={fetchData}
-                />
-                <div className={`${styles.optionsMobile}`}>
-                  <WishlistPrivacyOptions
-                    selectedWishlist={
-                      selectedWishlist !== null
-                        ? selectedWishlist
-                        : wishlists[0].id
-                    }
-                    wishlists={wishlists}
-                    buttonLabel="Share"
-                  />
-                  <button
-                    className={styles.wishlistDeleteWishList}
-                    onClick={() => deleteWishlist()}
-                  >
-                    Delete
-                  </button>
-                </div>
-              </div>
-            </div>
+            <WishlistMobile
+              selectedWishlist={selectedWishlist}
+              wishlists={wishlists}
+              wishlist={wishlist}
+              fetchData={fetchData}
+              handleSelectWishlist={handleSelectWishlist}
+              emailIDInfo={emailIDInfo}
+              buttonModalTable={buttonModalTable}
+              isModalAccountTable={isModalAccountTable}
+              handleSubmitDataTable={handleSubmitDataTable}
+              createWishlist={createWishlist}
+              setFieldValidationTable={setFieldValidationTable}
+              nameListAccountTable={nameListAccountTable}
+              setNameListAccountTable={setNameListAccountTable}
+              setIsModalAccountTable={setIsModalAccountTable}
+              deleteWishlist={deleteWishlist}
+              buttonCloseModalTable={buttonCloseModalTable}
+              handleNameListTable={handleNameListTable}
+              fieldValidationTable={fieldValidationTable}
+            />
           ) : (
-            <div id="wish-list-desktop">
-              <EditableWishlistTitle
-                initialTitle={
-                  selectedWishlist !== null ? wishlist.wishlistType : ''
-                }
-                wishlistId={
-                  selectedWishlist !== null ? selectedWishlist : wishlists[0].id
-                }
-                wishlist={selectedWishlist !== null ? wishlist : wishlists[0]}
-                fetchData={fetchData}
-              />
-              <div className={styles.wishlistOptionsContainer}>
-                <div className={styles.wishlistSelector}>
-                  <p className={styles.wishlistSelectListOneText}>
-                    Favourites List
-                  </p>
-                  <select
-                    className={styles.wishlistSelectListOne}
-                    id="selectListTable"
-                    onChange={(e) => {
-                      handleSelectWishlist(e.target.value)
-                    }}
-                    size={1}
-                    value={selectedWishlist}
-                  >
-                    <option value="" disabled selected>
-                      Select an option
-                    </option>
-                    {emailIDInfo.map((newDates) => (
-                      <option
-                        className={styles.wishlistSelectListOneOption}
-                        value={newDates.value}
-                        key={newDates.value}
-                        id={newDates.value}
-                      >
-                        {newDates.label}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <section className={styles.wishlistCreationOptions}>
-                  <button
-                    className={`${styles.wishlistCreateNew} ${styles.wishlistCreateNewHelper}`}
-                    onClick={buttonModalTable}
-                  >
-                    Create New List
-                  </button>
-                  {isModalAccountTable && (
-                    <ModalCreateList
-                      buttonCloseModal={buttonCloseModalTable}
-                      handleNameList={handleNameListTable}
-                      fieldValidation={fieldValidationTable}
-                      handleSubmitData={(event) =>
-                        handleSubmitDataTable({
-                          event,
-                          createWishlist,
-                          setFieldValidationTable,
-                          nameListAccountTable,
-                          setNameListAccountTable,
-                          setIsModalAccountTable,
-                        })
-                      }
-                    />
-                  )}
-                  <WishlistPrivacyOptions
-                    selectedWishlist={
-                      selectedWishlist !== null
-                        ? selectedWishlist
-                        : wishlists[0].id
-                    }
-                    wishlists={wishlists}
-                    buttonLabel="Share This List"
-                  />
-                  <button
-                    className={styles.wishlistDeleteWishList}
-                    onClick={() => deleteWishlist()}
-                  >
-                    Delete Selected List
-                  </button>
-                </section>
-              </div>
-            </div>
+            <WishlistDesktop
+              selectedWishlist={selectedWishlist}
+              wishlists={wishlists}
+              wishlist={wishlist}
+              fetchData={fetchData}
+              handleSelectWishlist={handleSelectWishlist}
+              emailIDInfo={emailIDInfo}
+              buttonModalTable={buttonModalTable}
+              isModalAccountTable={isModalAccountTable}
+              handleSubmitDataTable={handleSubmitDataTable}
+              createWishlist={createWishlist}
+              setFieldValidationTable={setFieldValidationTable}
+              nameListAccountTable={nameListAccountTable}
+              setNameListAccountTable={setNameListAccountTable}
+              setIsModalAccountTable={setIsModalAccountTable}
+              deleteWishlist={deleteWishlist}
+              buttonCloseModalTable={buttonCloseModalTable}
+              handleNameListTable={handleNameListTable}
+              fieldValidationTable={fieldValidationTable}
+            />
           )}
 
           <AutocompleteBlock
@@ -518,7 +381,7 @@ function Wishlist({ wishlists, fetchData }) {
               }
 
               if (newProduct.bundle > 1) {
-                newProduct.quantityProduct *= newProduct.bundle;
+                newProduct.quantityProduct *= newProduct.bundle
               }
 
               try {
@@ -548,7 +411,7 @@ function Wishlist({ wishlists, fetchData }) {
 
                 return false
               } finally {
-                setIsLoadingSKU(false);
+                setIsLoadingSKU(false)
               }
             }}
           />
@@ -559,7 +422,7 @@ function Wishlist({ wishlists, fetchData }) {
               items={paginatedData || []}
               toolbar={{
                 inputSearch: {
-                  label: "Search This List",
+                  label: 'Search This List',
                   value: searchValue,
                   onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
                     handleInputSearchChange({
@@ -579,9 +442,9 @@ function Wishlist({ wishlists, fetchData }) {
                     }),
                 },
                 fields: {
-                  label: "Toggle visible fields",
-                  showAllLabel: "Show All",
-                  hideAllLabel: "Hide All",
+                  label: 'Toggle visible fields',
+                  showAllLabel: 'Show All',
+                  hideAllLabel: 'Hide All',
                 },
               }}
               bulkActions={{
@@ -592,9 +455,9 @@ function Wishlist({ wishlists, fetchData }) {
                   selectAll: 'Select all',
                   allRowsSelected: bulkActionsAllRowsSelected,
                 },
-                totalItems: "",
+                totalItems: '',
                 onChange: (params) => {
-                  setUpdatedSelectedRows(params.selectedRows);
+                  setUpdatedSelectedRows(params.selectedRows)
                 },
                 others: [
                   {
@@ -604,12 +467,12 @@ function Wishlist({ wishlists, fetchData }) {
                     },
                   },
                   {
-                    label: "Remove item(s)",
+                    label: 'Remove item(s)',
                     isDangerous: true,
                     handleCallback: (params) =>
                       handleBulkAction(
                         params.selectedRows,
-                        "deleteRowsWishlist"
+                        'deleteRowsWishlist'
                       ),
                   },
                 ],
@@ -626,13 +489,13 @@ function Wishlist({ wishlists, fetchData }) {
                 currentItemFrom: (currentPage - 1) * itemsPerPage + 1,
                 currentItemTo: Math.min(currentPage * itemsPerPage, totalItems),
                 onRowsChange: handleRowsChange,
-                textShowRows: "Show rows",
-                textOf: "of",
+                textShowRows: 'Show rows',
+                textOf: 'of',
                 totalItems,
                 rowsOptions: [30, 40, 50, 60],
               }}
               filters={{
-                alwaysVisibleFilters: ["department", "name"],
+                alwaysVisibleFilters: ['department', 'name'],
                 statements: initialState.filterStatements,
                 onChangeStatements: (
                   e: React.ChangeEvent<HTMLInputElement>
@@ -649,7 +512,7 @@ function Wishlist({ wishlists, fetchData }) {
                     filterState,
                   })
                 },
-                clearAllFiltersButtonLabel: "Clear Filters",
+                clearAllFiltersButtonLabel: 'Clear Filters',
                 collapseLeft: true,
                 options: {
                   department: {
@@ -711,7 +574,7 @@ function Wishlist({ wishlists, fetchData }) {
                     label: 'Description',
                     renderFilterLabel: () => {
                       if (!filterState.name || !filterState.name.object) {
-                        return "All";
+                        return 'All'
                       }
 
                       const keys = filterState.name.object
@@ -762,7 +625,7 @@ function Wishlist({ wishlists, fetchData }) {
         </>
       )}
     </>
-  );
+  )
 }
 
-export default Wishlist;
+export default Wishlist
