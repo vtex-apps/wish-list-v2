@@ -1,7 +1,8 @@
+/* eslint-disable no-console */
 import { AuthenticationError } from '@vtex/api'
 
 import { auth } from '../middleware/auth'
-import type { WishlistUpdateArs } from '../typings/wishlist'
+import type { Productos, WishlistUpdateArs } from '../typings/wishlist'
 
 export const updateWishlist = async (
   _: unknown,
@@ -25,6 +26,18 @@ export const updateWishlist = async (
 
   const existWishlist = id
 
+  const data = wishlist?.products.map((prod) => {
+    const d = products?.find((pro) => pro.ID === prod.ID)
+
+    return {
+      ...prod,
+      quantityProduct: prod.quantityProduct
+        ? prod.quantityProduct
+        : d?.quantityProduct ?? 1,
+      notes: prod.notes ? prod.notes : d?.notes,
+    }
+  })
+
   if (!existWishlist) {
     throw new Error('An wishlist with this id does not exist')
   }
@@ -38,7 +51,7 @@ export const updateWishlist = async (
     email: wishlist?.email || emailUser,
     wishlistType: wishlist?.wishlistType || wishlistType,
     isPublic: wishlist?.isPublic || isPublic,
-    products: wishlist?.products || products,
+    products: data as Productos[],
   }
 
   await md.updateWishlist(wishlist.id, updatedWishlist)

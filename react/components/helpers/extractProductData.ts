@@ -1,6 +1,4 @@
-/* eslint-disable no-console */
 const extractProductData = ({ items }) => {
-
   return items?.map(
     ({
       ID,
