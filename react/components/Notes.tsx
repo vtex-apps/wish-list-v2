@@ -2,8 +2,8 @@
 import React, { useState, useEffect, useRef, useContext } from 'react'
 import { Modal, ToastContext } from 'vtex.styleguide'
 
-import { NoteIcon } from "./Icons";
-import styles from "./notes.css";
+import { NoteIcon } from './Icons'
+import styles from './notes.css'
 
 const Notes = ({
   wishlist: initialWishlist,
@@ -16,23 +16,23 @@ const Notes = ({
   price,
   currency,
 }) => {
-  const [show, setShow] = useState(false);
-  const [notes, setNotes] = useState(currentNotes);
+  const [show, setShow] = useState(false)
+  const [notes, setNotes] = useState(currentNotes)
 
   const wishlistRef = useRef(initialWishlist)
 
   const { showToast } = useContext<any>(ToastContext)
 
   useEffect(() => {
-    wishlistRef.current = initialWishlist;
-  }, [initialWishlist]);
+    wishlistRef.current = initialWishlist
+  }, [initialWishlist])
 
   const handleNotesSubmit = async () => {
     try {
-      const updatedProducts = wishlistRef.current.products?.map(product => ({
+      const updatedProducts = wishlistRef.current.products?.map((product) => ({
         ...product,
-        ...(product.skuCodeReference === skuReference ? { notes } : {})
-      }));
+        ...(product.skuCodeReference === skuReference ? { notes } : {}),
+      }))
 
       await updateWishlist({
         variables: {

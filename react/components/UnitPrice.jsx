@@ -12,11 +12,7 @@ const UnitPrice = ({ skuReference = 0, currency = '$' }) => {
   )
 
   const Wrapper = ({ children }) => {
-    return (
-      <div className={`${styles.unitPriceContainer}`}>
-        {children}
-      </div>
-    )
+    return <div className={`${styles.unitPriceContainer}`}>{children}</div>
   }
 
   return productError ? (

@@ -1,49 +1,49 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type { FunctionComponent } from "react";
-import React, { useState, useRef } from "react";
-import { AutocompleteInput } from "vtex.styleguide";
-import PropTypes from "prop-types";
-import type { WrappedComponentProps } from "react-intl";
-import { injectIntl } from "react-intl";
-import { useApolloClient } from "react-apollo";
-import { useCssHandles } from "vtex.css-handles";
+import type { FunctionComponent } from 'react'
+import React, { useState, useRef } from 'react'
+import { AutocompleteInput } from 'vtex.styleguide'
+import PropTypes from 'prop-types'
+import type { WrappedComponentProps } from 'react-intl'
+import { injectIntl } from 'react-intl'
+import { useApolloClient } from 'react-apollo'
+import { useCssHandles } from 'vtex.css-handles'
 
-import { SearchIcon } from "../Icons";
-import autocomplete from "../../queries/autocomplete.gql";
-import styles from "./searchSKU.css";
+import { SearchIcon } from '../Icons'
+import autocomplete from '../../queries/autocomplete.gql'
+import styles from './searchSKU.css'
 
 const getImageSrc = (img: string) => {
-  const td = img.split("/");
-  const ids = td[td.indexOf("ids") + 1];
+  const td = img.split('/')
+  const ids = td[td.indexOf('ids') + 1]
 
-  return img.replace(ids, `${ids}-50-50`);
-};
+  return img.replace(ids, `${ids}-50-50`)
+}
 
 interface Item {
   items: any
 }
 
 const CustomOption = (props: any) => {
-  const { roundedBottom, searchTerm, value, selected, onClick } = props;
-  const [highlightOption, setHighlightOption] = useState(false);
-  const CSS_HANDLES = ["customOptionButton"] as const;
+  const { roundedBottom, searchTerm, value, selected, onClick } = props
+  const [highlightOption, setHighlightOption] = useState(false)
+  const CSS_HANDLES = ['customOptionButton'] as const
 
-  const handles = useCssHandles(CSS_HANDLES);
+  const handles = useCssHandles(CSS_HANDLES)
   const renderOptionHighlightedText = () => {
-    const highlightableText = typeof value === "string" ? value : value.label;
+    const highlightableText = typeof value === 'string' ? value : value.label
     const index: number = highlightableText
       .toLowerCase()
-      .indexOf(searchTerm.toLowerCase());
+      .indexOf(searchTerm.toLowerCase())
 
     if (index === -1) {
-      return highlightableText;
+      return highlightableText
     }
 
-    const prefix = highlightableText.substring(0, index);
-    const match = highlightableText.substr(index, searchTerm.length);
+    const prefix = highlightableText.substring(0, index)
+    const match = highlightableText.substr(index, searchTerm.length)
     const suffix = highlightableText.substring(
       index + parseInt(match.length, 10)
-    );
+    )
 
     return (
       <span className="truncate">
@@ -51,17 +51,17 @@ const CustomOption = (props: any) => {
         {match}
         <span className="fw7">{suffix}</span>
       </span>
-    );
-  };
+    )
+  }
 
   const buttonClasses = `
     ${handles.customOptionButton}
-    ${roundedBottom ? "br2 br--bottom" : ""}
-    ${highlightOption || selected ? "bg-muted-5" : "bg-base"}
+    ${roundedBottom ? 'br2 br--bottom' : ''}
+    ${highlightOption || selected ? 'bg-muted-5' : 'bg-base'}
     bn w-100 tl pointer pa4 f6
-  `;
+  `
 
-  const thumb = value.thumb ? value.thumb : "";
+  const thumb = value.thumb ? value.thumb : ''
 
   return (
     <button
@@ -76,16 +76,16 @@ const CustomOption = (props: any) => {
           {thumb && <img src={thumb} alt="" />}
         </span>
         <span className="pr2">{renderOptionHighlightedText()}</span>
-        {typeof value !== "string" && (
+        {typeof value !== 'string' && (
           <div className="t-mini c-muted-1">{value.caption}</div>
         )}
       </div>
     </button>
-  );
-};
+  )
+}
 
 interface QuickOrderAutocompleteInt {
-  onSelect: any;
+  onSelect: any
 }
 const QuickOrderAutocomplete: FunctionComponent<
   WrappedComponentProps & QuickOrderAutocompleteInt
@@ -102,7 +102,7 @@ const QuickOrderAutocomplete: FunctionComponent<
       const { data } = await client.query({
         query: autocomplete,
         variables: { inputValue: value },
-      });
+      })
 
       setOptions(
         !!data &&
@@ -110,15 +110,15 @@ const QuickOrderAutocomplete: FunctionComponent<
           !!data.productSuggestions.products
           ? data.productSuggestions.products
           : []
-      );
+      )
     }
-  };
+  }
 
   const renderOptionRender = (props: any) => <CustomOption {...props} />
 
   const options = {
     onSelect: (...args: any) => {
-      onSelect(args);
+      onSelect(args)
     },
     loading,
     value: !term.length
@@ -137,7 +137,7 @@ const QuickOrderAutocomplete: FunctionComponent<
           }),
     lastSearched: {
       value: lastSearched,
-      label: "Last searched products",
+      label: 'Last searched products',
       onChange: (option: never) =>
         option && setLastSearched([...new Set([...lastSearched, option])]),
     },
@@ -148,35 +148,35 @@ const QuickOrderAutocomplete: FunctionComponent<
   const input = {
     onChange: (nterm: string) => {
       if (nterm) {
-        setLoading(true);
+        setLoading(true)
         if (timeoutRef.current) {
-          clearTimeout(timeoutRef.current);
+          clearTimeout(timeoutRef.current)
         }
 
         timeoutRef.current = setTimeout(() => {
-          setLoading(false);
-          setTerm(nterm);
-          handleSearch({ value: nterm });
-          timeoutRef.current = null;
-        }, 1000);
+          setLoading(false)
+          setTerm(nterm)
+          handleSearch({ value: nterm })
+          timeoutRef.current = null
+        }, 1000)
       } else {
-        setTerm(nterm);
+        setTerm(nterm)
       }
     },
-    onClear: () => setTerm(""),
-    placeholder: "Search products by SKU",
+    onClear: () => setTerm(''),
+    placeholder: 'Search products by SKU',
     value: term,
-  };
+  }
 
   return (
     <div className={`${styles.autocompleteInputWrapper}`}>
       <AutocompleteInput input={input} options={options} />
       <SearchIcon />
     </div>
-  );
-};
+  )
+}
 
 QuickOrderAutocomplete.propTypes = {
   onSelect: PropTypes.func,
-};
-export default injectIntl(QuickOrderAutocomplete);
+}
+export default injectIntl(QuickOrderAutocomplete)

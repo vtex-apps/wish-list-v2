@@ -127,7 +127,6 @@ export const JsonSchema = ({
   }
 
   const priceCellRenderer = ({ rowData }) => {
-
     return (
       <ProductPriceTotal
         skuReference={rowData?.skuReferenceCode}
