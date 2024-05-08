@@ -1,21 +1,21 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import { useCssHandles } from 'vtex.css-handles'
+import React from "react";
+import PropTypes from "prop-types";
+import { useCssHandles } from "vtex.css-handles";
 
-import ModalWishList from '../modal'
+import ModalWishList from "../modal";
 
 const CSS_HANDLES = [
-  'containerSelectFlexAccount',
-  'containerButtonCloseBox',
-  'containerButtonClose',
-  'containerTitleCreateList',
-  'containerInput',
-  'containerButtonCreateList2',
-  'containerErrorAdd',
-]
+  "containerSelectFlexAccount",
+  "containerButtonCloseBox",
+  "containerButtonClose",
+  "containerTitleCreateList",
+  "containerInput",
+  "containerButtonCreateList2",
+  "containerErrorAdd",
+];
 
 const ModalCreateList = (props) => {
-  const { handles } = useCssHandles(CSS_HANDLES)
+  const { handles } = useCssHandles(CSS_HANDLES);
 
   return (
     <ModalWishList>
@@ -51,14 +51,14 @@ const ModalCreateList = (props) => {
         </button>
       </div>
     </ModalWishList>
-  )
-}
+  );
+};
 
 ModalCreateList.propTypes = {
   handleButtonCloseModal: PropTypes.func,
   handleNameList: PropTypes.func,
   fieldValidation: PropTypes.string,
   handleSubmitData: PropTypes.func,
-}
+};
 
-export default ModalCreateList
+export default ModalCreateList;

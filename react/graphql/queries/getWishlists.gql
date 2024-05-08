@@ -18,6 +18,7 @@ query getWishlists($page: Int, $pageSize:Int){
       skuCodeReference
       department
       bundle
+      notes
     }
   }
 }
