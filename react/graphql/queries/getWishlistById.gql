@@ -4,7 +4,7 @@ query getWishlist($id: ID!) {
     email
     wishlistType
     isPublic
-    fieldsConfig{
+    fieldsConfig {
       description
       department
     }

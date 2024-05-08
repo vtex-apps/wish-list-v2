@@ -1,35 +1,38 @@
-/* eslint-disable no-console */
-import React from "react";
-import { Spinner } from "vtex.styleguide";
+import React from 'react'
+import { Spinner } from 'vtex.styleguide'
 
-import useQueryGetProductPrice from "../hooks/actions/useQueryGetProductPrice";
-import styles from "./productPriceTotal.css";
+import useQueryGetProductPrice from '../hooks/actions/useQueryGetProductPrice'
+import styles from './productPriceTotal.css'
 
 const ProductPriceTotal = ({
   skuReference = 0,
   productQuantity = 0,
-  currency = "$",
+  currency = '$',
 }) => {
   const { price, error: productError, loading } = useQueryGetProductPrice(
-    "reference",
+    'reference',
     skuReference,
     productQuantity
-  );
+  )
 
   const handlePrice = () =>
-    price ? `${currency} ${parseFloat(price).toFixed(2)}` : null;
+    price ? `${currency} ${parseFloat(price).toFixed(2)}` : null
+
+  const Wrapper = ({ children }) => {
+    return <div className={`${styles.productPriceContainer}`}>{children}</div>
+  }
 
   return productError ? (
-    <div className={`${styles.productPriceContainer}`}>
+    <Wrapper>
       <span>Error</span>
-    </div>
+    </Wrapper>
   ) : loading ? (
-    <div className={`${styles.productPriceContainer}`}>
+    <Wrapper>
       <Spinner size={20} />
-    </div>
+    </Wrapper>
   ) : (
-    <div className={`${styles.productPriceContainer}`}>{handlePrice()}</div>
-  );
-};
+    <Wrapper>{handlePrice()}</Wrapper>
+  )
+}
 
-export default ProductPriceTotal;
+export default ProductPriceTotal

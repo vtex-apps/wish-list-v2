@@ -1,5 +1,5 @@
 {
-  "vendor": "whitebird",
+  "vendor": "alfonsob2b",
   "name": "my-wishlists",
   "version": "1.0.11",
   "title": "My Wish Lists",
@@ -51,6 +51,12 @@
     },
     {
       "name": "POWER_USER_DS"
+    },
+    {
+      "name": "vbase-read-write"
+    },
+    {
+      "name": "update-app-settings"
     },
     {
       "name": "outbound-access",

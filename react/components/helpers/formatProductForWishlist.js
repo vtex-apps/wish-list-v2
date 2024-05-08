@@ -1,5 +1,5 @@
-const formatProductForWishlist = (list) => {
-  const formattedList = list?.map((item) => ({
+const formatProductForWishlist = (list) =>
+  list.map((item) => ({
     ID: item.id,
     bundle: item.bundle,
     Image: item.image,
@@ -10,8 +10,5 @@ const formatProductForWishlist = (list) => {
     skuCodeReference: item.skuReferenceCode,
     department: item.department,
   }))
-
-  return formattedList
-}
 
 export default formatProductForWishlist

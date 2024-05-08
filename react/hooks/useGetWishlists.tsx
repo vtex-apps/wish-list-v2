@@ -1,5 +1,5 @@
 import { useEffect, useState, useContext } from 'react'
-import { useProduct } from 'vtex.product-context'
+import useProduct from 'vtex.product-context/useProduct'
 import { ToastContext } from 'vtex.styleguide'
 
 import useBundleMinQuantity from './useBundleMinQuantity'
@@ -9,43 +9,6 @@ import useMutationCreateWishlist from './actions/useMutationCreateWishlist'
 const useGetWishlist = () => {
   const [listWishlist, setListWishlist] = useState<any>([])
   const [productBundle, setProductBundle] = useState<any>(null)
-  const { product, selectedQuantity, selectedItem } = useProduct()
-  const { showToast } = useContext<any>(ToastContext)
-  const bundle = useBundleMinQuantity(product)
-
-  const { data,  refetch } = useQueryWishlists()
-  const { createWishlist } = useMutationCreateWishlist(async (data) => {
-     const datarefect = await refetch()
-
-     const find = datarefect?.data?.getWishlistsByEmail.find(item => item.wishlistType == nameListWishlist)
-
-      if(!find){
-        const currentWhislist = datarefect?.data?.getWishlistsByEmail
-        currentWhislist.push({
-          id: data.createWishlist.DocumentId,
-           wishlistType: nameListWishlist
-        })
-        setListWishlist(currentWhislist)
-      }
-
-      setNameListWishlist('')
-      setisLoading(false)
-  })
-
-  useEffect(() => {
-    setProductBundle(bundle)
-  }, [bundle])
-
-  const nameProduct = product?.productName
-  const linkProduct = product?.link
-  const idProduct = Number(selectedItem?.itemId)
-  const urlImageProduct = product?.items[0]?.images[0]?.imageUrl
-  const quantityProduct = selectedQuantity
-  const price = Number(product?.priceRange?.sellingPrice?.highPrice)
-  const skuCodeReference = product?.items[0]?.referenceId?.[0]?.Value
-  const departmentArray = product?.categoryTree
-  const department = departmentArray && departmentArray[0]?.name
-
   const [nameListWishlist, setNameListWishlist] = useState('')
   const [errorName, setErrorName] = useState('')
   const [isLoading, setisLoading] = useState(false)
@@ -56,11 +19,52 @@ const useGetWishlist = () => {
   const [isShowSelect, setIsShowSelect] = useState(false)
   const [isShowForm, setIsShowForm] = useState(false)
 
+  const { product, selectedQuantity, selectedItem } = useProduct()
+  const { showToast } = useContext<any>(ToastContext)
+  const bundle = useBundleMinQuantity(product)
+
+  const { data, refetch } = useQueryWishlists()
+  const { createWishlist } = useMutationCreateWishlist(async (d) => {
+    const datarefect = await refetch()
+
+    const find = datarefect?.data?.getWishlistsByEmail.find(
+      (item: { wishlistType: string }) => item.wishlistType === nameListWishlist
+    )
+
+    if (!find) {
+      const currentWhislist = datarefect?.data?.getWishlistsByEmail
+
+      currentWhislist.push({
+        id: d.createWishlist.DocumentId,
+        wishlistType: nameListWishlist,
+      })
+      setListWishlist(currentWhislist)
+    }
+
+    setNameListWishlist('')
+    setisLoading(false)
+  })
+
+  useEffect(() => {
+    setProductBundle(bundle)
+  }, [bundle])
+
+  const nameProduct = product?.productName
+  const linkProduct = product?.link
+  const idProduct = Number(selectedItem?.itemId)
+  const urlImageProduct = product?.items.find((item: any) => item)?.images[0]
+    ?.imageUrl
+
+  const quantityProduct = selectedQuantity
+  const price = Number(product?.priceRange?.sellingPrice?.highPrice)
+  const skuCodeReference = product?.items[0]?.referenceId?.[0]?.Value
+  const departmentArray = product?.categoryTree
+  const department = departmentArray?.[0]?.name
+
   useEffect(() => {
     if (data?.getWishlistsByEmail) {
       setListWishlist(data.getWishlistsByEmail)
     }
-
   }, [data])
 
   const postCreateList = async () => {
@@ -74,6 +78,7 @@ const useGetWishlist = () => {
       skuCodeReference,
       department,
     }
+
     setisLoading(true)
     if (productBundle !== 1) {
       productObj.quantityProduct = selectedQuantity * productBundle
@@ -92,13 +97,12 @@ const useGetWishlist = () => {
         refetchQueries: ['getWishlists'],
       })
 
-      setisLoading(false);
+      setisLoading(false)
       showToast('You created a new Favourite List and your product was added')
     } catch (error) {
       setisLoading(false)
       showToast(error)
     }
-
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -122,7 +126,6 @@ const useGetWishlist = () => {
 
       setIsShowForm2(false)
       setClickCreate(false)
-
 
       setErrorName('')
     }

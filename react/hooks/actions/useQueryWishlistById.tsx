@@ -1,4 +1,3 @@
-/* eslint-disable max-params */
 import { useQuery } from 'react-apollo'
 
 import GET_WISHLIST from '../../graphql/queries/getWishlistById.gql'

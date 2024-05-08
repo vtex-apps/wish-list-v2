@@ -1,24 +1,35 @@
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useOrderForm } from 'vtex.order-manager/OrderForm'
 import { useRuntime } from 'vtex.render-runtime'
 
 import useCreateListAccount from './useCreateListAccount'
-import { getWishlists } from '../components/helpers'
 import { useUserEmail } from './useUserEmail'
 import useStoreGlobal from '../globalStore/globalStore'
 import useMutationCreateWishlist from './actions/useMutationCreateWishlist'
+import useQueryWishlists from './actions/useQueryWishlists'
 
-// eslint-disable-next-line @typescript-eslint/naming-convention
-interface useAddSharedListPageProps {
+interface UseAddSharedListPageProps {
   queryId: string
   products: any
   updatedProducts: any
 }
 
+interface Product {
+  id: string
+  image: string
+  bundle: string
+  unitValue: string
+  linkProduct: string
+  name: string
+  qty: number
+  skuReferenceCode: string
+  department: string
+}
+
 export default function useAddSharedListPage({
   queryId,
   products,
-}: useAddSharedListPageProps) {
+}: UseAddSharedListPageProps) {
   // ORDER FORM
   const { orderForm } = useOrderForm()
 
@@ -43,6 +54,7 @@ export default function useAddSharedListPage({
   const { updatedProducts } = useStoreGlobal.getState()
 
   const { createWishlist } = useMutationCreateWishlist(() => {})
+  const { data: wishlistsByEmail, refetch } = useQueryWishlists()
 
   // CREATE WISH LIST
   const {
@@ -60,7 +72,8 @@ export default function useAddSharedListPage({
   const userEmail = useUserEmail()
   const fetchData = async () => {
     setIsLoading(true)
-    const data = await getWishlists(userEmail)
+    refetch()
+    const data = wishlistsByEmail
 
     setWishlists(data || [])
     setIsLoading(false)
@@ -86,7 +99,7 @@ export default function useAddSharedListPage({
     setIsListNameInputVisible((state) => !state)
   }
 
-  const createNewList = async (event) => {
+  const createNewList = async (event: React.FormEvent) => {
     event.preventDefault()
 
     if (nameListAccountTable.trim() === '') {
@@ -111,8 +124,8 @@ export default function useAddSharedListPage({
           listProducts.push(newProduct)
         })
       } else {
-        products.forEach((prod) => {
-          const newProduct: any = {
+        products.forEach((prod: Product) => {
+          const newProduct = {
             ID: prod.id,
             Image: prod.image,
             bundle: prod.bundle,

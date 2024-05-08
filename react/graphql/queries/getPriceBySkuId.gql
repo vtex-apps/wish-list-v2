@@ -1,5 +1,13 @@
-query getPriceBySkuId($skuId: Int, $skuReference: String, $productQuantity: Int) {
-  getPriceBySkuId(skuId: $skuId, skuReference: $skuReference, productQuantity: $productQuantity) {
+query getPriceBySkuId(
+  $skuId: Int
+  $skuReference: String
+  $productQuantity: Int
+) {
+  getPriceBySkuId(
+    skuId: $skuId
+    skuReference: $skuReference
+    productQuantity: $productQuantity
+  ) {
     itemId
     listPrice
     costPrice

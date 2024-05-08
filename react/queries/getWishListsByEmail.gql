@@ -1,0 +1,18 @@
+query GetWishListByEmail {
+  getWishlistsByEmail {
+    id
+    email
+    wishlistType
+    products {
+      ID
+      Image
+      unitValue
+      linkProduct
+      nameProduct
+      quantityProduct
+      skuCodeReference
+      department
+      bundle
+    }
+  }
+}

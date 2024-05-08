@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { NumericStepper } from 'vtex.styleguide'
-import debounce from 'lodash.debounce'
 
 export const ProductStepper = ({
   initialQty,
@@ -17,24 +16,6 @@ export const ProductStepper = ({
     qtyRef.current = QTY
   }, [QTY])
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const debouncedUpdateProducts = useCallback(
-    debounce((newQty) => {
-      // Lógica para manejar la actualización de la cantidad de productos...
-      handleQuantityChange(productId, newQty)
-      // Asegúrate de que esta función actualice el estado global según sea necesario
-      handleQuantityChange(newQty)
-    }, 2000),
-    [productId, handleQuantityChange]
-  )
-
-  // Efectos y funciones relacionadas con el stepper...
-  useEffect(() => {
-    return () => {
-      debouncedUpdateProducts.cancel()
-    }
-  }, [debouncedUpdateProducts])
-
   useEffect(() => {
     setQTY(initialQty)
   }, [initialQty])
@@ -45,29 +26,30 @@ export const ProductStepper = ({
 
     let finalValue = 0 + newValue
 
-    if (bundle) {
-      if (eventType === 'click') {
-        if (finalValue < bundle) {
-          finalValue = bundle
-        } else if (finalValue < QTY) {
-          finalValue = QTY - bundle
-        } else {
-          finalValue = QTY + bundle
-        }
-      }
+    const quantity = finalValue
+    const minimumQuantity = bundle || 1
+    const maximumQuantity = qtyRef.current
 
-      if (eventType === 'change') {
-        if (finalValue < bundle) {
-          finalValue = bundle
-        } else {
-          finalValue -= finalValue % bundle
-        }
+    if (eventType === 'click') {
+      if (quantity < minimumQuantity) {
+        finalValue = minimumQuantity
+      } else if (quantity === maximumQuantity) {
+        finalValue = quantity - minimumQuantity + 1
+      } else {
+        finalValue = quantity + minimumQuantity
       }
+    } else if (eventType === 'change') {
+      const roundedQty = Math.ceil(quantity / minimumQuantity) * minimumQuantity
+
+      finalValue = Math.max(
+        minimumQuantity,
+        Math.min(roundedQty, maximumQuantity)
+      )
     }
 
     setQTY(finalValue)
-    debouncedUpdateProducts(finalValue)
-    // Asegúrate de que esta línea está llamando a handleQuantityChange
+    handleQuantityChange(productId, finalValue)
+    handleQuantityChange(finalValue)
     handleQuantityChange(productId, finalValue)
   }
 

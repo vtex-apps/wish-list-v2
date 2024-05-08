@@ -20,13 +20,7 @@
       "type": "array"
     }
   },
-  "required": [
-    "email",
-    "wishlistType",
-    "products",
-    "isPublic",
-    "fieldsConfig"
-  ],
+  "required": ["email", "wishlistType", "products", "isPublic", "fieldsConfig"],
   "v-indexed": [
     "email",
     "wishlistType",

@@ -1,9 +1,9 @@
-import React from "react";
+import React from 'react'
 
-import EditableWishlistTitle from "./WishlistName/WishlistName";
-import ModalCreateList from "./ModalCreateList";
-import WishlistPrivacyOptions from "./WishlistPrivacyOptions";
-import styles from "../styles.css";
+import EditableWishlistTitle from './WishlistName/WishlistName'
+import ModalCreateList from './ModalCreateList'
+import WishlistPrivacyOptions from './WishlistPrivacyOptions'
+import styles from '../styles.css'
 
 const WishlistMobile = ({
   selectedWishlist,
@@ -16,7 +16,6 @@ const WishlistMobile = ({
   isModalAccountTable,
   handleSubmitDataTable,
   createWishlist,
-  userEmail,
   setFieldValidationTable,
   nameListAccountTable,
   setNameListAccountTable,
@@ -38,7 +37,7 @@ const WishlistMobile = ({
               className={styles.wishlistSelectListOne}
               id="selectListTable"
               onChange={(e) => {
-                handleSelectWishlist(e.target.value);
+                handleSelectWishlist(e.target.value)
               }}
               size={1}
               value={selectedWishlist}
@@ -69,17 +68,15 @@ const WishlistMobile = ({
                   buttonCloseModal={buttonCloseModalTable}
                   handleNameList={handleNameListTable}
                   fieldValidation={fieldValidationTable}
-                  handleSubmitData={(event) =>
-                    handleSubmitDataTable(
+                  handleSubmitData={(event: React.FormEvent) =>
+                    handleSubmitDataTable({
                       event,
                       createWishlist,
-                      userEmail,
                       setFieldValidationTable,
                       nameListAccountTable,
                       setNameListAccountTable,
                       setIsModalAccountTable,
-                      fetchData
-                    )
+                    })
                   }
                 />
               )}
@@ -90,7 +87,7 @@ const WishlistMobile = ({
 
       <div className={`${styles.nameAndOptionsMobile}`}>
         <EditableWishlistTitle
-          initialTitle={selectedWishlist !== null ? wishlist.wishlistType : ""}
+          initialTitle={selectedWishlist !== null ? wishlist.wishlistType : ''}
           wishlistId={
             selectedWishlist !== null ? selectedWishlist : wishlists[0].id
           }
@@ -114,7 +111,7 @@ const WishlistMobile = ({
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default WishlistMobile;
+export default WishlistMobile

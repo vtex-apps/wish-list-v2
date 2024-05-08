@@ -1,19 +1,20 @@
 // Hooks
 import React, { useEffect } from 'react'
 import { Spinner, Button } from 'vtex.styleguide'
+import { useMutation } from 'react-apollo'
 
 import useCreateListAccount from '../hooks/useCreateListAccount'
-import { useUserEmail } from '../hooks/useUserEmail'
 // Global Store
 import useStoreGlobal from '../globalStore/globalStore'
 // Components
 import Wishlist from './Wishlist'
 import ModalCreateList from './ModalCreateList'
 // Helpers
-import { createWishlist } from './helpers'
 import useQueryWishlists from '../hooks/actions/useQueryWishlists'
 // Styles
 import styles from '../styles.css'
+// GQL
+import CREATE_WISHLIST from '../mutation/createWishList.gql'
 
 const MyWishLists = () => {
   const { setSelectedWishlist, selectedWishlist } = useStoreGlobal()
@@ -22,7 +23,7 @@ const MyWishLists = () => {
 
   const { data, loading, refetch } = useQueryWishlists()
 
-  const userEmail = useUserEmail()
+  const [createNewListMutaion] = useMutation(CREATE_WISHLIST, {})
 
   const {
     isModalAccount,
@@ -37,11 +38,7 @@ const MyWishLists = () => {
   } = useCreateListAccount()
 
   useEffect(() => {
-    if (
-      data &&
-      data.getWishlistsByEmail &&
-      data.getWishlistsByEmail.length > 0
-    ) {
+    if (data?.getWishlistsByEmail?.length > 0) {
       setWishlists(data.getWishlistsByEmail)
 
       if (!selectedWishlist) {
@@ -58,10 +55,27 @@ const MyWishLists = () => {
     if (nameListAccount.trim() === '') {
       setFieldValidation('The field cannot be empty')
     } else {
-      createWishlist(userEmail, nameListAccount, () => refetch())
-      setNameListAccount('')
-      setFieldValidation('')
-      setIsModalAccount(false)
+      createNewListMutaion({
+        variables: {
+          wishList: {
+            wishlistType: nameListAccount,
+            products: [],
+            isPublic: false,
+          },
+        },
+      })
+        .then(() => {
+          refetch()
+          setNameListAccount('')
+          setFieldValidation('')
+          setIsModalAccount(false)
+        })
+        .catch((error) => {
+          console.error(error)
+          setNameListAccount('')
+          setFieldValidation('')
+          setIsModalAccount(false)
+        })
     }
   }
 

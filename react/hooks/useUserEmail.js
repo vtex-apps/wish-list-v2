@@ -1,8 +1,8 @@
-import { useOrderForm } from 'vtex.order-manager/OrderForm';
+import { useOrderForm } from 'vtex.order-manager/OrderForm'
 
 export const useUserEmail = () => {
-  const { orderForm } = useOrderForm();
-  const email = orderForm?.clientProfileData?.email;
-  return email;
-}
+  const { orderForm } = useOrderForm()
+  const { email } = orderForm.clientProfileData
 
+  return email
+}

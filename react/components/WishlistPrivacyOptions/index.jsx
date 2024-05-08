@@ -6,14 +6,13 @@ import styles from '../../styles.css'
 export default function WishlistPrivacyOptions({
   selectedWishlist,
   wishlists,
-  buttonLabel
+  buttonLabel,
 }) {
   const [textCopied, setTextCopied] = useState(false)
 
   const linkToCopy =
     typeof window !== 'undefined'
-      ? // eslint-disable-next-line no-undef
-        `${window.location.host}/wishlist-share?id=${
+      ? `${window.location.host}/wishlist-share?id=${
           selectedWishlist || wishlists[0].id
         }`
       : ''
@@ -30,7 +29,6 @@ export default function WishlistPrivacyOptions({
       {textCopied && (
         <p className={styles.popupCopy}>Link copied to clipboard!</p>
       )}
-      
     </div>
   )
 }

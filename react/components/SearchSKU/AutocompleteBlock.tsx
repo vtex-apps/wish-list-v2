@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable react/prop-types */
 import type { FunctionComponent } from 'react'
 import React, { useState } from 'react'
 import type { WrappedComponentProps } from 'react-intl'
@@ -7,10 +5,21 @@ import { injectIntl } from 'react-intl'
 import { Button, Tag, IconClear } from 'vtex.styleguide'
 import PropTypes from 'prop-types'
 import { useApolloClient } from 'react-apollo'
+import { Item, Product } from 'vtex.product-context/react/ProductTypes'
 
 import QuickOrderAutocomplete from './QuickOrderAutocomplete'
 import productQuery from '../../queries/product.gql'
 import handles from '../../styles.css'
+
+interface SelectedProps {
+  label: string
+  seller?: string
+  slug: string
+  thumb?: string
+  value: string
+  data?: { product: Product }
+  product?: Product
+}
 
 const AutocompleteBlock: FunctionComponent<any & WrappedComponentProps> = ({
   text,
@@ -19,7 +28,11 @@ const AutocompleteBlock: FunctionComponent<any & WrappedComponentProps> = ({
   onAddToWishlist,
 }) => {
   const client = useApolloClient()
-  const [state, setState] = useState<any>({
+  const [state, setState] = useState<{
+    selectedItem: SelectedProps | null
+    quantitySelected: number
+    unitMultiplier: number
+  }>({
     selectedItem: null,
     quantitySelected: 1,
     unitMultiplier: 1,
@@ -49,9 +62,11 @@ const AutocompleteBlock: FunctionComponent<any & WrappedComponentProps> = ({
         data.product.items.length === 1 ? data.product.items[0].itemId : null
 
       const seller = selectedSku
-        ? data.product.items[0].sellers.find((item: any) => {
-            return item.sellerDefault === true
-          }).sellerId
+        ? data.product.items[0].sellers.find(
+            (item: { sellerDefault: boolean }) => {
+              return item.sellerDefault === true
+            }
+          ).sellerId
         : null
 
       let multiplier = 1
@@ -75,29 +90,31 @@ const AutocompleteBlock: FunctionComponent<any & WrappedComponentProps> = ({
   }
 
   const selectSku = (value: string) => {
-    const seller = selectedItem.data.product.items
-      .find((item: any) => {
-        return item.itemId === value
+    const seller = selectedItem?.data?.product?.items
+      .find((item: { itemId: string }) => {
+        return item?.itemId === value
       })
-      .sellers.find((s: any) => {
+      ?.sellers?.find((s: { sellerDefault: boolean }) => {
         return s.sellerDefault === true
-      }).sellerId
+      })?.sellerId
 
     const newSelected = {
+      label: selectedItem?.label ?? '',
+      slug: selectedItem?.slug ?? '',
       ...selectedItem,
       seller,
       value,
     }
 
-    const matchedItem = selectedItem.data.product.items.find(
-      (item) => item.itemId === value
+    const matchedItem = selectedItem?.data?.product.items.find(
+      (item: { itemId: string }) => item.itemId === value
     )
 
     setState({
       ...state,
       selectedItem: newSelected,
-      unitMultiplier: matchedItem.unitMultiplier,
-      quantitySelected: matchedItem.unitMultiplier,
+      unitMultiplier: matchedItem?.unitMultiplier ?? 1,
+      quantitySelected: matchedItem?.unitMultiplier ?? 1,
     })
   }
 
@@ -140,7 +157,7 @@ const AutocompleteBlock: FunctionComponent<any & WrappedComponentProps> = ({
                     className={`flex flex-column w-15 fl ${handles.productThumb}`}
                   >
                     <img
-                      src={thumb(selectedItem.thumb)}
+                      src={thumb(selectedItem?.thumb ?? '')}
                       width="50"
                       height="50"
                       alt=""
@@ -154,30 +171,33 @@ const AutocompleteBlock: FunctionComponent<any & WrappedComponentProps> = ({
                     </span>
 
                     {!!selectedItem &&
-                      selectedItem.data.product.items.length > 1 && (
+                      selectedItem.data?.product &&
+                      selectedItem.data?.product?.items?.length > 1 && (
                         <div className={`${handles.productSku} flex flex-row`}>
-                          {selectedItem.data.product.items.map((item: any) => {
-                            return (
-                              <span
-                                key={item.itemId}
-                                className={`mr4 ${handles.skuSelection}`}
-                              >
-                                <Tag
-                                  size="small"
-                                  bgColor={
-                                    item.itemId === selectedItem.value
-                                      ? '#8bc34a'
-                                      : '#979899'
-                                  }
-                                  onClick={() => {
-                                    selectSku(item.itemId)
-                                  }}
+                          {selectedItem.data?.product.items.map(
+                            (item: Item) => {
+                              return (
+                                <span
+                                  key={item.itemId}
+                                  className={`mr4 ${handles.skuSelection}`}
                                 >
-                                  {item.name}
-                                </Tag>
-                              </span>
-                            )
-                          })}
+                                  <Tag
+                                    size="small"
+                                    bgColor={
+                                      item.itemId === selectedItem.value
+                                        ? '#8bc34a'
+                                        : '#979899'
+                                    }
+                                    onClick={() => {
+                                      selectSku(item.itemId)
+                                    }}
+                                  >
+                                    {item.name}
+                                  </Tag>
+                                </span>
+                              )
+                            }
+                          )}
                         </div>
                       )}
                   </div>
@@ -229,6 +249,7 @@ AutocompleteBlock.propTypes = {
   componentOnly: PropTypes.bool,
   text: PropTypes.string,
   description: PropTypes.string,
+  onAddToWishlist: PropTypes.func,
 }
 
 export default injectIntl(AutocompleteBlock)
