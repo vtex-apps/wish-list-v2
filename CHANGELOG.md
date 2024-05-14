@@ -11,17 +11,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Added price for wish list item line
 - Added notes to wish list item line
+- Added Master Data informations to the Read me document.
 
-### Fixed 
+### Fixed
+
 - Impersonation issue happening in PDP when retrieving loggedIn from the OrderForm
 
 ### Fixed
+
 - Issue related to adding products to cart from a wishlist.
 - Issue related to creating a wishlist from PDP.
 
 ## [1.0.11] - 2024-03-27
 
-### Fix 
+### Fix
+
 - Addressed issues reported
 
 ## [1.0.10] - 2024-03-25
