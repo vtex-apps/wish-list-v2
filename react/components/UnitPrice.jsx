@@ -1,29 +1,33 @@
-import React from "react";
-import { Spinner } from "vtex.styleguide";
+import React from 'react'
+import { Spinner } from 'vtex.styleguide'
 
-import useQueryGetProductPrice from "../hooks/actions/useQueryGetProductPrice";
-import styles from "./unitPrice.css";
+import useQueryGetProductPrice from '../hooks/actions/useQueryGetProductPrice'
+import styles from './unitPrice.css'
 
-const UnitPrice = ({ skuReference = 0, currency = "$" }) => {
+const UnitPrice = ({ skuReference = 0, currency = '$' }) => {
   const { price, error: productError, loading } = useQueryGetProductPrice(
-    "reference",
+    'reference',
     skuReference,
     1
-  );
+  )
+
+  const Wrapper = ({ children }) => {
+    return <div className={`${styles.unitPriceContainer}`}>{children}</div>
+  }
 
   return productError ? (
-    <div className={`${styles.unitPriceContainer}`}>
+    <Wrapper>
       <span>Error</span>
-    </div>
+    </Wrapper>
   ) : loading ? (
-    <div className={`${styles.unitPriceContainer}`}>
+    <Wrapper>
       <Spinner size={20} />
-    </div>
+    </Wrapper>
   ) : (
-    <div className={`${styles.unitPriceContainer}`}>
+    <Wrapper>
       {`${currency} ${price ? parseFloat(price).toFixed(2) : null}`}
-    </div>
-  );
-};
+    </Wrapper>
+  )
+}
 
-export default UnitPrice;
+export default UnitPrice

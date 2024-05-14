@@ -1,9 +1,9 @@
-import React from "react";
+import React from 'react'
 
-import EditableWishlistTitle from "./WishlistName/WishlistName";
-import ModalCreateList from "./ModalCreateList";
-import WishlistPrivacyOptions from "./WishlistPrivacyOptions";
-import styles from "../styles.css";
+import EditableWishlistTitle from './WishlistName/WishlistName'
+import ModalCreateList from './ModalCreateList'
+import WishlistPrivacyOptions from './WishlistPrivacyOptions'
+import styles from '../styles.css'
 
 const WishlistDesktop = ({
   selectedWishlist,
@@ -16,7 +16,6 @@ const WishlistDesktop = ({
   isModalAccountTable,
   handleSubmitDataTable,
   createWishlist,
-  userEmail,
   setFieldValidationTable,
   nameListAccountTable,
   setNameListAccountTable,
@@ -29,7 +28,7 @@ const WishlistDesktop = ({
   return (
     <div id="wish-list-desktop">
       <EditableWishlistTitle
-        initialTitle={selectedWishlist !== null ? wishlist.wishlistType : ""}
+        initialTitle={selectedWishlist !== null ? wishlist.wishlistType : ''}
         wishlistId={
           selectedWishlist !== null ? selectedWishlist : wishlists[0].id
         }
@@ -43,7 +42,7 @@ const WishlistDesktop = ({
             className={styles.wishlistSelectListOne}
             id="selectListTable"
             onChange={(e) => {
-              handleSelectWishlist(e.target.value);
+              handleSelectWishlist(e.target.value)
             }}
             size={1}
             value={selectedWishlist}
@@ -76,16 +75,14 @@ const WishlistDesktop = ({
               handleNameList={handleNameListTable}
               fieldValidation={fieldValidationTable}
               handleSubmitData={(event) =>
-                handleSubmitDataTable(
+                handleSubmitDataTable({
                   event,
                   createWishlist,
-                  userEmail,
                   setFieldValidationTable,
                   nameListAccountTable,
                   setNameListAccountTable,
                   setIsModalAccountTable,
-                  fetchData
-                )
+                })
               }
             />
           )}
@@ -105,7 +102,7 @@ const WishlistDesktop = ({
         </section>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default WishlistDesktop;
+export default WishlistDesktop

@@ -1,14 +1,14 @@
-query getWishlists($page: Int, $pageSize:Int){
+query getWishlists($page: Int, $pageSize: Int) {
   getWishlistsByEmail(page: $page, pageSize: $pageSize) {
     id
     email
     wishlistType
     isPublic
-    fieldsConfig{
+    fieldsConfig {
       department
       description
     }
-    products{
+    products {
       ID
       Image
       unitValue
@@ -22,4 +22,3 @@ query getWishlists($page: Int, $pageSize:Int){
     }
   }
 }
-

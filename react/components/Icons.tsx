@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react'
 
 export const NoteIcon = () => {
   return (
@@ -38,8 +38,8 @@ export const NoteIcon = () => {
         strokeLinejoin="round"
       />
     </svg>
-  );
-};
+  )
+}
 
 export const SearchIcon = () => {
   return (
@@ -72,5 +72,5 @@ export const SearchIcon = () => {
         />
       </defs>
     </svg>
-  );
-};
+  )
+}

@@ -3,6 +3,17 @@ import PropTypes from 'prop-types'
 
 import styles from '../../styles.css'
 
+interface Item {
+  productId: string
+  items: Array<{
+    images: Array<{
+      imageUrl: string
+      imageText: string
+    }>
+    referenceId: Array<{ Value: string }>
+  }>
+}
+
 const SearchSKU = ({
   valueSearchSku,
   changeValueSku,
@@ -23,7 +34,7 @@ const SearchSKU = ({
 
       {isShowProductSearch && (
         <div>
-          {searchProduct.map((item) => (
+          {searchProduct.map((item: Item) => (
             <div
               key={item.productId}
               id={item.productId}

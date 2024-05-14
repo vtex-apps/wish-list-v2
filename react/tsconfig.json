@@ -4,16 +4,10 @@
     "jsx": "react",
     "noEmitOnError": false,
     "noImplicitAny": false,
-    "lib": [
-      "dom"
-    ],
+    "lib": ["dom"],
     "module": "esnext",
     "moduleResolution": "node",
     "target": "es2017"
   },
-  "include": [
-    "./typings/*.d.ts",
-    "./**/*.tsx",
-    "./**/*.ts"
-, "components/ProductPriceTotal.jsx"  ]
+  "include": ["./typings/*.d.ts", "./**/*.tsx", "./**/*.ts"]
 }

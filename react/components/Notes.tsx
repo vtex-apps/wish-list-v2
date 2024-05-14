@@ -1,8 +1,9 @@
-import React, { useState, useEffect, useRef, useContext } from "react";
-import { Modal, ToastContext } from "vtex.styleguide";
+/* eslint-disable no-console */
+import React, { useState, useEffect, useRef, useContext } from 'react'
+import { Modal, ToastContext } from 'vtex.styleguide'
 
-import { NoteIcon } from "./Icons";
-import styles from "./notes.css";
+import { NoteIcon } from './Icons'
+import styles from './notes.css'
 
 const Notes = ({
   wishlist: initialWishlist,
@@ -15,26 +16,23 @@ const Notes = ({
   price,
   currency,
 }) => {
-  const [show, setShow] = useState(false);
-  const [notes, setNotes] = useState(currentNotes);
+  const [show, setShow] = useState(false)
+  const [notes, setNotes] = useState(currentNotes)
 
-  const wishlistRef = useRef(initialWishlist);
+  const wishlistRef = useRef(initialWishlist)
 
-  const { showToast } = useContext(ToastContext);
+  const { showToast } = useContext<any>(ToastContext)
 
   useEffect(() => {
-    wishlistRef.current = initialWishlist;
-  }, [initialWishlist]);
+    wishlistRef.current = initialWishlist
+  }, [initialWishlist])
 
   const handleNotesSubmit = async () => {
     try {
-      const updatedProducts = wishlistRef.current.products.map((product) => {
-        if (product.skuCodeReference === skuReference) {
-          product.notes = notes;
-        }
-
-        return product;
-      });
+      const updatedProducts = wishlistRef.current.products?.map((product) => ({
+        ...product,
+        ...(product.skuCodeReference === skuReference ? { notes } : {}),
+      }))
 
       await updateWishlist({
         variables: {
@@ -43,17 +41,17 @@ const Notes = ({
             products: updatedProducts,
           },
         },
-      });
+      })
 
-      showToast("Notes saved successfully!");
-      setShow(false);
+      showToast('Notes saved successfully!')
+      setShow(false)
     } catch (error) {
-      showToast("Error saving notes!");
-      console.error("Notes submit error: ", error);
+      showToast('Error saving notes!')
+      console.error('Notes submit error: ', error)
     }
-  };
+  }
 
-  const formattedValue = `${currency} ${parseFloat(price).toFixed(2)}`;
+  const formattedValue = `${currency} ${parseFloat(price).toFixed(2)}`
 
   return (
     <div className={`${styles.notesContainer}`}>
@@ -134,7 +132,7 @@ const Notes = ({
         </div>
       </Modal>
     </div>
-  );
-};
+  )
+}
 
-export default Notes;
+export default Notes

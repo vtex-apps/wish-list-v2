@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 export default function copyToClipboard(link, setTextCopied) {
   // Create a hidden textarea element to copy the text
   const textarea = document.createElement('textarea')

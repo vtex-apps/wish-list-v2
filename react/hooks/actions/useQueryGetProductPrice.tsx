@@ -1,6 +1,6 @@
-import { useQuery } from "react-apollo";
+import { useQuery } from 'react-apollo'
 
-import PRODUCT_QUERY from "../../graphql/queries/productPrice.graphql";
+import PRODUCT_QUERY from '../../graphql/queries/productPrice.graphql'
 
 const useQueryWishlists = (
   field: string,
@@ -12,19 +12,19 @@ const useQueryWishlists = (
       identifier: { field, value: idValue },
     },
     notifyOnNetworkStatusChange: true,
-  });
+  })
 
   const price =
     (data?.product.items ?? [])
       .find((item) => item)
       ?.sellers?.find((seller) => seller)?.commertialOffer?.Price * quantity ??
-    null;
+    null
 
   return {
     price,
     loading,
     error,
-  };
-};
+  }
+}
 
-export default useQueryWishlists;
+export default useQueryWishlists

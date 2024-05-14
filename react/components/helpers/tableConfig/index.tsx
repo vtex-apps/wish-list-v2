@@ -1,34 +1,35 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { Checkbox } from 'vtex.styleguide'
 
-export const handleNextClick = (
+export const handleNextClick = ({
   currentPage,
   setCurrentPage,
   totalItems,
-  itemsPerPage
-) => {
+  itemsPerPage,
+}) => {
   if (currentPage < Math.ceil(totalItems / itemsPerPage)) {
-    setCurrentPage(currentPage + 1)
+    setCurrentPage(Number(currentPage) + 1)
   }
 }
 
-export const handlePrevClick = (currentPage, setCurrentPage) => {
+export const handlePrevClick = (
+  currentPage: number,
+  setCurrentPage: React.Dispatch<React.SetStateAction<number>>
+) => {
   if (currentPage > 1) {
     setCurrentPage(currentPage - 1)
   }
 }
 
-//Create list post
-export const handleSubmitDataTable = (
+// Create list post
+export const handleSubmitDataTable = ({
   event,
   createWishlist,
-  _,
   setFieldValidationTable,
   nameListAccountTable,
   setNameListAccountTable,
   setIsModalAccountTable,
-  fetchData
-) => {
+}) => {
   event.preventDefault()
 
   if (nameListAccountTable.trim() === '') {
@@ -39,9 +40,9 @@ export const handleSubmitDataTable = (
         wishlist: {
           wishlistType: nameListAccountTable,
           isPublic: false,
-          products: []
-        }
-      }
+          products: [],
+        },
+      },
     })
     setNameListAccountTable('')
     setFieldValidationTable('')
@@ -50,11 +51,9 @@ export const handleSubmitDataTable = (
   }
 }
 
-//Filter Table
-export const selectorObject = (props, filterState) => {
-
-
-  const [newValueObject, setNewValueObject] = useState({})
+// Filter Table
+export const SelectorObject = (props: any, filterState: any) => {
+  const [, setNewValueObject] = useState({})
 
   const initialValue = {
     Ascending: false,
@@ -64,28 +63,35 @@ export const selectorObject = (props, filterState) => {
 
   const toggleValueByKey = (key) => {
     const copyInitialObject = {
-      ...(props.value || initialValue)
+      ...(props.value || initialValue),
     }
+
     const newValue = {
       ...copyInitialObject,
       [key]: copyInitialObject ? !copyInitialObject[key] : false,
     }
+
     setNewValueObject(newValue)
+
     return newValue
   }
+
   return (
     <div>
       {Object.keys(initialValue).map((opt, index) => {
         return (
           <div className="mb3" key={`class-statement-object-${opt}-${index}`}>
             <Checkbox
-              checked={props.value ? props.value[opt] : filterState?.[opt]}
+              checked={props.value ? props?.value?.[opt] : filterState?.[opt]}
               label={opt}
               name="default-checkbox-group"
               onChange={() => {
                 const newValue = toggleValueByKey(`${opt}`)
                 const newValueKeys = Object.keys(newValue)
-                const isEmptyFilter = !newValueKeys.some((key) => !newValue[key])
+                const isEmptyFilter = !newValueKeys.some(
+                  (key) => !newValue[key]
+                )
+
                 props.onChange(isEmptyFilter ? null : newValue)
               }}
               value={opt}
@@ -94,10 +100,10 @@ export const selectorObject = (props, filterState) => {
         )
       })}
     </div>
-  );
-};
+  )
+}
 
-export const handleFiltersChange = (
+export const handleFiltersChange = ({
   statements,
   initialState,
   setInitialState,
@@ -106,56 +112,54 @@ export const handleFiltersChange = (
   setDisplayedProducts,
   onChangeStatements,
   setfilterState,
-  filterState
-) => {
-  let newData = paginatedData ? [...paginatedData] : [];
+  filterState,
+}) => {
+  const newData = paginatedData ? [...paginatedData] : []
 
-
-
-  if (onChangeStatements && onChangeStatements.object) {
-    const { subject, object } = onChangeStatements;
+  if (onChangeStatements?.object) {
+    const { subject, object } = onChangeStatements
 
     setfilterState({ ...filterState, [subject]: onChangeStatements })
 
     switch (subject) {
       case 'department':
         newData.sort((a, b) => {
-          return object.Ascending ?
-            a.department.localeCompare(b.department) :
-            b.department.localeCompare(a.department)
-        });
-        break;
+          return object.Ascending
+            ? a.department.localeCompare(b.department)
+            : b.department.localeCompare(a.department)
+        })
+        break
 
       case 'name':
         newData.sort((a, b) => {
-          return object.Ascending ?
-            a.name.localeCompare(b.name) :
-            b.name.localeCompare(a.name)
-        });
-        break;
+          return object.Ascending
+            ? a.name.localeCompare(b.name)
+            : b.name.localeCompare(a.name)
+        })
+        break
 
       default:
         // Manejar caso no reconocido
-        break;
+        break
     }
   }
 
   setPaginatedData(newData)
   setDisplayedProducts(newData)
 
-  if (statements.length > 0) {
-    const newDataLength = newData.length;
-    const { tableLength } = initialState;
-    const newSlicedData = newData.slice(0, tableLength);
-
-    setInitialState((prevState) => ({
-      ...prevState,
-      filterStatements: statements,
-      slicedData: newSlicedData,
-      itemsLength: newDataLength,
-      currentItemTo: Math.min(tableLength, newDataLength),
-    }));
+  if (statements.length <= 0) {
+    return
   }
-};
 
+  const newDataLength = newData.length
+  const { tableLength } = initialState
+  const newSlicedData = newData.slice(0, tableLength)
 
+  setInitialState((prevState) => ({
+    ...prevState,
+    filterStatements: statements,
+    slicedData: newSlicedData,
+    itemsLength: newDataLength,
+    currentItemTo: Math.min(tableLength, newDataLength),
+  }))
+}

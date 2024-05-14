@@ -47,6 +47,7 @@
     "localeDirectory": "messages"
   },
   "dependencies": {
+    "eslint-plugin-react-hooks": "^4.6.0",
     "lodash.debounce": "^4.0.8"
   }
 }

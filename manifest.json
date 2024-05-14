@@ -1,7 +1,7 @@
 {
-  "vendor": "whitebird",
+  "vendor": "vtex",
   "name": "my-wishlists",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "title": "My Wish Lists",
   "description": "Custom app for managing users' wishlists on the My Account Dashboard",
   "builders": {
@@ -35,7 +35,9 @@
   "peerDependencies": {
     "vtex.quickorder": "3.x"
   },
-  "registries": ["smartcheckout"],
+  "registries": [
+    "smartcheckout"
+  ],
   "policies": [
     {
       "name": "colossus-fire-event"
@@ -51,6 +53,12 @@
     },
     {
       "name": "POWER_USER_DS"
+    },
+    {
+      "name": "vbase-read-write"
+    },
+    {
+      "name": "update-app-settings"
     },
     {
       "name": "outbound-access",

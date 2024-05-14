@@ -1,5 +1,5 @@
 const getEmailID = (wishlists) => {
-  const info = wishlists?.map((item) => ({
+  const info = wishlists.map((item) => ({
     label: item.wishlistType,
     value: item.id,
   }))

@@ -1,5 +1,3 @@
-/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { useState, useEffect } from 'react'
 import { useMutation } from 'react-apollo'
 import { IconEdit } from 'vtex.styleguide'
@@ -53,8 +51,12 @@ function EditableWishlistTitle({ initialTitle, wishlist, fetchData }) {
           </button>
         </div>
       ) : (
-        <div className={styles.wishlistNameContainer}>
-          <h1 className={styles.wishlistName} onClick={handleEditClick}>
+        <div
+          className={styles.wishlistNameContainer}
+          onClick={handleEditClick}
+          aria-hidden="true"
+        >
+          <h1 className={styles.wishlistName}>
             {title} {title && <IconEdit />}
           </h1>
         </div>
