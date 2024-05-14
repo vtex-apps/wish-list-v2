@@ -7,13 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Added Master Data informations to the Read me document.
+
 ## [1.0.12] - 2024-05-09
 
 ### Added
 
 - Added price for wish list item line
 - Added notes to wish list item line
-- Added Master Data informations to the Read me document.
 
 ### Fixed
 
