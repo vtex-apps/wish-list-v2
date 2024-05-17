@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 // Hooks
 import React, { useEffect, useState, useContext, useCallback } from 'react'
 import { Table, Spinner, ToastContext } from 'vtex.styleguide'
@@ -291,6 +290,13 @@ function Wishlist({ wishlists, fetchData }) {
     setCurrentPage(1) // Return to the first page when the number of rows per page changes
   }
 
+  const handleButtonCloseModalTable = (event: {
+    preventDefault: () => void
+  }) => {
+    event.preventDefault()
+    buttonCloseModalTable()
+  }
+
   const bulkActionsrowsSelected = (qty: number) => (
     <React.Fragment>Selected rows: {qty}</React.Fragment>
   )
@@ -343,7 +349,7 @@ function Wishlist({ wishlists, fetchData }) {
               setNameListAccountTable={setNameListAccountTable}
               setIsModalAccountTable={setIsModalAccountTable}
               deleteWishlist={deleteWishlist}
-              buttonCloseModalTable={buttonCloseModalTable}
+              buttonCloseModalTable={handleButtonCloseModalTable}
               handleNameListTable={handleNameListTable}
               fieldValidationTable={fieldValidationTable}
             />
