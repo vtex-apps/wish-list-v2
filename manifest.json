@@ -1,5 +1,5 @@
 {
-  "vendor": "vtex",
+  "vendor": "alfonsob2b",
   "name": "my-wishlists",
   "version": "1.0.12",
   "title": "My Wish Lists",
@@ -35,9 +35,7 @@
   "peerDependencies": {
     "vtex.quickorder": "3.x"
   },
-  "registries": [
-    "smartcheckout"
-  ],
+  "registries": ["smartcheckout"],
   "policies": [
     {
       "name": "colossus-fire-event"
