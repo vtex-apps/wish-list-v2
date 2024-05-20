@@ -32,7 +32,7 @@ export default class MasterDataClient extends JanusClient {
     const { page, pageSize } = pagination ?? {}
 
     return this.http.get(
-      `/api/dataentities/${DATA_ENTITY_NAME}/search?_where=${field}=${value}&_fields=${FIELDS}&_sort=createdIn&_schema=${SCHEMA_NAME}`,
+      `/api/dataentities/${DATA_ENTITY_NAME}/search?_where=${field}="${value}" &_fields=${FIELDS}&_sort=createdIn&_schema=${SCHEMA_NAME}`,
       {
         headers: {
           'REST-Range': `resources=${page ?? 0}-${pageSize ?? 100}`,

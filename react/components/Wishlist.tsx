@@ -362,7 +362,11 @@ function Wishlist({ wishlists, fetchData }) {
             onAddToWishlist={async (product: any) => {
               setIsLoadingSKU(true)
               const { product: productData } = product.data || {}
-              const item = productData.items[0] || {}
+
+              const item =
+                productData.items.find(
+                  (itm: { itemId: string }) => itm.itemId === product?.value
+                ) || {}
 
               const unitMultiplierProperty = productData.properties.find(
                 (prop: { name: string }) => prop.name === 'UnitMultiplier'

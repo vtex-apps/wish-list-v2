@@ -57,6 +57,7 @@ const AutocompleteBlock: FunctionComponent<any & WrappedComponentProps> = ({
       }
 
       const response = await client.query(query)
+
       const { data } = response
       const selectedSku =
         data.product.items.length === 1 ? data.product.items[0].itemId : null

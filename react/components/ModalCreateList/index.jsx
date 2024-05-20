@@ -4,9 +4,12 @@ import { useCssHandles } from 'vtex.css-handles'
 
 import ModalWishList from '../modal'
 
+import './modalCreateList.css'
+
 const CSS_HANDLES = [
   'containerSelectFlexAccount',
   'containerButtonCloseBox',
+  'buttonCloseModal',
   'containerButtonClose',
   'containerTitleCreateList',
   'containerInput',

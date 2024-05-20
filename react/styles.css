@@ -313,10 +313,6 @@
   width: 100%;
 }
 
-.wishlistCreationOptions button {
-  min-height: 2.5rem;
-}
-
 .wishlistCreateNew,
 .wishlistDelete,
 .wishlistAddItem,
