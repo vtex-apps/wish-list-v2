@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix sku autocomplete section selected item
 - Updated the create wishlist modal
 - Fix adding multiple sku issue.
+- Updated the create wishlist to not create a new wishlist if it already exists.
 
 ## [1.0.12] - 2024-05-09
 

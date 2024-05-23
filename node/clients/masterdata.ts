@@ -41,6 +41,22 @@ export default class MasterDataClient extends JanusClient {
     )
   }
 
+  public async searchForExistingWishList(
+    where: string,
+    pagination?: { page: number; pageSize: number }
+  ): Promise<Wishlist[]> {
+    const { page, pageSize } = pagination ?? {}
+
+    return this.http.get(
+      `/api/dataentities/${DATA_ENTITY_NAME}/search?_where=${where} &_fields=${FIELDS}&_sort=createdIn&_schema=${SCHEMA_NAME}`,
+      {
+        headers: {
+          'REST-Range': `resources=${page ?? 0}-${pageSize ?? 100}`,
+        },
+      }
+    )
+  }
+
   public async createWishlist(payload: Wishlist) {
     return this.http.post(
       `/api/dataentities/${DATA_ENTITY_NAME}/documents?_schema=${SCHEMA_NAME}`,
