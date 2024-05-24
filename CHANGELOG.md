@@ -18,7 +18,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Added Master Data informations to the Read me document.
 
-
 ## [1.0.12] - 2024-05-09
 
 ### Added
@@ -29,15 +28,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Impersonation issue happening in PDP when retrieving loggedIn from the OrderForm
-
-### Fixed
-
 - Issue related to adding products to cart from a wishlist.
 - Issue related to creating a wishlist from PDP.
+- FIx styles on wishlist input fields
+- Impersonation issue happening in PDP when retrieving loggedIn from the OrderForm
 
 ## [1.0.11] - 2024-03-27
 
-### Fix
+### Fixed
 
 - Addressed issues reported
 
