@@ -49,7 +49,7 @@ const MyWishLists = () => {
   }, [data])
 
   // Create list post
-  const handleSubmitData = (event) => {
+  const handleSubmitData = (event: { preventDefault: () => void }) => {
     event.preventDefault()
 
     if (nameListAccount.trim() === '') {
@@ -79,6 +79,11 @@ const MyWishLists = () => {
     }
   }
 
+  const handleCloseButton = (event: { preventDefault: () => void }) => {
+    event.preventDefault()
+    buttonCloseModal()
+  }
+
   if (loading) return <Spinner />
 
   if (wishlists.length === 0) {
@@ -91,7 +96,7 @@ const MyWishLists = () => {
         </button>
         {isModalAccount && (
           <ModalCreateList
-            buttonCloseModal={buttonCloseModal}
+            buttonCloseModal={handleCloseButton}
             handleNameList={handleNameList}
             fieldValidation={fieldValidation}
             handleSubmitData={handleSubmitData}

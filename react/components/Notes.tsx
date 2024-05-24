@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import React, { useState, useEffect, useRef, useContext } from 'react'
 import { Modal, ToastContext } from 'vtex.styleguide'
 
@@ -29,10 +28,12 @@ const Notes = ({
 
   const handleNotesSubmit = async () => {
     try {
-      const updatedProducts = wishlistRef.current.products?.map((product) => ({
-        ...product,
-        ...(product.skuCodeReference === skuReference ? { notes } : {}),
-      }))
+      const updatedProducts = wishlistRef.current.products?.map(
+        (product: { skuCodeReference: any }) => ({
+          ...product,
+          ...(product.skuCodeReference === skuReference ? { notes } : {}),
+        })
+      )
 
       await updateWishlist({
         variables: {

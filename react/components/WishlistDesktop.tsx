@@ -71,7 +71,7 @@ const WishlistDesktop = ({
           </button>
           {isModalAccountTable && (
             <ModalCreateList
-              buttonCloseModal={buttonCloseModalTable}
+              handleButtonCloseModal={buttonCloseModalTable}
               handleNameList={handleNameListTable}
               fieldValidation={fieldValidationTable}
               handleSubmitData={(event) =>

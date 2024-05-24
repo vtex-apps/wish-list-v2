@@ -14,7 +14,10 @@ export const createWishlist = async (
 
   const { email } = await auth(ctx)
 
-  const foundWishlist = await md.searchWistlist('wishlistType', wishlistType)
+  const foundWishlist = await md.searchForExistingWishList(
+    `wishlistType = "${wishlistType}" AND email = ${email}`
+  )
+
   const existWishlistName = foundWishlist?.length > 0
 
   if (existWishlistName) {

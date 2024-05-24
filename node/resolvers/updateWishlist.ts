@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { AuthenticationError } from '@vtex/api'
 
 import { auth } from '../middleware/auth'
