@@ -65,15 +65,23 @@ Add the `wishlist-button` to Search page. In the example below, the `wishlist-bu
 
 ## Master Data
 
-### Setting up the Master Data for My Wishlists App
+Data in the wishlist are stored in VTEX masterdata entity named `myWishlists`.
 
-data_entity_name: `whitebird_my_wishlists_wishlist`
+This entity is created automatically when first time accessing the wishlist.
 
-schema_name: `0.0.2-mywishlists`
+### Updating schema
 
-#### Schema of the My Wishlists App
+If masterdata schema is updated during the development (if any changes added to schema), schema version needs to be updated.
+On each schema update new schema is created automatically with following format `{versionNumber}-mywishlists` (i.e. `0.0.2-mywishlists`).
 
-Use this Schema to create the data table in Master Data for My Wishlist App.
+#### Master data schema
+
+Here is the latest masterdata schema.
+
+Data Entity Name: `myWishlists`
+Schema Name: `0.0.4-mywishlists`
+
+<details><summary>myWishlists</summary>
 
 ```json
 {
@@ -140,27 +148,7 @@ Use this Schema to create the data table in Master Data for My Wishlist App.
 }
 ```
 
-VTEX Master Data API Endpoint
-
-`https://{{accountName}}.vtexcommercestable.com.br/api/dataentities/:data_entity_name/schemas/:schema_name`
-
-Create a table by sending a `PUT` request to this endpoint with the above schema.
-
-#### Create a document in the table
-
-```json
-{
-  "email": "", // User email*
-  "wishlistType": "", // Name of the list*
-  "products": [],
-  "isPublic": true,
-  "fieldsConfig": []
-}
-```
-
-`https://{{accountName}}.vtexcommercestable.com.br/api/dataentities/whitebird_my_wishlists_wishlist/documents?_schema=0.0.2-mywishlists`
-
-You can create a sample list using this `POST` call.
+</details>
 
 ## Customization
 
