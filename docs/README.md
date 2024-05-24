@@ -63,6 +63,105 @@ Add the `wishlist-button` to Search page. In the example below, the `wishlist-bu
   }
 ```
 
+## Master Data
+
+### Setting up the Master Data for My Wishlists App
+
+data_entity_name: `whitebird_my_wishlists_wishlist`
+
+schema_name: `0.0.2-mywishlists`
+
+#### Schema of the My Wishlists App
+
+Use this Schema to create the data table in Master Data for My Wishlist App.
+
+```json
+{
+  "properties": {
+    "email": {
+      "type": "string",
+      "format": "email"
+    },
+    "wishlistType": {
+      "type": "string"
+    },
+    "products": {
+      "type": "array"
+    },
+    "isPublic": {
+      "type": "boolean"
+    },
+    "fieldsConfig": {
+      "type": "array"
+    }
+  },
+  "required": ["email", "wishlistType", "products", "isPublic"],
+  "v-indexed": [
+    "email",
+    "wishlistType",
+    "products",
+    "isPublic",
+    "fieldsConfig"
+  ],
+  "v-default-fields": [
+    "email",
+    "wishlistType",
+    "products",
+    "isPublic",
+    "fieldsConfig"
+  ],
+  "v-cache": false,
+  "v-immediate-indexing": true,
+  "v-security": {
+    "allowGetAll": true,
+    "publicRead": [
+      "id",
+      "email",
+      "wishlistType",
+      "products",
+      "isPublic",
+      "fieldsConfig"
+    ],
+    "publicWrite": [
+      "email",
+      "wishlistType",
+      "products",
+      "isPublic",
+      "fieldsConfig"
+    ],
+    "publicFilter": [
+      "email",
+      "wishlistType",
+      "products",
+      "isPublic",
+      "fieldsConfig"
+    ]
+  }
+}
+```
+
+VTEX Master Data API Endpoint
+
+`https://{{accountName}}.vtexcommercestable.com.br/api/dataentities/:data_entity_name/schemas/:schema_name`
+
+Create a table by sending a `PUT` request to this endpoint with the above schema.
+
+#### Create a document in the table
+
+```json
+{
+  "email": "", // User email*
+  "wishlistType": "", // Name of the list*
+  "products": [],
+  "isPublic": true,
+  "fieldsConfig": []
+}
+```
+
+`https://{{accountName}}.vtexcommercestable.com.br/api/dataentities/whitebird_my_wishlists_wishlist/documents?_schema=0.0.2-mywishlists`
+
+You can create a sample list using this `POST` call.
+
 ## Customization
 
 In order to apply CSS customizations in this and other blocks, follow the instructions given in the recipe on [Using CSS Handles for store customization](https://vtex.io/docs/recipes/style/using-css-handles-for-store-customization).
