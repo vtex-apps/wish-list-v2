@@ -6,8 +6,8 @@ const useQueryWishlistById = (id: string, callback: (data: any) => void) => {
   const { refetch } = useQuery(GET_WISHLIST, {
     skip: !id,
     variables: { id },
-    onCompleted: (data) => {
-      callback(data)
+    onCompleted: async (data) => {
+      await callback(data)
     },
     fetchPolicy: 'network-only',
   })

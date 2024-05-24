@@ -15,6 +15,8 @@ declare module 'vtex.styleguide' {
   export const Table
   export const withToast
   export const IconDelete
+  export const Layout
+  export const PageHeader
 
   interface InputProps {
     [key: string]: any

@@ -92,8 +92,8 @@ const ButtonWishlist = () => {
           <Button size="small" variation="secondary" onClick={close}>
             Add to Favourites List
           </Button>
-          <div className={`${handles.containerLoggedIn}`}>
-            <ModalWishList>
+          <div className={`${handles.containerLoggedIn} relative`}>
+            <ModalWishList blockClass="vtex-select-or-create-wishlist">
               {isShowSelect && (
                 <SelectWishlist
                   isButton={isButton}

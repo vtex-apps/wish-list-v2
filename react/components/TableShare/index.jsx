@@ -12,7 +12,6 @@ import { useOrderItems } from 'vtex.order-items/OrderItems'
 import { useRuntime } from 'vtex.render-runtime'
 
 import { ProductStepper } from './ProductStepper'
-import ModalWishList from '../modal'
 import useAddSharedListPage from '../../hooks/useAddSharedListPage'
 import ModalCreateList from '../ModalCreateList'
 import styles from '../../styles.css'
@@ -240,17 +239,16 @@ export default function TableWishList({ products, queryId }) {
             >
               Import Favourite List
             </Button>
-            <div className={handles.importList__modalContainer}>
-              <ModalWishList>
-                {isListNameInputVisible && (
-                  <ModalCreateList
-                    handleButtonCloseModal={handleInputListNameVisualization}
-                    handleNameList={handleNameListTable}
-                    fieldValidation={fieldValidationTable}
-                    handleSubmitData={createNewList}
-                  />
-                )}
-              </ModalWishList>
+            <div className={`${handles.importList__modalContainer} relative`}>
+              {isListNameInputVisible && (
+                <ModalCreateList
+                  handleButtonCloseModal={handleInputListNameVisualization}
+                  handleNameList={handleNameListTable}
+                  fieldValidation={fieldValidationTable}
+                  handleSubmitData={createNewList}
+                  blockClass="vtex-create-wishlist-favorite-list"
+                />
+              )}
             </div>
           </div>
         </div>

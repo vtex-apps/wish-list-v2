@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 import EditableWishlistTitle from './WishlistName/WishlistName'
 import ModalCreateList from './ModalCreateList'
@@ -24,7 +24,11 @@ const WishlistDesktop = ({
   buttonCloseModalTable,
   handleNameListTable,
   fieldValidationTable,
+  isDeleting,
 }) => {
+  const [isCreateLoading, setIsCreateLoading] = useState(false)
+  const [isDeleteLoading, setIsDeleteLoading] = useState(false)
+
   return (
     <div id="wish-list-desktop">
       <EditableWishlistTitle
@@ -62,7 +66,7 @@ const WishlistDesktop = ({
             ))}
           </select>
         </div>
-        <section className={styles.wishlistCreationOptions}>
+        <section className={`${styles.wishlistCreationOptions} relative`}>
           <button
             className={`${styles.wishlistCreateNew} ${styles.wishlistCreateNewHelper}`}
             onClick={buttonModalTable}
@@ -71,19 +75,30 @@ const WishlistDesktop = ({
           </button>
           {isModalAccountTable && (
             <ModalCreateList
-              handleButtonCloseModal={buttonCloseModalTable}
+              buttonCloseModal={buttonCloseModalTable}
               handleNameList={handleNameListTable}
               fieldValidation={fieldValidationTable}
-              handleSubmitData={(event) =>
-                handleSubmitDataTable({
-                  event,
-                  createWishlist,
-                  setFieldValidationTable,
-                  nameListAccountTable,
-                  setNameListAccountTable,
-                  setIsModalAccountTable,
-                })
-              }
+              handleSubmitData={async (event) => {
+                setIsCreateLoading(true)
+                try {
+                  await handleSubmitDataTable({
+                    event,
+                    createWishlist,
+                    setFieldValidationTable,
+                    nameListAccountTable,
+                    setNameListAccountTable,
+                    setIsModalAccountTable,
+                  })
+                  // await fetchData()
+                  // await updateData()
+                  setIsCreateLoading(false)
+                } catch (error) {
+                  console.error(error)
+                  setIsCreateLoading(false)
+                }
+              }}
+              isButtonLoading={isCreateLoading}
+              blockClass="vtex-create-wishlist-desktop"
             />
           )}
           <WishlistPrivacyOptions
@@ -95,9 +110,21 @@ const WishlistDesktop = ({
           />
           <button
             className={styles.wishlistDeleteWishList}
-            onClick={() => deleteWishlist()}
+            onClick={async () => {
+              setIsDeleteLoading(true)
+              try {
+                await deleteWishlist()
+                // await fetchData()
+                // await updateData()
+                setIsDeleteLoading(false)
+              } catch (error) {
+                console.error(error)
+                setIsDeleteLoading(false)
+              }
+            }}
+            disabled={isDeleteLoading}
           >
-            Delete Selected List
+            {isDeleting ? `Deleting...` : `Delete Selected List`}
           </button>
         </section>
       </div>

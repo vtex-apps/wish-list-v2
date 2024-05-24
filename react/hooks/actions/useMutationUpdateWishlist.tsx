@@ -4,8 +4,8 @@ import UPDATE_WISHLIST from '../../graphql/mutations/updateWishlist.gql'
 
 const useMutationUpdateWishlist = (callback) => {
   const [updateWishlist] = useMutation(UPDATE_WISHLIST, {
-    onCompleted: () => {
-      callback()
+    onCompleted: async () => {
+      await callback()
     },
   })
 

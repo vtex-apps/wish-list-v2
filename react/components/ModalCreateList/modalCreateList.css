@@ -4,3 +4,28 @@
   row-gap: 1rem;
   padding: 1rem;
 }
+
+.containerSelectFlexAccount :global(.vtex-styleguide-9-x-input),
+.containerSelectFlexAccount :global(.vtex-button) {
+  font-size: 12px;
+}
+
+.containerTitleCreateList {
+  margin: 0;
+}
+
+.containerButtonCloseBox .buttonCloseModal {
+  position: absolute;
+  right: 0;
+  top: 0;
+  border: none;
+  height: 2rem;
+  width: 2rem;
+  font-size: 1rem;
+  background: unset;
+  cursor: pointer;
+}
+
+.containerButtonCloseBox .buttonCloseModal:hover {
+  scale: 1.2;
+}

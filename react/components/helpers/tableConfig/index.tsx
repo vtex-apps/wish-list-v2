@@ -22,7 +22,7 @@ export const handlePrevClick = (
 }
 
 // Create list post
-export const handleSubmitDataTable = ({
+export const handleSubmitDataTable = async ({
   event,
   createWishlist,
   setFieldValidationTable,
@@ -35,7 +35,7 @@ export const handleSubmitDataTable = ({
   if (nameListAccountTable.trim() === '') {
     setFieldValidationTable('The field cannot be empty')
   } else {
-    createWishlist({
+    await createWishlist({
       variables: {
         wishlist: {
           wishlistType: nameListAccountTable,

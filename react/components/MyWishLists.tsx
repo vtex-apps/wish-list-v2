@@ -1,5 +1,5 @@
 // Hooks
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Spinner, Button } from 'vtex.styleguide'
 import { useMutation } from 'react-apollo'
 
@@ -17,6 +17,7 @@ import styles from '../styles.css'
 import CREATE_WISHLIST from '../mutation/createWishList.gql'
 
 const MyWishLists = () => {
+  const [isLoading, setIsLoading] = useState(false)
   const { setSelectedWishlist, selectedWishlist } = useStoreGlobal()
   const setWishlists = useStoreGlobal((state) => state.setWishlists)
   const wishlists = useStoreGlobal((state) => state.wishlists)
@@ -55,6 +56,7 @@ const MyWishLists = () => {
     if (nameListAccount.trim() === '') {
       setFieldValidation('The field cannot be empty')
     } else {
+      setIsLoading(true)
       createNewListMutaion({
         variables: {
           wishList: {
@@ -64,17 +66,19 @@ const MyWishLists = () => {
           },
         },
       })
+        .then(refetch)
         .then(() => {
-          refetch()
           setNameListAccount('')
           setFieldValidation('')
           setIsModalAccount(false)
+          setIsLoading(false)
         })
         .catch((error) => {
           console.error(error)
           setNameListAccount('')
           setFieldValidation('')
           setIsModalAccount(false)
+          setIsLoading(false)
         })
     }
   }
@@ -100,13 +104,15 @@ const MyWishLists = () => {
             handleNameList={handleNameList}
             fieldValidation={fieldValidation}
             handleSubmitData={handleSubmitData}
+            blockClass="vtex-create-wishlist-main"
+            isButtonLoading={isLoading}
           />
         )}
       </section>
     )
   }
 
-  return <Wishlist wishlists={wishlists} fetchData={async () => refetch()} />
+  return <Wishlist wishlists={wishlists} fetchData={refetch} />
 }
 
 export default MyWishLists

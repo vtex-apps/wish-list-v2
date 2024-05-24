@@ -5,7 +5,11 @@ import handles from './modalstyle.css'
 
 const ModalWishList = (props: PropsModal) => {
   return (
-    <div className={`${handles.modalWishListWrapper}`}>{props.children}</div>
+    <div
+      className={`${props.blockClass} ${handles.modalWishListWrapper} relative`}
+    >
+      {props.children}
+    </div>
   )
 }
 
