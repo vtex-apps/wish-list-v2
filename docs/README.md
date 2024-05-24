@@ -72,7 +72,7 @@ This entity is created automatically when first time accessing the wishlist.
 ### Updating schema
 
 If masterdata schema is updated during the development (if any changes added to schema), schema version needs to be updated.
-On each schema update new schema is created automatically with following format `{versionNumber}-mywishlists` (i.e. `0.0.2-mywishlists`).
+On each schema version update new schema is created automatically with following format `{versionNumber}-mywishlists` (i.e. `0.0.2-mywishlists`).
 
 #### Master data schema
 

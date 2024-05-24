@@ -89,11 +89,10 @@ const WishlistDesktop = ({
                     setNameListAccountTable,
                     setIsModalAccountTable,
                   })
-                  // await fetchData()
-                  // await updateData()
                   setIsCreateLoading(false)
                 } catch (error) {
                   console.error(error)
+                  await fetchData()
                   setIsCreateLoading(false)
                 }
               }}
@@ -114,11 +113,10 @@ const WishlistDesktop = ({
               setIsDeleteLoading(true)
               try {
                 await deleteWishlist()
-                // await fetchData()
-                // await updateData()
                 setIsDeleteLoading(false)
               } catch (error) {
                 console.error(error)
+                await fetchData()
                 setIsDeleteLoading(false)
               }
             }}

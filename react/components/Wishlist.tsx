@@ -101,8 +101,6 @@ function Wishlist({ wishlists, fetchData }) {
     if (data.createWishlist) {
       setSelectedWishlist(data.createWishlist.DocumentId)
     }
-
-    // await updateData()
   })
 
   const { updateWishlist } = useUpdateWishlist(async () => {
