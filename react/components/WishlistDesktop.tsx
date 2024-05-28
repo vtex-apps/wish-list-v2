@@ -29,6 +29,37 @@ const WishlistDesktop = ({
   const [isCreateLoading, setIsCreateLoading] = useState(false)
   const [isDeleteLoading, setIsDeleteLoading] = useState(false)
 
+  const onCreateList = async (event) => {
+    setIsCreateLoading(true)
+    try {
+      await handleSubmitDataTable({
+        event,
+        createWishlist,
+        setFieldValidationTable,
+        nameListAccountTable,
+        setNameListAccountTable,
+        setIsModalAccountTable,
+      })
+      setIsCreateLoading(false)
+    } catch (error) {
+      console.error(error)
+      await fetchData()
+      setIsCreateLoading(false)
+    }
+  }
+
+  const onDeleteList = async () => {
+    setIsDeleteLoading(true)
+    try {
+      await deleteWishlist()
+      setIsDeleteLoading(false)
+    } catch (error) {
+      console.error(error)
+      await fetchData()
+      setIsDeleteLoading(false)
+    }
+  }
+
   return (
     <div id="wish-list-desktop">
       <EditableWishlistTitle
@@ -78,24 +109,7 @@ const WishlistDesktop = ({
               buttonCloseModal={buttonCloseModalTable}
               handleNameList={handleNameListTable}
               fieldValidation={fieldValidationTable}
-              handleSubmitData={async (event) => {
-                setIsCreateLoading(true)
-                try {
-                  await handleSubmitDataTable({
-                    event,
-                    createWishlist,
-                    setFieldValidationTable,
-                    nameListAccountTable,
-                    setNameListAccountTable,
-                    setIsModalAccountTable,
-                  })
-                  setIsCreateLoading(false)
-                } catch (error) {
-                  console.error(error)
-                  await fetchData()
-                  setIsCreateLoading(false)
-                }
-              }}
+              handleSubmitData={onCreateList}
               isButtonLoading={isCreateLoading}
               blockClass="vtex-create-wishlist-desktop"
             />
@@ -109,17 +123,7 @@ const WishlistDesktop = ({
           />
           <button
             className={styles.wishlistDeleteWishList}
-            onClick={async () => {
-              setIsDeleteLoading(true)
-              try {
-                await deleteWishlist()
-                setIsDeleteLoading(false)
-              } catch (error) {
-                console.error(error)
-                await fetchData()
-                setIsDeleteLoading(false)
-              }
-            }}
+            onClick={onDeleteList}
             disabled={isDeleteLoading}
           >
             {isDeleting ? `Deleting...` : `Delete Selected List`}

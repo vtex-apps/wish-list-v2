@@ -303,6 +303,148 @@ function Wishlist({ wishlists, fetchData }) {
     buttonCloseModalTable()
   }
 
+  const onAddToWishlist = async (product: any) => {
+    setIsLoadingSKU(true)
+    const { product: productData } = product.data || {}
+
+    const item =
+      productData.items.find(
+        (itm: { itemId: string }) => itm.itemId === product?.value
+      ) || {}
+
+    const unitMultiplierProperty = productData.properties.find(
+      (prop: { name: string }) => prop.name === 'UnitMultiplier'
+    )
+
+    const unitMultiplierValue = unitMultiplierProperty
+      ? parseInt(unitMultiplierProperty.values[0], 10)
+      : 1
+
+    const hasBundle = unitMultiplierValue > 1
+
+    const newProduct = {
+      ID: Number(item.itemId),
+      Image: item.images[0].imageUrl,
+      unitValue: productData.priceRange.sellingPrice.highPrice,
+      linkProduct: productData.link,
+      nameProduct: productData.productName,
+      quantityProduct: 1,
+      skuCodeReference: item.referenceId[0].Value,
+      department: productData.categoryTree[0].name,
+      bundle: hasBundle ? unitMultiplierValue : item.unitMultiplier,
+    }
+
+    if (newProduct.bundle > 1) {
+      newProduct.quantityProduct *= newProduct.bundle
+    }
+
+    try {
+      if (
+        wishlist.products.some((p: { ID: number }) => p.ID === newProduct.ID)
+      ) {
+        showToast('You have already added this product to the list')
+
+        return false
+      }
+
+      await updateWishlist({
+        variables: {
+          wishlist: {
+            id: selectedWishlist,
+            products: [...wishlist.products, newProduct],
+          },
+        },
+      })
+      showToast('Successfully added to the Favourites List')
+
+      return true
+    } catch (error) {
+      console.error('Error adding to the list:', error)
+
+      return false
+    } finally {
+      setIsLoadingSKU(false)
+    }
+  }
+
+  const tableFilterOptions = {
+    department: {
+      label: 'Department',
+      renderFilterLabel: () => {
+        if (!filterState.department || !filterState.department.object) {
+          return 'All'
+        }
+
+        const keys = filterState.department.object
+          ? Object.keys(filterState.department.object)
+          : []
+
+        const isAllTrue = !keys.some(
+          (key) => !filterState.department.object[key]
+        )
+
+        const isAllFalse = !keys.some(
+          (key) => filterState.department.object[key]
+        )
+
+        const trueKeys = keys.filter(
+          (key) => filterState.department.object[key]
+        )
+
+        let trueKeysLabel = ''
+
+        trueKeys.forEach((key, index) => {
+          trueKeysLabel += `${key}${index === trueKeys.length - 1 ? '' : ', '}`
+        })
+
+        return `${isAllTrue ? 'All' : isAllFalse ? 'None' : `${trueKeysLabel}`}`
+      },
+      verbs: [
+        {
+          label: 'Sort',
+          value: 'Sort',
+          object: (e: React.ChangeEvent<HTMLSelectElement>) => {
+            return SelectorObject(e, filterState?.department?.object)
+          },
+        },
+      ],
+    },
+    name: {
+      label: 'Description',
+      renderFilterLabel: () => {
+        if (!filterState.name || !filterState.name.object) {
+          return 'All'
+        }
+
+        const keys = filterState.name.object
+          ? Object.keys(filterState.name.object)
+          : []
+
+        const isAllTrue = !keys.some((key) => !filterState.name.object[key])
+
+        const isAllFalse = !keys.some((key) => filterState.name.object[key])
+
+        const trueKeys = keys.filter((key) => filterState.name.object[key])
+
+        let trueKeysLabel = ''
+
+        trueKeys.forEach((key, index) => {
+          trueKeysLabel += `${key}${index === trueKeys.length - 1 ? '' : ', '}`
+        })
+
+        return `${isAllTrue ? 'All' : isAllFalse ? 'None' : `${trueKeysLabel}`}`
+      },
+      verbs: [
+        {
+          label: 'Sort',
+          value: 'Sort',
+          object: (e: React.ChangeEvent<HTMLSelectElement>) =>
+            SelectorObject(e, filterState?.name?.object),
+        },
+      ],
+    },
+  }
+
   const bulkActionsrowsSelected = (qty: number) => (
     <React.Fragment>Selected rows: {qty}</React.Fragment>
   )
@@ -363,71 +505,7 @@ function Wishlist({ wishlists, fetchData }) {
         text="Add SKU"
         description="Search and add to your list"
         componentOnly={false}
-        onAddToWishlist={async (product: any) => {
-          setIsLoadingSKU(true)
-          const { product: productData } = product.data || {}
-
-          const item =
-            productData.items.find(
-              (itm: { itemId: string }) => itm.itemId === product?.value
-            ) || {}
-
-          const unitMultiplierProperty = productData.properties.find(
-            (prop: { name: string }) => prop.name === 'UnitMultiplier'
-          )
-
-          const unitMultiplierValue = unitMultiplierProperty
-            ? parseInt(unitMultiplierProperty.values[0], 10)
-            : 1
-
-          const hasBundle = unitMultiplierValue > 1
-
-          const newProduct = {
-            ID: Number(item.itemId),
-            Image: item.images[0].imageUrl,
-            unitValue: productData.priceRange.sellingPrice.highPrice,
-            linkProduct: productData.link,
-            nameProduct: productData.productName,
-            quantityProduct: 1,
-            skuCodeReference: item.referenceId[0].Value,
-            department: productData.categoryTree[0].name,
-            bundle: hasBundle ? unitMultiplierValue : item.unitMultiplier,
-          }
-
-          if (newProduct.bundle > 1) {
-            newProduct.quantityProduct *= newProduct.bundle
-          }
-
-          try {
-            if (
-              wishlist.products.some(
-                (p: { ID: number }) => p.ID === newProduct.ID
-              )
-            ) {
-              showToast('You have already added this product to the list')
-
-              return false
-            }
-
-            await updateWishlist({
-              variables: {
-                wishlist: {
-                  id: selectedWishlist,
-                  products: [...wishlist.products, newProduct],
-                },
-              },
-            })
-            showToast('Successfully added to the Favourites List')
-
-            return true
-          } catch (error) {
-            console.error('Error adding to the list:', error)
-
-            return false
-          } finally {
-            setIsLoadingSKU(false)
-          }
-        }}
+        onAddToWishlist={onAddToWishlist}
       />
       <section className={styles.wishlistSearchContainer}>
         <Table
@@ -523,100 +601,7 @@ function Wishlist({ wishlists, fetchData }) {
             },
             clearAllFiltersButtonLabel: 'Clear Filters',
             collapseLeft: true,
-            options: {
-              department: {
-                label: 'Department',
-                renderFilterLabel: () => {
-                  if (
-                    !filterState.department ||
-                    !filterState.department.object
-                  ) {
-                    return 'All'
-                  }
-
-                  const keys = filterState.department.object
-                    ? Object.keys(filterState.department.object)
-                    : []
-
-                  const isAllTrue = !keys.some(
-                    (key) => !filterState.department.object[key]
-                  )
-
-                  const isAllFalse = !keys.some(
-                    (key) => filterState.department.object[key]
-                  )
-
-                  const trueKeys = keys.filter(
-                    (key) => filterState.department.object[key]
-                  )
-
-                  let trueKeysLabel = ''
-
-                  trueKeys.forEach((key, index) => {
-                    trueKeysLabel += `${key}${
-                      index === trueKeys.length - 1 ? '' : ', '
-                    }`
-                  })
-
-                  return `${
-                    isAllTrue ? 'All' : isAllFalse ? 'None' : `${trueKeysLabel}`
-                  }`
-                },
-                verbs: [
-                  {
-                    label: 'Sort',
-                    value: 'Sort',
-                    object: (e: React.ChangeEvent<HTMLSelectElement>) => {
-                      return SelectorObject(e, filterState?.department?.object)
-                    },
-                  },
-                ],
-              },
-              name: {
-                label: 'Description',
-                renderFilterLabel: () => {
-                  if (!filterState.name || !filterState.name.object) {
-                    return 'All'
-                  }
-
-                  const keys = filterState.name.object
-                    ? Object.keys(filterState.name.object)
-                    : []
-
-                  const isAllTrue = !keys.some(
-                    (key) => !filterState.name.object[key]
-                  )
-
-                  const isAllFalse = !keys.some(
-                    (key) => filterState.name.object[key]
-                  )
-
-                  const trueKeys = keys.filter(
-                    (key) => filterState.name.object[key]
-                  )
-
-                  let trueKeysLabel = ''
-
-                  trueKeys.forEach((key, index) => {
-                    trueKeysLabel += `${key}${
-                      index === trueKeys.length - 1 ? '' : ', '
-                    }`
-                  })
-
-                  return `${
-                    isAllTrue ? 'All' : isAllFalse ? 'None' : `${trueKeysLabel}`
-                  }`
-                },
-                verbs: [
-                  {
-                    label: 'Sort',
-                    value: 'Sort',
-                    object: (e: React.ChangeEvent<HTMLSelectElement>) =>
-                      SelectorObject(e, filterState?.name?.object),
-                  },
-                ],
-              },
-            },
+            options: tableFilterOptions,
           }}
         />
       </section>

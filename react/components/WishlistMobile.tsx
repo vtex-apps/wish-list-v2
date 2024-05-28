@@ -28,6 +28,24 @@ const WishlistMobile = ({
 }) => {
   const [isCreateLoading, setIsCreateLoading] = useState(false)
 
+  const onCreateList = async (event: React.FormEvent) => {
+    setIsCreateLoading(true)
+    try {
+      await handleSubmitDataTable({
+        event,
+        createWishlist,
+        setFieldValidationTable,
+        nameListAccountTable,
+        setNameListAccountTable,
+        setIsModalAccountTable,
+      })
+      setIsCreateLoading(false)
+    } catch (error) {
+      console.error(error)
+      setIsCreateLoading(false)
+    }
+  }
+
   return (
     <div id="wish-list-mobile">
       {/* Mobile Design */}
@@ -71,23 +89,7 @@ const WishlistMobile = ({
                   buttonCloseModal={buttonCloseModalTable}
                   handleNameList={handleNameListTable}
                   fieldValidation={fieldValidationTable}
-                  handleSubmitData={async (event: React.FormEvent) => {
-                    setIsCreateLoading(true)
-                    try {
-                      await handleSubmitDataTable({
-                        event,
-                        createWishlist,
-                        setFieldValidationTable,
-                        nameListAccountTable,
-                        setNameListAccountTable,
-                        setIsModalAccountTable,
-                      })
-                      setIsCreateLoading(false)
-                    } catch (error) {
-                      console.error(error)
-                      setIsCreateLoading(false)
-                    }
-                  }}
+                  handleSubmitData={onCreateList}
                   isButtonLoading={isCreateLoading}
                   blockClass="vtex-create-wishlist-mobile"
                 />

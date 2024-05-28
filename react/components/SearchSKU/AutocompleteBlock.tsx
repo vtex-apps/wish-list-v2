@@ -123,6 +123,14 @@ const AutocompleteBlock: FunctionComponent<any & WrappedComponentProps> = ({
     return url.replace('25-25', `50-50`)
   }
 
+  const onAddToFavoritesList = async () => {
+    const result = await onAddToWishlist(selectedItem)
+
+    if (result) {
+      clear()
+    }
+  }
+
   return (
     <div className={`${handles.addSkuContainer}`}>
       {!componentOnly && (
@@ -181,13 +189,7 @@ const AutocompleteBlock: FunctionComponent<any & WrappedComponentProps> = ({
                         <Button
                           variation="primary"
                           size="small"
-                          onClick={async () => {
-                            const result = await onAddToWishlist(selectedItem)
-
-                            if (result) {
-                              clear()
-                            }
-                          }}
+                          onClick={onAddToFavoritesList}
                         >
                           Add to Favourite List
                         </Button>
