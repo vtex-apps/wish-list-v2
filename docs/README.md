@@ -63,6 +63,93 @@ Add the `wishlist-button` to Search page. In the example below, the `wishlist-bu
   }
 ```
 
+## Master Data
+
+Data in the wishlist are stored in VTEX masterdata entity named `myWishlists`.
+
+This entity is created automatically when first time accessing the wishlist.
+
+### Updating schema
+
+If masterdata schema is updated during the development (if any changes added to schema), schema version needs to be updated.
+On each schema version update new schema is created automatically with following format `{versionNumber}-mywishlists` (i.e. `0.0.2-mywishlists`).
+
+#### Master data schema
+
+Here is the latest masterdata schema.
+
+Data Entity Name: `myWishlists`
+Schema Name: `0.0.4-mywishlists`
+
+<details><summary>myWishlists</summary>
+
+```json
+{
+  "properties": {
+    "email": {
+      "type": "string",
+      "format": "email"
+    },
+    "wishlistType": {
+      "type": "string"
+    },
+    "products": {
+      "type": "array"
+    },
+    "isPublic": {
+      "type": "boolean"
+    },
+    "fieldsConfig": {
+      "type": "array"
+    }
+  },
+  "required": ["email", "wishlistType", "products", "isPublic"],
+  "v-indexed": [
+    "email",
+    "wishlistType",
+    "products",
+    "isPublic",
+    "fieldsConfig"
+  ],
+  "v-default-fields": [
+    "email",
+    "wishlistType",
+    "products",
+    "isPublic",
+    "fieldsConfig"
+  ],
+  "v-cache": false,
+  "v-immediate-indexing": true,
+  "v-security": {
+    "allowGetAll": true,
+    "publicRead": [
+      "id",
+      "email",
+      "wishlistType",
+      "products",
+      "isPublic",
+      "fieldsConfig"
+    ],
+    "publicWrite": [
+      "email",
+      "wishlistType",
+      "products",
+      "isPublic",
+      "fieldsConfig"
+    ],
+    "publicFilter": [
+      "email",
+      "wishlistType",
+      "products",
+      "isPublic",
+      "fieldsConfig"
+    ]
+  }
+}
+```
+
+</details>
+
 ## Customization
 
 In order to apply CSS customizations in this and other blocks, follow the instructions given in the recipe on [Using CSS Handles for store customization](https://vtex.io/docs/recipes/style/using-css-handles-for-store-customization).

@@ -30,4 +30,5 @@ export interface SelectWishList {
 
 export interface PropsModal {
   children: any
+  blockClass: string
 }

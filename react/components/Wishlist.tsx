@@ -1,7 +1,6 @@
-/* eslint-disable no-console */
 // Hooks
 import React, { useEffect, useState, useContext, useCallback } from 'react'
-import { Table, Spinner, ToastContext } from 'vtex.styleguide'
+import { Table, ToastContext } from 'vtex.styleguide'
 import { useRuntime } from 'vtex.render-runtime'
 
 // Components
@@ -79,14 +78,7 @@ function Wishlist({ wishlists, fetchData }) {
     setDisplayedProducts(sortedProducts)
   })
 
-  const { createWishlist } = useCreateWishlist(async (data) => {
-    await fetchData()
-    if (data.createWishlist) {
-      setSelectedWishlist(data.createWishlist.DocumentId)
-    }
-  })
-
-  const { updateWishlist } = useUpdateWishlist(() => {
+  const updateData = () =>
     refetch().then(({ data }) => {
       if (!data || !data.getWishlist) return
 
@@ -103,13 +95,26 @@ function Wishlist({ wishlists, fetchData }) {
       setAllProducts(sortedProducts)
       setDisplayedProducts(sortedProducts)
     })
+
+  const { createWishlist } = useCreateWishlist(async (data) => {
+    await fetchData()
+    if (data.createWishlist) {
+      setSelectedWishlist(data.createWishlist.DocumentId)
+    }
+  })
+
+  const { updateWishlist } = useUpdateWishlist(async () => {
+    await updateData()
   })
 
   const { deleteWishlist, loading: isDeleting } = useDeleteWishlist(
     selectedWishlist,
     async () => {
+      setSelectedWishlist(null)
       await fetchData()
-      setSelectedWishlist(wishlists[0].id)
+      setSelectedWishlist(
+        (wishlists ?? []).length > 0 ? wishlists[0]?.id : null
+      )
     }
   )
 
@@ -291,6 +296,155 @@ function Wishlist({ wishlists, fetchData }) {
     setCurrentPage(1) // Return to the first page when the number of rows per page changes
   }
 
+  const handleButtonCloseModalTable = (event: {
+    preventDefault: () => void
+  }) => {
+    event.preventDefault()
+    buttonCloseModalTable()
+  }
+
+  const onAddToWishlist = async (product: any) => {
+    setIsLoadingSKU(true)
+    const { product: productData } = product.data || {}
+
+    const item =
+      productData.items.find(
+        (itm: { itemId: string }) => itm.itemId === product?.value
+      ) || {}
+
+    const unitMultiplierProperty = productData.properties.find(
+      (prop: { name: string }) => prop.name === 'UnitMultiplier'
+    )
+
+    const unitMultiplierValue = unitMultiplierProperty
+      ? parseInt(unitMultiplierProperty.values[0], 10)
+      : 1
+
+    const hasBundle = unitMultiplierValue > 1
+
+    const newProduct = {
+      ID: Number(item.itemId),
+      Image: item.images[0].imageUrl,
+      unitValue: productData.priceRange.sellingPrice.highPrice,
+      linkProduct: productData.link,
+      nameProduct: productData.productName,
+      quantityProduct: 1,
+      skuCodeReference: item.referenceId[0].Value,
+      department: productData.categoryTree[0].name,
+      bundle: hasBundle ? unitMultiplierValue : item.unitMultiplier,
+    }
+
+    if (newProduct.bundle > 1) {
+      newProduct.quantityProduct *= newProduct.bundle
+    }
+
+    try {
+      if (
+        wishlist.products.some((p: { ID: number }) => p.ID === newProduct.ID)
+      ) {
+        showToast('You have already added this product to the list')
+
+        return false
+      }
+
+      await updateWishlist({
+        variables: {
+          wishlist: {
+            id: selectedWishlist,
+            products: [...wishlist.products, newProduct],
+          },
+        },
+      })
+      showToast('Successfully added to the Favourites List')
+
+      return true
+    } catch (error) {
+      console.error('Error adding to the list:', error)
+
+      return false
+    } finally {
+      setIsLoadingSKU(false)
+    }
+  }
+
+  const tableFilterOptions = {
+    department: {
+      label: 'Department',
+      renderFilterLabel: () => {
+        if (!filterState.department || !filterState.department.object) {
+          return 'All'
+        }
+
+        const keys = filterState.department.object
+          ? Object.keys(filterState.department.object)
+          : []
+
+        const isAllTrue = !keys.some(
+          (key) => !filterState.department.object[key]
+        )
+
+        const isAllFalse = !keys.some(
+          (key) => filterState.department.object[key]
+        )
+
+        const trueKeys = keys.filter(
+          (key) => filterState.department.object[key]
+        )
+
+        let trueKeysLabel = ''
+
+        trueKeys.forEach((key, index) => {
+          trueKeysLabel += `${key}${index === trueKeys.length - 1 ? '' : ', '}`
+        })
+
+        return `${isAllTrue ? 'All' : isAllFalse ? 'None' : `${trueKeysLabel}`}`
+      },
+      verbs: [
+        {
+          label: 'Sort',
+          value: 'Sort',
+          object: (e: React.ChangeEvent<HTMLSelectElement>) => {
+            return SelectorObject(e, filterState?.department?.object)
+          },
+        },
+      ],
+    },
+    name: {
+      label: 'Description',
+      renderFilterLabel: () => {
+        if (!filterState.name || !filterState.name.object) {
+          return 'All'
+        }
+
+        const keys = filterState.name.object
+          ? Object.keys(filterState.name.object)
+          : []
+
+        const isAllTrue = !keys.some((key) => !filterState.name.object[key])
+
+        const isAllFalse = !keys.some((key) => filterState.name.object[key])
+
+        const trueKeys = keys.filter((key) => filterState.name.object[key])
+
+        let trueKeysLabel = ''
+
+        trueKeys.forEach((key, index) => {
+          trueKeysLabel += `${key}${index === trueKeys.length - 1 ? '' : ', '}`
+        })
+
+        return `${isAllTrue ? 'All' : isAllFalse ? 'None' : `${trueKeysLabel}`}`
+      },
+      verbs: [
+        {
+          label: 'Sort',
+          value: 'Sort',
+          object: (e: React.ChangeEvent<HTMLSelectElement>) =>
+            SelectorObject(e, filterState?.name?.object),
+        },
+      ],
+    },
+  }
+
   const bulkActionsrowsSelected = (qty: number) => (
     <React.Fragment>Selected rows: {qty}</React.Fragment>
   )
@@ -301,329 +455,156 @@ function Wishlist({ wishlists, fetchData }) {
 
   return (
     <>
-      {isDeleting ? (
-        <Spinner />
+      {deviceInfo.type === 'phone' ? (
+        <WishlistMobile
+          selectedWishlist={selectedWishlist}
+          wishlists={wishlists}
+          wishlist={wishlist}
+          fetchData={fetchData}
+          handleSelectWishlist={handleSelectWishlist}
+          emailIDInfo={emailIDInfo}
+          buttonModalTable={buttonModalTable}
+          isModalAccountTable={isModalAccountTable}
+          handleSubmitDataTable={handleSubmitDataTable}
+          createWishlist={createWishlist}
+          setFieldValidationTable={setFieldValidationTable}
+          nameListAccountTable={nameListAccountTable}
+          setNameListAccountTable={setNameListAccountTable}
+          setIsModalAccountTable={setIsModalAccountTable}
+          deleteWishlist={deleteWishlist}
+          buttonCloseModalTable={buttonCloseModalTable}
+          handleNameListTable={handleNameListTable}
+          fieldValidationTable={fieldValidationTable}
+          isDeleting={isDeleting}
+        />
       ) : (
-        <>
-          {deviceInfo.type === 'phone' ? (
-            <WishlistMobile
-              selectedWishlist={selectedWishlist}
-              wishlists={wishlists}
-              wishlist={wishlist}
-              fetchData={fetchData}
-              handleSelectWishlist={handleSelectWishlist}
-              emailIDInfo={emailIDInfo}
-              buttonModalTable={buttonModalTable}
-              isModalAccountTable={isModalAccountTable}
-              handleSubmitDataTable={handleSubmitDataTable}
-              createWishlist={createWishlist}
-              setFieldValidationTable={setFieldValidationTable}
-              nameListAccountTable={nameListAccountTable}
-              setNameListAccountTable={setNameListAccountTable}
-              setIsModalAccountTable={setIsModalAccountTable}
-              deleteWishlist={deleteWishlist}
-              buttonCloseModalTable={buttonCloseModalTable}
-              handleNameListTable={handleNameListTable}
-              fieldValidationTable={fieldValidationTable}
-            />
-          ) : (
-            <WishlistDesktop
-              selectedWishlist={selectedWishlist}
-              wishlists={wishlists}
-              wishlist={wishlist}
-              fetchData={fetchData}
-              handleSelectWishlist={handleSelectWishlist}
-              emailIDInfo={emailIDInfo}
-              buttonModalTable={buttonModalTable}
-              isModalAccountTable={isModalAccountTable}
-              handleSubmitDataTable={handleSubmitDataTable}
-              createWishlist={createWishlist}
-              setFieldValidationTable={setFieldValidationTable}
-              nameListAccountTable={nameListAccountTable}
-              setNameListAccountTable={setNameListAccountTable}
-              setIsModalAccountTable={setIsModalAccountTable}
-              deleteWishlist={deleteWishlist}
-              buttonCloseModalTable={buttonCloseModalTable}
-              handleNameListTable={handleNameListTable}
-              fieldValidationTable={fieldValidationTable}
-            />
-          )}
-
-          <AutocompleteBlock
-            text="Add SKU"
-            description="Search and add to your list"
-            componentOnly={false}
-            onAddToWishlist={async (product: any) => {
-              setIsLoadingSKU(true)
-              const { product: productData } = product.data || {}
-              const item = productData.items[0] || {}
-
-              const unitMultiplierProperty = productData.properties.find(
-                (prop: { name: string }) => prop.name === 'UnitMultiplier'
-              )
-
-              const unitMultiplierValue = unitMultiplierProperty
-                ? parseInt(unitMultiplierProperty.values[0], 10)
-                : 1
-
-              const hasBundle = unitMultiplierValue > 1
-
-              const newProduct = {
-                ID: Number(item.itemId),
-                Image: item.images[0].imageUrl,
-                unitValue: productData.priceRange.sellingPrice.highPrice,
-                linkProduct: productData.link,
-                nameProduct: productData.productName,
-                quantityProduct: 1,
-                skuCodeReference: item.referenceId[0].Value,
-                department: productData.categoryTree[0].name,
-                bundle: hasBundle ? unitMultiplierValue : item.unitMultiplier,
-              }
-
-              if (newProduct.bundle > 1) {
-                newProduct.quantityProduct *= newProduct.bundle
-              }
-
-              try {
-                if (
-                  wishlist.products.some(
-                    (p: { ID: number }) => p.ID === newProduct.ID
-                  )
-                ) {
-                  showToast('You have already added this product to the list')
-
-                  return false
-                }
-
-                await updateWishlist({
-                  variables: {
-                    wishlist: {
-                      id: selectedWishlist,
-                      products: [...wishlist.products, newProduct],
-                    },
-                  },
-                })
-                showToast('Successfully added to the Favourites List')
-
-                return true
-              } catch (error) {
-                console.error('Error adding to the list:', error)
-
-                return false
-              } finally {
-                setIsLoadingSKU(false)
-              }
-            }}
-          />
-          <section className={styles.wishlistSearchContainer}>
-            <Table
-              density="medium"
-              schema={tableSchema}
-              items={paginatedData || []}
-              toolbar={{
-                inputSearch: {
-                  label: 'Search This List',
-                  value: searchValue,
-                  onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
-                    handleInputSearchChange({
-                      e,
-                      allProducts,
-                      setSearchValue,
-                      setDisplayedProducts,
-                    }),
-                  onClear: () =>
-                    handleInputSearchClear(setDisplayedProducts, allProducts),
-                  onSubmit: (e) =>
-                    handleInputSearchSubmit({
-                      e,
-                      allProducts,
-                      searchValue,
-                      setDisplayedProducts,
-                    }),
-                },
-                fields: {
-                  label: 'Toggle visible fields',
-                  showAllLabel: 'Show All',
-                  hideAllLabel: 'Hide All',
-                },
-              }}
-              bulkActions={{
-                selectedRows: updatedSelectedRows,
-                texts: {
-                  secondaryActionsLabel: 'Actions',
-                  rowsSelected: bulkActionsrowsSelected,
-                  selectAll: 'Select all',
-                  allRowsSelected: bulkActionsAllRowsSelected,
-                },
-                totalItems: '',
-                onChange: (params) => {
-                  setUpdatedSelectedRows(params.selectedRows)
-                },
-                others: [
-                  {
-                    label: 'Add to cart',
-                    handleCallback: (params) => {
-                      handleBulkAction(params.selectedRows, 'addToCart')
-                    },
-                  },
-                  {
-                    label: 'Remove item(s)',
-                    isDangerous: true,
-                    handleCallback: (params) =>
-                      handleBulkAction(
-                        params.selectedRows,
-                        'deleteRowsWishlist'
-                      ),
-                  },
-                ],
-              }}
-              pagination={{
-                onNextClick: () =>
-                  handleNextClick({
-                    currentPage,
-                    setCurrentPage,
-                    totalItems,
-                    itemsPerPage,
-                  }),
-                onPrevClick: () => handlePrevClick(currentPage, setCurrentPage),
-                currentItemFrom: (currentPage - 1) * itemsPerPage + 1,
-                currentItemTo: Math.min(currentPage * itemsPerPage, totalItems),
-                onRowsChange: handleRowsChange,
-                textShowRows: 'Show rows',
-                textOf: 'of',
-                totalItems,
-                rowsOptions: [30, 40, 50, 60],
-              }}
-              filters={{
-                alwaysVisibleFilters: ['department', 'name'],
-                statements: initialState.filterStatements,
-                onChangeStatements: (
-                  e: React.ChangeEvent<HTMLInputElement>
-                ) => {
-                  handleFiltersChange({
-                    statements: initialState.filterStatements,
-                    initialState,
-                    setInitialState,
-                    paginatedData,
-                    setPaginatedData,
-                    setDisplayedProducts,
-                    onChangeStatements: e[2],
-                    setfilterState,
-                    filterState,
-                  })
-                },
-                clearAllFiltersButtonLabel: 'Clear Filters',
-                collapseLeft: true,
-                options: {
-                  department: {
-                    label: 'Department',
-                    renderFilterLabel: () => {
-                      if (
-                        !filterState.department ||
-                        !filterState.department.object
-                      ) {
-                        return 'All'
-                      }
-
-                      const keys = filterState.department.object
-                        ? Object.keys(filterState.department.object)
-                        : []
-
-                      const isAllTrue = !keys.some(
-                        (key) => !filterState.department.object[key]
-                      )
-
-                      const isAllFalse = !keys.some(
-                        (key) => filterState.department.object[key]
-                      )
-
-                      const trueKeys = keys.filter(
-                        (key) => filterState.department.object[key]
-                      )
-
-                      let trueKeysLabel = ''
-
-                      trueKeys.forEach((key, index) => {
-                        trueKeysLabel += `${key}${
-                          index === trueKeys.length - 1 ? '' : ', '
-                        }`
-                      })
-
-                      return `${
-                        isAllTrue
-                          ? 'All'
-                          : isAllFalse
-                          ? 'None'
-                          : `${trueKeysLabel}`
-                      }`
-                    },
-                    verbs: [
-                      {
-                        label: 'Sort',
-                        value: 'Sort',
-                        object: (e: React.ChangeEvent<HTMLSelectElement>) => {
-                          return SelectorObject(
-                            e,
-                            filterState?.department?.object
-                          )
-                        },
-                      },
-                    ],
-                  },
-                  name: {
-                    label: 'Description',
-                    renderFilterLabel: () => {
-                      if (!filterState.name || !filterState.name.object) {
-                        return 'All'
-                      }
-
-                      const keys = filterState.name.object
-                        ? Object.keys(filterState.name.object)
-                        : []
-
-                      const isAllTrue = !keys.some(
-                        (key) => !filterState.name.object[key]
-                      )
-
-                      const isAllFalse = !keys.some(
-                        (key) => filterState.name.object[key]
-                      )
-
-                      const trueKeys = keys.filter(
-                        (key) => filterState.name.object[key]
-                      )
-
-                      let trueKeysLabel = ''
-
-                      trueKeys.forEach((key, index) => {
-                        trueKeysLabel += `${key}${
-                          index === trueKeys.length - 1 ? '' : ', '
-                        }`
-                      })
-
-                      return `${
-                        isAllTrue
-                          ? 'All'
-                          : isAllFalse
-                          ? 'None'
-                          : `${trueKeysLabel}`
-                      }`
-                    },
-                    verbs: [
-                      {
-                        label: 'Sort',
-                        value: 'Sort',
-                        object: (e: React.ChangeEvent<HTMLSelectElement>) =>
-                          SelectorObject(e, filterState?.name?.object),
-                      },
-                    ],
-                  },
-                },
-              }}
-            />
-          </section>
-        </>
+        <WishlistDesktop
+          selectedWishlist={selectedWishlist}
+          wishlists={wishlists}
+          wishlist={wishlist}
+          fetchData={fetchData}
+          handleSelectWishlist={handleSelectWishlist}
+          emailIDInfo={emailIDInfo}
+          buttonModalTable={buttonModalTable}
+          isModalAccountTable={isModalAccountTable}
+          handleSubmitDataTable={handleSubmitDataTable}
+          createWishlist={createWishlist}
+          setFieldValidationTable={setFieldValidationTable}
+          nameListAccountTable={nameListAccountTable}
+          setNameListAccountTable={setNameListAccountTable}
+          setIsModalAccountTable={setIsModalAccountTable}
+          deleteWishlist={deleteWishlist}
+          buttonCloseModalTable={handleButtonCloseModalTable}
+          handleNameListTable={handleNameListTable}
+          fieldValidationTable={fieldValidationTable}
+          isDeleting={isDeleting}
+        />
       )}
+
+      <AutocompleteBlock
+        text="Add SKU"
+        description="Search and add to your list"
+        componentOnly={false}
+        onAddToWishlist={onAddToWishlist}
+      />
+      <section className={styles.wishlistSearchContainer}>
+        <Table
+          density="medium"
+          schema={tableSchema}
+          items={paginatedData || []}
+          toolbar={{
+            inputSearch: {
+              label: 'Search This List',
+              value: searchValue,
+              onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
+                handleInputSearchChange({
+                  e,
+                  allProducts,
+                  setSearchValue,
+                  setDisplayedProducts,
+                }),
+              onClear: () =>
+                handleInputSearchClear(setDisplayedProducts, allProducts),
+              onSubmit: (e) =>
+                handleInputSearchSubmit({
+                  e,
+                  allProducts,
+                  searchValue,
+                  setDisplayedProducts,
+                }),
+            },
+            fields: {
+              label: 'Toggle visible fields',
+              showAllLabel: 'Show All',
+              hideAllLabel: 'Hide All',
+            },
+          }}
+          bulkActions={{
+            selectedRows: updatedSelectedRows,
+            texts: {
+              secondaryActionsLabel: 'Actions',
+              rowsSelected: bulkActionsrowsSelected,
+              selectAll: 'Select all',
+              allRowsSelected: bulkActionsAllRowsSelected,
+            },
+            totalItems: '',
+            onChange: (params) => {
+              setUpdatedSelectedRows(params.selectedRows)
+            },
+            others: [
+              {
+                label: 'Add to cart',
+                handleCallback: (params) => {
+                  handleBulkAction(params.selectedRows, 'addToCart')
+                },
+              },
+              {
+                label: 'Remove item(s)',
+                isDangerous: true,
+                handleCallback: (params) =>
+                  handleBulkAction(params.selectedRows, 'deleteRowsWishlist'),
+              },
+            ],
+          }}
+          pagination={{
+            onNextClick: () =>
+              handleNextClick({
+                currentPage,
+                setCurrentPage,
+                totalItems,
+                itemsPerPage,
+              }),
+            onPrevClick: () => handlePrevClick(currentPage, setCurrentPage),
+            currentItemFrom: (currentPage - 1) * itemsPerPage + 1,
+            currentItemTo: Math.min(currentPage * itemsPerPage, totalItems),
+            onRowsChange: handleRowsChange,
+            textShowRows: 'Show rows',
+            textOf: 'of',
+            totalItems,
+            rowsOptions: [30, 40, 50, 60],
+          }}
+          filters={{
+            alwaysVisibleFilters: ['department', 'name'],
+            statements: initialState.filterStatements,
+            onChangeStatements: (e: React.ChangeEvent<HTMLInputElement>) => {
+              handleFiltersChange({
+                statements: initialState.filterStatements,
+                initialState,
+                setInitialState,
+                paginatedData,
+                setPaginatedData,
+                setDisplayedProducts,
+                onChangeStatements: e[2],
+                setfilterState,
+                filterState,
+              })
+            },
+            clearAllFiltersButtonLabel: 'Clear Filters',
+            collapseLeft: true,
+            options: tableFilterOptions,
+          }}
+        />
+      </section>
     </>
   )
 }

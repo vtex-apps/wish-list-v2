@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 import EditableWishlistTitle from './WishlistName/WishlistName'
 import ModalCreateList from './ModalCreateList'
@@ -24,7 +24,28 @@ const WishlistMobile = ({
   buttonCloseModalTable,
   handleNameListTable,
   fieldValidationTable,
+  isDeleting,
 }) => {
+  const [isCreateLoading, setIsCreateLoading] = useState(false)
+
+  const onCreateList = async (event: React.FormEvent) => {
+    setIsCreateLoading(true)
+    try {
+      await handleSubmitDataTable({
+        event,
+        createWishlist,
+        setFieldValidationTable,
+        nameListAccountTable,
+        setNameListAccountTable,
+        setIsModalAccountTable,
+      })
+      setIsCreateLoading(false)
+    } catch (error) {
+      console.error(error)
+      setIsCreateLoading(false)
+    }
+  }
+
   return (
     <div id="wish-list-mobile">
       {/* Mobile Design */}
@@ -56,7 +77,7 @@ const WishlistMobile = ({
                 </option>
               ))}
             </select>
-            <section>
+            <section className="relative">
               <button
                 className={`${styles.wishlistCreateNew} ${styles.wishlistCreateNewHelper}`}
                 onClick={buttonModalTable}
@@ -68,16 +89,9 @@ const WishlistMobile = ({
                   buttonCloseModal={buttonCloseModalTable}
                   handleNameList={handleNameListTable}
                   fieldValidation={fieldValidationTable}
-                  handleSubmitData={(event: React.FormEvent) =>
-                    handleSubmitDataTable({
-                      event,
-                      createWishlist,
-                      setFieldValidationTable,
-                      nameListAccountTable,
-                      setNameListAccountTable,
-                      setIsModalAccountTable,
-                    })
-                  }
+                  handleSubmitData={onCreateList}
+                  isButtonLoading={isCreateLoading}
+                  blockClass="vtex-create-wishlist-mobile"
                 />
               )}
             </section>
@@ -106,7 +120,7 @@ const WishlistMobile = ({
             className={styles.wishlistDeleteWishList}
             onClick={() => deleteWishlist()}
           >
-            Delete
+            {isDeleting ? `Deleting...` : `Delete`}
           </button>
         </div>
       </div>

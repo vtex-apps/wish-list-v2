@@ -57,6 +57,7 @@ const AutocompleteBlock: FunctionComponent<any & WrappedComponentProps> = ({
       }
 
       const response = await client.query(query)
+
       const { data } = response
       const selectedSku =
         data.product.items.length === 1 ? data.product.items[0].itemId : null
@@ -122,6 +123,14 @@ const AutocompleteBlock: FunctionComponent<any & WrappedComponentProps> = ({
     return url.replace('25-25', `50-50`)
   }
 
+  const onAddToFavoritesList = async () => {
+    const result = await onAddToWishlist(selectedItem)
+
+    if (result) {
+      clear()
+    }
+  }
+
   return (
     <div className={`${handles.addSkuContainer}`}>
       {!componentOnly && (
@@ -149,75 +158,74 @@ const AutocompleteBlock: FunctionComponent<any & WrappedComponentProps> = ({
               {!selectedItem && <QuickOrderAutocomplete onSelect={onSelect} />}
             </div>
             {!!selectedItem && (
-              <div>
+              <div
+                className={`flex flex-row ${handles.quickOrderAutocompleteItemsWrapper}`}
+              >
                 <div
-                  className={`w-two-thirds-l w-100-ns fl-l flex items-center ${handles.quickOrderAutocomplete}`}
+                  className={`w-two-thirds-l w-100-ns fl-l flex ${handles.quickOrderAutocomplete}`}
                 >
                   <div
-                    className={`flex flex-column w-15 fl ${handles.productThumb}`}
+                    className={`flex flex-row ${handles.quickOrderAutocompleteItems}`}
                   >
-                    <img
-                      src={thumb(selectedItem?.thumb ?? '')}
-                      width="50"
-                      height="50"
-                      alt=""
-                    />
-                  </div>
-                  <div
-                    className={`flex flex-column w-50 fl ${handles.productLabel}`}
-                  >
-                    <span className={`${handles.productTitle}`}>
-                      {selectedItem.label}
-                    </span>
-
-                    {!!selectedItem &&
-                      selectedItem.data?.product &&
-                      selectedItem.data?.product?.items?.length > 1 && (
-                        <div className={`${handles.productSku} flex flex-row`}>
-                          {selectedItem.data?.product.items.map(
-                            (item: Item) => {
-                              return (
-                                <span
-                                  key={item.itemId}
-                                  className={`mr4 ${handles.skuSelection}`}
-                                >
-                                  <Tag
-                                    size="small"
-                                    bgColor={
-                                      item.itemId === selectedItem.value
-                                        ? '#8bc34a'
-                                        : '#979899'
-                                    }
-                                    onClick={() => {
-                                      selectSku(item.itemId)
-                                    }}
-                                  >
-                                    {item.name}
-                                  </Tag>
-                                </span>
-                              )
-                            }
-                          )}
-                        </div>
-                      )}
-                  </div>
-                </div>
-                <div className="w-third-l w-100-ns fr-l flex-row-l">
-                  <div className="flex flex-column fl h-50">
-                    <Button
-                      variation="primary"
-                      size="small"
-                      onClick={async () => {
-                        const result = await onAddToWishlist(selectedItem)
-
-                        if (result) {
-                          clear()
-                        }
-                      }}
+                    <div
+                      className={`flex flex-column w-15 fl ${handles.productThumb}`}
                     >
-                      Add to Favourite List
-                    </Button>
+                      <img
+                        src={thumb(selectedItem?.thumb ?? '')}
+                        width="50"
+                        height="50"
+                        alt=""
+                      />
+                    </div>
+                    <div
+                      className={`flex flex-row w-85 fl ${handles.productLabel}`}
+                    >
+                      <span className={`${handles.productTitle}`}>
+                        {selectedItem.label}
+                      </span>
+                      <div
+                        className={`flex flex-column fl h-50 ${handles.addToFavouritebutton}`}
+                      >
+                        <Button
+                          variation="primary"
+                          size="small"
+                          onClick={onAddToFavoritesList}
+                        >
+                          Add to Favourite List
+                        </Button>
+                      </div>
+                    </div>
                   </div>
+                  {(selectedItem?.data?.product?.items ?? [])?.length > 1 && (
+                    <div className={`${handles.productSku} flex flex-row`}>
+                      {selectedItem.data?.product.items.map((item: Item) => {
+                        return (
+                          <span
+                            key={item.itemId}
+                            className={`mr4 ${handles.skuSelection}`}
+                          >
+                            <Tag
+                              size="small"
+                              bgColor={
+                                item.itemId === selectedItem.value
+                                  ? '#8bc34a'
+                                  : '#979899'
+                              }
+                              onClick={() => {
+                                selectSku(item.itemId)
+                              }}
+                            >
+                              {item.name}
+                            </Tag>
+                          </span>
+                        )
+                      })}
+                    </div>
+                  )}
+                </div>
+                <div
+                  className={`w-third-l w-100-ns fr-l flex-row-l ${handles.buttonClearWrapper}`}
+                >
                   <div
                     className={`flex flex-column w-100 fl ${handles.buttonClear}`}
                   >

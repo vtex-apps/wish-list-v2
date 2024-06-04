@@ -10,9 +10,7 @@ const useMutationDeleteWishlist = (
     variables: {
       id: wishlistId,
     },
-    onCompleted: () => {
-      callback()
-    },
+    onCompleted: callback,
   })
 
   return { deleteWishlist, loading, error }

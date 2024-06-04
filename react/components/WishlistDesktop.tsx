@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 import EditableWishlistTitle from './WishlistName/WishlistName'
 import ModalCreateList from './ModalCreateList'
@@ -24,7 +24,42 @@ const WishlistDesktop = ({
   buttonCloseModalTable,
   handleNameListTable,
   fieldValidationTable,
+  isDeleting,
 }) => {
+  const [isCreateLoading, setIsCreateLoading] = useState(false)
+  const [isDeleteLoading, setIsDeleteLoading] = useState(false)
+
+  const onCreateList = async (event) => {
+    setIsCreateLoading(true)
+    try {
+      await handleSubmitDataTable({
+        event,
+        createWishlist,
+        setFieldValidationTable,
+        nameListAccountTable,
+        setNameListAccountTable,
+        setIsModalAccountTable,
+      })
+      setIsCreateLoading(false)
+    } catch (error) {
+      console.error(error)
+      await fetchData()
+      setIsCreateLoading(false)
+    }
+  }
+
+  const onDeleteList = async () => {
+    setIsDeleteLoading(true)
+    try {
+      await deleteWishlist()
+      setIsDeleteLoading(false)
+    } catch (error) {
+      console.error(error)
+      await fetchData()
+      setIsDeleteLoading(false)
+    }
+  }
+
   return (
     <div id="wish-list-desktop">
       <EditableWishlistTitle
@@ -62,7 +97,7 @@ const WishlistDesktop = ({
             ))}
           </select>
         </div>
-        <section className={styles.wishlistCreationOptions}>
+        <section className={`${styles.wishlistCreationOptions} relative`}>
           <button
             className={`${styles.wishlistCreateNew} ${styles.wishlistCreateNewHelper}`}
             onClick={buttonModalTable}
@@ -74,16 +109,9 @@ const WishlistDesktop = ({
               buttonCloseModal={buttonCloseModalTable}
               handleNameList={handleNameListTable}
               fieldValidation={fieldValidationTable}
-              handleSubmitData={(event) =>
-                handleSubmitDataTable({
-                  event,
-                  createWishlist,
-                  setFieldValidationTable,
-                  nameListAccountTable,
-                  setNameListAccountTable,
-                  setIsModalAccountTable,
-                })
-              }
+              handleSubmitData={onCreateList}
+              isButtonLoading={isCreateLoading}
+              blockClass="vtex-create-wishlist-desktop"
             />
           )}
           <WishlistPrivacyOptions
@@ -95,9 +123,10 @@ const WishlistDesktop = ({
           />
           <button
             className={styles.wishlistDeleteWishList}
-            onClick={() => deleteWishlist()}
+            onClick={onDeleteList}
+            disabled={isDeleteLoading}
           >
-            Delete Selected List
+            {isDeleting ? `Deleting...` : `Delete Selected List`}
           </button>
         </section>
       </div>
