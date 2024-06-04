@@ -196,34 +196,32 @@ const AutocompleteBlock: FunctionComponent<any & WrappedComponentProps> = ({
                       </div>
                     </div>
                   </div>
-                  {!!selectedItem &&
-                    selectedItem.data?.product &&
-                    selectedItem.data?.product?.items?.length > 1 && (
-                      <div className={`${handles.productSku} flex flex-row`}>
-                        {selectedItem.data?.product.items.map((item: Item) => {
-                          return (
-                            <span
-                              key={item.itemId}
-                              className={`mr4 ${handles.skuSelection}`}
+                  {(selectedItem?.data?.product?.items ?? [])?.length > 1 && (
+                    <div className={`${handles.productSku} flex flex-row`}>
+                      {selectedItem.data?.product.items.map((item: Item) => {
+                        return (
+                          <span
+                            key={item.itemId}
+                            className={`mr4 ${handles.skuSelection}`}
+                          >
+                            <Tag
+                              size="small"
+                              bgColor={
+                                item.itemId === selectedItem.value
+                                  ? '#8bc34a'
+                                  : '#979899'
+                              }
+                              onClick={() => {
+                                selectSku(item.itemId)
+                              }}
                             >
-                              <Tag
-                                size="small"
-                                bgColor={
-                                  item.itemId === selectedItem.value
-                                    ? '#8bc34a'
-                                    : '#979899'
-                                }
-                                onClick={() => {
-                                  selectSku(item.itemId)
-                                }}
-                              >
-                                {item.name}
-                              </Tag>
-                            </span>
-                          )
-                        })}
-                      </div>
-                    )}
+                              {item.name}
+                            </Tag>
+                          </span>
+                        )
+                      })}
+                    </div>
+                  )}
                 </div>
                 <div
                   className={`w-third-l w-100-ns fr-l flex-row-l ${handles.buttonClearWrapper}`}
