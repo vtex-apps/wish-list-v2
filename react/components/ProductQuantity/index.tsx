@@ -4,9 +4,9 @@ import { NumericStepper, ToastContext } from 'vtex.styleguide'
 export const ProductStepper = ({
   initialQty,
   wishlist: initialWishlist,
-  productName,
   bundle,
   updateWishlist,
+  skuReferenceCode,
 }) => {
   const [QTY, setQTY] = useState(initialQty)
   const wishlistRef = useRef(initialWishlist)
@@ -33,8 +33,8 @@ export const ProductStepper = ({
     setQTY(finalValue)
 
     const updatedProducts = wishlistRef.current.products.map(
-      (product: { nameProduct: string }) =>
-        product.nameProduct === productName
+      (product: { skuCodeReference: string }) =>
+        product.skuCodeReference === skuReferenceCode
           ? { ...product, quantityProduct: finalValue }
           : product
     )
