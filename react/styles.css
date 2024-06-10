@@ -67,6 +67,7 @@
 
 .wishlistSearchContainer :global(.vtex-styleguide-9-x-input) {
   border-right: 0.125rem solid #e3e4e6;
+  height: 100%;
 }
 
 .wishlistSearchContainer
@@ -75,6 +76,7 @@
   width: 1.375rem;
   height: 1.375rem;
   padding: 0 0.5rem;
+  height: 100%;
 }
 
 .wishlistSearchContainer
@@ -251,10 +253,12 @@
 
 .componentContainerHelper {
   width: 100%;
+  padding: 0 !important;
 }
 
 .addSkuContainer {
   display: flex;
+  margin-top: 1rem;
 }
 
 .componentContainerHelper label div {
@@ -268,13 +272,15 @@
 .textContainer {
   min-width: 150px;
   width: 150px;
+  display: flex;
+  align-items: center;
 }
 
 .textContainerTitle {
   width: fit-content !important;
   max-width: 196.8px !important;
   margin: 0;
-  margin-top: 2em;
+  margin-top: 0;
 }
 
 .textContainerDescription {
@@ -422,7 +428,6 @@
   font-family: Roboto, HelveticaNeue, 'Helvetica Neue', sans-serif, Inter !important;
   font-weight: 700 !important;
   font-size: 18px;
-  line-height: 30.26px !important;
   min-width: 150px !important;
   color: #7a8094;
 }
@@ -519,7 +524,7 @@
 }
 
 .wishlistSearchContainer :global(.vtex-input) {
-  margin-top: -1em;
+  margin-top: 0;
 }
 
 .addSkuContainer .text-container {
@@ -566,6 +571,7 @@
 
 .quickOrderAutocompleteItemsWrapper {
   row-gap: 0.5rem;
+  padding: .75rem;
 }
 
 .quickOrderAutocompleteItems {
@@ -632,6 +638,7 @@
 @media screen and (min-width: 1291px) {
   .wishlistSelectListOneText {
     width: unset !important;
+    margin: 0;
   }
 
   .wishlistSelectListOne {
@@ -648,13 +655,12 @@
   }
 
   .componentContainerHelper {
-    padding-top: 1em;
-    padding-bottom: 1em;
+    padding: 0 !important;
     width: 310px;
   }
 
   .textContainerTitle {
-    margin-top: 1.1em;
+    margin-top: 0rem;
   }
 
   .wishlistSearchContainer :global(.vtex-input-prefix__group) {
@@ -663,6 +669,7 @@
   .wishlistSearchContainer :global(.vtex-input__label) {
     margin-right: 0 !important;
     width: 174px !important;
+    margin-bottom: 0;
   }
 }
 @media (max-width: 1024px) {
@@ -889,4 +896,8 @@
   :global(#toggleFieldsBtn) {
     margin-top: 2rem !important;
   }
+}
+
+.wishlistSearchContainer {
+  margin-top: 1rem;
 }

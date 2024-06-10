@@ -84,9 +84,9 @@ export const JsonSchema = ({
       <ProductStepper
         initialQty={rowData.quantity || null}
         wishlist={selectedWishlist !== null ? wishlist : wishlists[0]}
-        productName={rowData.name || ''}
         bundle={rowData.bundle || null}
         updateWishlist={updateWishlist}
+        skuReferenceCode={rowData.skuReferenceCode || ''}
       />
     )
   }

@@ -150,7 +150,7 @@ const AutocompleteBlock: FunctionComponent<any & WrappedComponentProps> = ({
       <div
         className={`${handles.componentContainer} ${!componentOnly ? '' : ''}`}
       >
-        <div className="w-100 mb5">
+        <div className="w-100">
           <div
             className={`bg-base t-body c-on-base pa7 br3 b--muted-4 ${handles.componentContainerHelper}`}
           >
