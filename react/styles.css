@@ -901,3 +901,8 @@
 .wishlistSearchContainer {
   margin-top: 1rem;
 }
+
+.skuSelection,
+.skuSelected {
+  display: block;
+}
