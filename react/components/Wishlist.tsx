@@ -291,7 +291,8 @@ function Wishlist({ wishlists, fetchData }) {
   }, [displayedProducts])
 
   // Handlers to change page and rows per page
-  const handleRowsChange = (value) => {
+  const handleRowsChange = (e, value) => {
+    e.preventDefault()
     setItemsPerPage(parseInt(value, 10))
     setCurrentPage(1) // Return to the first page when the number of rows per page changes
   }
