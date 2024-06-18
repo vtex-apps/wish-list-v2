@@ -152,12 +152,34 @@ export const JsonSchema = ({
     )
   }
 
+  const skuNameCellRenderer = ({ cellData, rowData }) => {
+    const linkUrl = rowData.linkProduct || ''
+    const parts = linkUrl.split('.br/')
+    const productUrl = `${window.location.origin}/${parts[parts.length - 1]}`
+
+    return (
+      <a
+        href={productUrl || ''}
+        className={styles.wishlistProductTexts}
+        target="_blank"
+        rel="noreferrer"
+      >
+        {cellData || rowData.name || ''}
+      </a>
+    )
+  }
+
   const jsonschema = {
     properties: {
       image: {
         title: 'Image',
         width: 80,
         cellRenderer: imageCellRenderer,
+      },
+      skuName: {
+        title: 'Name',
+        width: 200,
+        cellRenderer: skuNameCellRenderer,
       },
       department: {
         sortable: true,
