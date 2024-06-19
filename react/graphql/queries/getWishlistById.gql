@@ -19,6 +19,8 @@ query getWishlist($id: ID!) {
       department
       bundle
       notes
+      skuName
+      description
     }
   }
 }

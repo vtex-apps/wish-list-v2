@@ -30,3 +30,15 @@
 .autocompleteInputWrapper svg{
   padding: 0 0.5rem;
 }
+
+.imageThumb {
+  width: 2.5rem;
+  height: 2.5rem;
+  min-width: 2.5rem;
+  object-fit: none;
+}
+
+.searchTextPreviewWrapper {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

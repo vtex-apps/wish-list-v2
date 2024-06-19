@@ -19,6 +19,8 @@ query getWishlists($page: Int, $pageSize: Int) {
       department
       bundle
       notes
+      skuName
+      description
     }
   }
 }

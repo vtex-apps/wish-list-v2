@@ -1,4 +1,5 @@
 {
   "admin/test": "test",
-  "store/test": "test"
+  "store/test": "test",
+  "store/favorite-list.search-product-by-sku": "Search products by SKU"
 }

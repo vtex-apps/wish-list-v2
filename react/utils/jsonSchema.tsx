@@ -67,6 +67,8 @@ export const JsonSchema = ({
     const parts = linkUrl.split('.br/')
     const productUrl = `${window.location.origin}/${parts[parts.length - 1]}`
 
+    console.log('>>> row data ', rowData)
+
     return (
       <a
         href={productUrl || ''}
@@ -74,7 +76,7 @@ export const JsonSchema = ({
         target="_blank"
         rel="noreferrer"
       >
-        {cellData || rowData.nameProduct || ''}
+        {cellData || rowData.description || ''}
       </a>
     )
   }
@@ -164,7 +166,7 @@ export const JsonSchema = ({
         target="_blank"
         rel="noreferrer"
       >
-        {cellData || rowData.name || ''}
+        {cellData || rowData.skuName || ''}
       </a>
     )
   }
@@ -192,7 +194,7 @@ export const JsonSchema = ({
         width: 125,
         cellRenderer: skuReferenceCodeCellRenderer,
       },
-      name: {
+      description: {
         sortable: true,
         title: 'Description',
         width: 220,
