@@ -4,14 +4,10 @@ import { Spinner } from 'vtex.styleguide'
 import useQueryGetProductPrice from '../hooks/actions/useQueryGetProductPrice'
 import styles from './productPriceTotal.css'
 
-const ProductPriceTotal = ({
-  skuReference = 0,
-  productQuantity = 0,
-  currency = '$',
-}) => {
+const ProductPriceTotal = ({ productQuantity = 0, currency = '$', itemId }) => {
   const { price, error: productError, loading } = useQueryGetProductPrice(
-    'reference',
-    skuReference,
+    'sku',
+    itemId,
     productQuantity
   )
 

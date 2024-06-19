@@ -2,23 +2,19 @@ import { useQuery } from 'react-apollo'
 
 import PRODUCT_QUERY from '../../graphql/queries/productPrice.graphql'
 
-const useQueryWishlists = (
-  field: string,
-  idValue: number | string,
-  quantity: number
-) => {
+const useQueryWishlists = (field: string, itemId: number, quantity: number) => {
   const { data, error, loading } = useQuery(PRODUCT_QUERY, {
     variables: {
-      identifier: { field, value: idValue },
+      identifier: { field, value: itemId },
     },
     notifyOnNetworkStatusChange: true,
   })
 
-  const price =
-    (data?.product.items ?? [])
-      .find((item) => item)
-      ?.sellers?.find((seller) => seller)?.commertialOffer?.Price * quantity ??
-    null
+  const unitPrice = (data?.product.items ?? [])
+    .find((item) => item.itemId === itemId?.toString())
+    ?.sellers?.find((seller) => seller)?.commertialOffer?.Price
+
+  const price = unitPrice ? unitPrice * quantity : 0
 
   return {
     price,

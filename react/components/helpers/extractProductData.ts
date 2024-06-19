@@ -7,7 +7,6 @@ const extractProductData = ({ items }) => {
       skuCodeReference,
       nameProduct,
       quantityProduct,
-      unitValue,
       linkProduct,
       bundle,
       notes,
@@ -16,13 +15,12 @@ const extractProductData = ({ items }) => {
     }) => {
       const pr = {
         id: ID,
+        itemId: ID,
         image: Image,
         department,
         skuReferenceCode: skuCodeReference,
         name: nameProduct,
         quantity: quantityProduct,
-        unitValue,
-        totalValue: unitValue * quantityProduct,
         linkProduct,
         bundle: bundle || null,
         notes,

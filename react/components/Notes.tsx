@@ -3,6 +3,7 @@ import { Modal, ToastContext } from 'vtex.styleguide'
 
 import { NoteIcon } from './Icons'
 import styles from './notes.css'
+import useQueryGetProductPrice from '../hooks/actions/useQueryGetProductPrice'
 
 const Notes = ({
   wishlist: initialWishlist,
@@ -12,11 +13,18 @@ const Notes = ({
   productName,
   productImage,
   partNumber,
-  price,
   currency,
+  itemId,
+  quantity,
 }) => {
   const [show, setShow] = useState(false)
   const [notes, setNotes] = useState(currentNotes)
+
+  const { price } = useQueryGetProductPrice(
+    'sku',
+    itemId,
+    quantity ? parseInt(quantity, 10) : 1
+  )
 
   const wishlistRef = useRef(initialWishlist)
 
@@ -52,7 +60,7 @@ const Notes = ({
     }
   }
 
-  const formattedValue = `${currency} ${parseFloat(price).toFixed(2)}`
+  const formattedValue = `${currency} ${price.toFixed(2)}`
 
   return (
     <div className={`${styles.notesContainer}`}>

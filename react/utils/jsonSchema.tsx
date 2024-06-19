@@ -95,7 +95,11 @@ export const JsonSchema = ({
 
   const unitValueCellRenderer = ({ rowData }) => {
     return (
-      <UnitPrice skuReference={rowData?.skuReferenceCode} currency={currency} />
+      <UnitPrice
+        itemId={rowData.itemId}
+        skuReference={rowData?.skuReferenceCode}
+        currency={currency}
+      />
     )
   }
 
@@ -131,7 +135,7 @@ export const JsonSchema = ({
   const priceCellRenderer = ({ rowData }) => {
     return (
       <ProductPriceTotal
-        skuReference={rowData?.skuReferenceCode}
+        itemId={rowData.itemId}
         productQuantity={rowData?.quantity}
         currency={currency}
       />
@@ -148,8 +152,9 @@ export const JsonSchema = ({
         productName={rowData?.name || ''}
         productImage={rowData?.image || ''}
         partNumber={rowData?.skuReferenceCode || ''}
-        price={rowData?.totalValue ? rowData?.totalValue : rowData?.unitValue}
         currency={currency}
+        itemId={rowData?.itemId}
+        quantity={rowData?.quantity}
       />
     )
   }
