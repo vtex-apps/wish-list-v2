@@ -10,8 +10,6 @@ const extractProductData = ({ items }) => {
       linkProduct,
       bundle,
       notes,
-      skuName,
-      description,
     }) => {
       const pr = {
         id: ID,
@@ -24,8 +22,6 @@ const extractProductData = ({ items }) => {
         linkProduct,
         bundle: bundle || null,
         notes,
-        skuName,
-        description,
       }
 
       return pr

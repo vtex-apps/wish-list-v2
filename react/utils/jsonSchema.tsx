@@ -8,6 +8,8 @@ import ProductPriceTotal from '../components/ProductPriceTotal'
 import Notes from '../components/Notes'
 import UnitPrice from '../components/UnitPrice'
 import styles from '../styles.css'
+import ProductDescription from '../components/ProductDescription'
+import SkuName from '../components/SkuName'
 
 export const JsonSchema = ({
   addProductsToCart,
@@ -62,22 +64,13 @@ export const JsonSchema = ({
     )
   }
 
-  const nameCellRenderer = ({ cellData, rowData }) => {
+  const nameCellRenderer = ({ rowData }) => {
     const linkUrl = rowData.linkProduct || ''
     const parts = linkUrl.split('.br/')
     const productUrl = `${window.location.origin}/${parts[parts.length - 1]}`
 
-    console.log('>>> row data ', rowData)
-
     return (
-      <a
-        href={productUrl || ''}
-        className={styles.wishlistProductTexts}
-        target="_blank"
-        rel="noreferrer"
-      >
-        {cellData || rowData.description || ''}
-      </a>
+      <ProductDescription itemId={rowData.itemId} productUrl={productUrl} />
     )
   }
 
@@ -159,21 +152,22 @@ export const JsonSchema = ({
     )
   }
 
-  const skuNameCellRenderer = ({ cellData, rowData }) => {
+  const skuNameCellRenderer = ({ rowData }) => {
     const linkUrl = rowData.linkProduct || ''
     const parts = linkUrl.split('.br/')
     const productUrl = `${window.location.origin}/${parts[parts.length - 1]}`
 
-    return (
-      <a
-        href={productUrl || ''}
-        className={styles.wishlistProductTexts}
-        target="_blank"
-        rel="noreferrer"
-      >
-        {cellData || rowData.skuName || ''}
-      </a>
-    )
+    return <SkuName itemId={rowData.itemId} productUrl={productUrl} />
+    // (
+    //   <a
+    //     href={productUrl || ''}
+    //     className={styles.wishlistProductTexts}
+    //     target="_blank"
+    //     rel="noreferrer"
+    //   >
+    //     {cellData || rowData.skuName || ''}
+    //   </a>
+    // )
   }
 
   const jsonschema = {

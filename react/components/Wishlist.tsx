@@ -332,8 +332,6 @@ function Wishlist({ wishlists, fetchData }) {
       skuCodeReference: item.referenceId[0].Value,
       department: productData.categoryTree[0].name,
       bundle: hasBundle ? unitMultiplierValue : item.unitMultiplier,
-      skuName: `${productData.productName} - ${item.name}`,
-      description: productData.description,
     }
 
     if (newProduct.bundle > 1) {

@@ -13,8 +13,6 @@ query GetWishListByEmail {
       department
       bundle
       notes
-      skuName
-      description
     }
   }
 }

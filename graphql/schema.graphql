@@ -38,8 +38,6 @@ input ProductsInput {
   department: String
   bundle: Int
   notes: String
-  skuName: String
-  description: String
 }
 
 type Products {
@@ -52,8 +50,6 @@ type Products {
   department: String
   bundle: Int
   notes: String
-  skuName: String
-  description: String
 }
 
 type DocumentCreatedResponse {
