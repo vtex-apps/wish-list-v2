@@ -31,7 +31,6 @@ type FieldsConfig {
 input ProductsInput {
   ID: Int
   Image: String
-  unitValue: Float
   linkProduct: String
   nameProduct: String
   quantityProduct: Int
@@ -44,7 +43,6 @@ input ProductsInput {
 type Products {
   ID: Int
   Image: String
-  unitValue: Float
   linkProduct: String
   nameProduct: String
   quantityProduct: Int

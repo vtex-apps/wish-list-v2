@@ -6,13 +6,13 @@ query GetWishListByEmail {
     products {
       ID
       Image
-      unitValue
       linkProduct
       nameProduct
       quantityProduct
       skuCodeReference
       department
       bundle
+      notes
     }
   }
 }

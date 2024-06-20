@@ -3,5 +3,15 @@
   min-width: 100%;
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+}
+
+.skuNameContainer {}
+
+.descriptionContainer {}
+
+.wishlistProductTexts,
+.wishlistProductTexts a {
+  font-weight: 400;
+  color: #000000;
+  text-decoration: none;
 }

@@ -8,6 +8,8 @@ import ProductPriceTotal from '../components/ProductPriceTotal'
 import Notes from '../components/Notes'
 import UnitPrice from '../components/UnitPrice'
 import styles from '../styles.css'
+import ProductDescription from '../components/ProductDescription'
+import SkuName from '../components/SkuName'
 
 export const JsonSchema = ({
   addProductsToCart,
@@ -62,20 +64,13 @@ export const JsonSchema = ({
     )
   }
 
-  const nameCellRenderer = ({ cellData, rowData }) => {
+  const nameCellRenderer = ({ rowData }) => {
     const linkUrl = rowData.linkProduct || ''
     const parts = linkUrl.split('.br/')
     const productUrl = `${window.location.origin}/${parts[parts.length - 1]}`
 
     return (
-      <a
-        href={productUrl || ''}
-        className={styles.wishlistProductTexts}
-        target="_blank"
-        rel="noreferrer"
-      >
-        {cellData || rowData.nameProduct || ''}
-      </a>
+      <ProductDescription itemId={rowData.itemId} productUrl={productUrl} />
     )
   }
 
@@ -93,7 +88,11 @@ export const JsonSchema = ({
 
   const unitValueCellRenderer = ({ rowData }) => {
     return (
-      <UnitPrice skuReference={rowData?.skuReferenceCode} currency={currency} />
+      <UnitPrice
+        itemId={rowData.itemId}
+        skuReference={rowData?.skuReferenceCode}
+        currency={currency}
+      />
     )
   }
 
@@ -129,7 +128,7 @@ export const JsonSchema = ({
   const priceCellRenderer = ({ rowData }) => {
     return (
       <ProductPriceTotal
-        skuReference={rowData?.skuReferenceCode}
+        itemId={rowData.itemId}
         productQuantity={rowData?.quantity}
         currency={currency}
       />
@@ -146,10 +145,29 @@ export const JsonSchema = ({
         productName={rowData?.name || ''}
         productImage={rowData?.image || ''}
         partNumber={rowData?.skuReferenceCode || ''}
-        price={rowData?.totalValue ? rowData?.totalValue : rowData?.unitValue}
         currency={currency}
+        itemId={rowData?.itemId}
+        quantity={rowData?.quantity}
       />
     )
+  }
+
+  const skuNameCellRenderer = ({ rowData }) => {
+    const linkUrl = rowData.linkProduct || ''
+    const parts = linkUrl.split('.br/')
+    const productUrl = `${window.location.origin}/${parts[parts.length - 1]}`
+
+    return <SkuName itemId={rowData.itemId} productUrl={productUrl} />
+    // (
+    //   <a
+    //     href={productUrl || ''}
+    //     className={styles.wishlistProductTexts}
+    //     target="_blank"
+    //     rel="noreferrer"
+    //   >
+    //     {cellData || rowData.skuName || ''}
+    //   </a>
+    // )
   }
 
   const jsonschema = {
@@ -158,6 +176,11 @@ export const JsonSchema = ({
         title: 'Image',
         width: 80,
         cellRenderer: imageCellRenderer,
+      },
+      skuName: {
+        title: 'Name',
+        width: 200,
+        cellRenderer: skuNameCellRenderer,
       },
       department: {
         sortable: true,
@@ -170,7 +193,7 @@ export const JsonSchema = ({
         width: 125,
         cellRenderer: skuReferenceCodeCellRenderer,
       },
-      name: {
+      description: {
         sortable: true,
         title: 'Description',
         width: 220,

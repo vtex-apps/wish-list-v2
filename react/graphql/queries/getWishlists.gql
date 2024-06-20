@@ -11,7 +11,6 @@ query getWishlists($page: Int, $pageSize: Int) {
     products {
       ID
       Image
-      unitValue
       linkProduct
       nameProduct
       quantityProduct

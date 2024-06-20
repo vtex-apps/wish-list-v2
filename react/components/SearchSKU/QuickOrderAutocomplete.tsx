@@ -4,7 +4,7 @@ import React, { useState, useRef } from 'react'
 import { AutocompleteInput } from 'vtex.styleguide'
 import PropTypes from 'prop-types'
 import type { WrappedComponentProps } from 'react-intl'
-import { injectIntl } from 'react-intl'
+import { injectIntl, IntlShape } from 'react-intl'
 import { useApolloClient } from 'react-apollo'
 import { useCssHandles } from 'vtex.css-handles'
 
@@ -26,9 +26,14 @@ interface Item {
 const CustomOption = (props: any) => {
   const { roundedBottom, searchTerm, value, selected, onClick } = props
   const [highlightOption, setHighlightOption] = useState(false)
-  const CSS_HANDLES = ['customOptionButton'] as const
+  const CSS_HANDLES = [
+    'customOptionButton',
+    'imageThumbContainer',
+    'imageThumb',
+    'searchTextPreviewWrapper',
+  ] as const
 
-  const handles = useCssHandles(CSS_HANDLES)
+  const { handles } = useCssHandles(CSS_HANDLES)
   const renderOptionHighlightedText = () => {
     const highlightableText = typeof value === 'string' ? value : value.label
     const index: number = highlightableText
@@ -72,13 +77,19 @@ const CustomOption = (props: any) => {
       onClick={onClick}
     >
       <div className="flex items-center">
-        <span className="mr3 c-muted-2 flex pt1">
-          {thumb && <img src={thumb} alt="" />}
-        </span>
-        <span className="pr2">{renderOptionHighlightedText()}</span>
-        {typeof value !== 'string' && (
-          <div className="t-mini c-muted-1">{value.caption}</div>
+        {thumb && (
+          <span
+            className={`${handles.imageThumbContainer} mr3 c-muted-2 flex pt1`}
+          >
+            <img className={`${handles.imageThumb}`} src={thumb} alt="" />
+          </span>
         )}
+        <div className={`${handles.searchTextPreviewWrapper}`}>
+          <span className="pr2">{renderOptionHighlightedText()}</span>
+          {typeof value !== 'string' && (
+            <div className="t-mini c-muted-1">{value.caption}</div>
+          )}
+        </div>
       </div>
     </button>
   )
@@ -89,7 +100,13 @@ interface QuickOrderAutocompleteInt {
 }
 const QuickOrderAutocomplete: FunctionComponent<
   WrappedComponentProps & QuickOrderAutocompleteInt
-> = ({ onSelect }: { onSelect: (...args: any) => void }) => {
+> = ({
+  onSelect,
+  intl,
+}: {
+  onSelect: (...args: any) => void
+  intl: IntlShape
+}) => {
   const client = useApolloClient()
   const [optionsResult, setOptions] = useState([])
   const [term, setTerm] = useState('')
@@ -130,7 +147,7 @@ const QuickOrderAutocomplete: FunctionComponent<
           .map((item: any) => {
             return {
               value: item.items[0].itemId,
-              label: item.items[0].name,
+              label: item.productName,
               slug: item.linkText,
               thumb: getImageSrc(item.items[0].images[0].imageUrl),
             }
@@ -164,7 +181,9 @@ const QuickOrderAutocomplete: FunctionComponent<
       }
     },
     onClear: () => setTerm(''),
-    placeholder: 'Search products by SKU',
+    placeholder: intl.formatMessage({
+      id: 'store/favorite-list.search-product-by-sku',
+    }),
     value: term,
   }
 

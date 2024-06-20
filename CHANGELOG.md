@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Added Master Data informations to the Read me document.
+- Add new column sku name to product table
 
 ## [1.0.12] - 2024-05-09
 

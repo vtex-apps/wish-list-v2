@@ -5,6 +5,7 @@ query Product($slug: String) {
       values
     }
     productName
+    description
     link
     priceRange {
       sellingPrice {

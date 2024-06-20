@@ -1,16 +1,17 @@
 query Autocomplete($inputValue: String!) {
   productSuggestions(fullText: $inputValue, hideUnavailableItems: true)
     @context(provider: "vtex.search-graphql") {
-      products {
-        items {
-          itemId
-          name
-          images {
-            imageUrl
-          }
+    products {
+      items {
+        itemId
+        name
+        images {
+          imageUrl
         }
-        link
-        linkText
       }
+      link
+      linkText
+      productName
     }
+  }
 }
