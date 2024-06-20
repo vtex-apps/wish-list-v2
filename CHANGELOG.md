@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Style improvements in wishlist page
 - Wishlist page ui alignment issues
 - Product quantity updates multiple sku lines issue fixed
+- Fix wishlist pagination
 
 ### Added
 
