@@ -8,7 +8,7 @@ import ProductPriceTotal from '../components/ProductPriceTotal'
 import Notes from '../components/Notes'
 import UnitPrice from '../components/UnitPrice'
 import styles from '../styles.css'
-import ProductDescription from '../components/ProductDescription'
+//import ProductDescription from '../components/ProductDescription'
 import SkuName from '../components/SkuName'
 
 export const JsonSchema = ({
@@ -64,15 +64,15 @@ export const JsonSchema = ({
     )
   }
 
-  const nameCellRenderer = ({ rowData }) => {
-    const linkUrl = rowData.linkProduct || ''
-    const parts = linkUrl.split('.br/')
-    const productUrl = `${window.location.origin}/${parts[parts.length - 1]}`
+  // const nameCellRenderer = ({ rowData }) => {
+  //   const linkUrl = rowData.linkProduct || ''
+  //   const parts = linkUrl.split('.br/')
+  //   const productUrl = `${window.location.origin}/${parts[parts.length - 1]}`
 
-    return (
-      <ProductDescription itemId={rowData.itemId} productUrl={productUrl} />
-    )
-  }
+  //   return (
+  //     <ProductDescription itemId={rowData.itemId} productUrl={productUrl} />
+  //   )
+  // }
 
   const qtyCellRenderer = ({ rowData }) => {
     return (
@@ -193,13 +193,13 @@ export const JsonSchema = ({
         width: 125,
         cellRenderer: skuReferenceCodeCellRenderer,
       },
-      description: {
-        sortable: true,
-        title: 'Description',
-        width: 220,
-        name: '',
-        cellRenderer: nameCellRenderer,
-      },
+      // description: {
+      //   sortable: true,
+      //   title: 'Description',
+      //   width: 220,
+      //   name: '',
+      //   cellRenderer: nameCellRenderer,
+      // },
       quantity: {
         title: 'Qty',
         width: 145,
