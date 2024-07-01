@@ -8,8 +8,23 @@ import ProductPriceTotal from '../components/ProductPriceTotal'
 import Notes from '../components/Notes'
 import UnitPrice from '../components/UnitPrice'
 import styles from '../styles.css'
-//import ProductDescription from '../components/ProductDescription'
+// import ProductDescription from '../components/ProductDescription'
 import SkuName from '../components/SkuName'
+
+const getProductPath = (rowData: any) => {
+  const isFastStore = (window?.location?.hostname ?? '').startsWith('secure')
+
+  const linkUrl = rowData.linkProduct || ''
+  const parts = linkUrl.split('.br/')
+
+  // eslint-disable-next-line prefer-destructuring
+  const productSlug = parts[parts.length - 1]?.split('/')?.[0] ?? ''
+  const productPath = isFastStore
+    ? `${productSlug}-${rowData.itemId}`
+    : productSlug
+
+  return `${window.location.origin}/${productPath}/p`
+}
 
 export const JsonSchema = ({
   addProductsToCart,
@@ -24,9 +39,7 @@ export const JsonSchema = ({
   const currency = culture.customCurrencySymbol
 
   const imageCellRenderer = ({ cellData, rowData }) => {
-    const linkUrl = rowData.linkProduct || ''
-    const parts = linkUrl.split('.br/')
-    const productUrl = `${window.location.origin}/${parts[parts.length - 1]}`
+    const productUrl = getProductPath(rowData)
 
     return (
       <a href={productUrl || ''} target="_blank" rel="noreferrer">
@@ -48,9 +61,7 @@ export const JsonSchema = ({
   }
 
   const skuReferenceCodeCellRenderer = ({ cellData, rowData }) => {
-    const linkUrl = rowData.linkProduct || ''
-    const parts = linkUrl.split('.br/')
-    const productUrl = `${window.location.origin}/${parts[parts.length - 1]}`
+    const productUrl = getProductPath(rowData)
 
     return (
       <a
@@ -153,21 +164,9 @@ export const JsonSchema = ({
   }
 
   const skuNameCellRenderer = ({ rowData }) => {
-    const linkUrl = rowData.linkProduct || ''
-    const parts = linkUrl.split('.br/')
-    const productUrl = `${window.location.origin}/${parts[parts.length - 1]}`
+    const productUrl = getProductPath(rowData)
 
     return <SkuName itemId={rowData.itemId} productUrl={productUrl} />
-    // (
-    //   <a
-    //     href={productUrl || ''}
-    //     className={styles.wishlistProductTexts}
-    //     target="_blank"
-    //     rel="noreferrer"
-    //   >
-    //     {cellData || rowData.skuName || ''}
-    //   </a>
-    // )
   }
 
   const jsonschema = {

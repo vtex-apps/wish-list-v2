@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Fast store pdp link not correct issue fixed
+- Fixed wishlist notes not updating issue
+
 ## [2.0.0] - 2024-06-24
 
 ## [1.0.16] - 2024-06-24

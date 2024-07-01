@@ -18,7 +18,7 @@ const Notes = ({
   quantity,
 }) => {
   const [show, setShow] = useState(false)
-  const [notes, setNotes] = useState(currentNotes)
+  const [notes, setNotes] = useState('')
 
   const { price } = useQueryGetProductPrice(
     'sku',
@@ -33,6 +33,10 @@ const Notes = ({
   useEffect(() => {
     wishlistRef.current = initialWishlist
   }, [initialWishlist])
+
+  useEffect(() => {
+    setNotes(currentNotes)
+  }, [currentNotes])
 
   const handleNotesSubmit = async () => {
     try {
