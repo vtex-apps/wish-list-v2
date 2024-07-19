@@ -10,6 +10,7 @@ import UnitPrice from '../components/UnitPrice'
 import styles from '../styles.css'
 // import ProductDescription from '../components/ProductDescription'
 import SkuName from '../components/SkuName'
+import { removePrefixRegex } from './stringUtils'
 
 const getProductPath = (rowData: any) => {
   const isFastStore = (window?.location?.hostname ?? '').startsWith('secure')
@@ -23,7 +24,10 @@ const getProductPath = (rowData: any) => {
     ? `${productSlug}-${rowData.itemId}`
     : productSlug
 
-  return `${window.location.origin}/${productPath}/p`
+  const hostUrl = removePrefixRegex(window.location.host ?? '', 'secure.')
+  const newBaseUrl = `https://${hostUrl}`
+
+  return `${newBaseUrl}/${productPath}/p`
 }
 
 export const JsonSchema = ({
