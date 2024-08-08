@@ -41,7 +41,7 @@ const WishlistMobile = ({
         setNameListAccountTable,
         setIsModalAccountTable,
       })
-      showToast('You created a new Wishlist and your product was added')
+      showToast('You created a new Wishlist')
       setIsCreateLoading(false)
     } catch (error) {
       showToast(error)
