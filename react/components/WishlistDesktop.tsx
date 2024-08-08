@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
+import { ToastContext } from 'vtex.styleguide'
 
 import EditableWishlistTitle from './WishlistName/WishlistName'
 import ModalCreateList from './ModalCreateList'
@@ -28,6 +29,7 @@ const WishlistDesktop = ({
 }) => {
   const [isCreateLoading, setIsCreateLoading] = useState(false)
   const [isDeleteLoading, setIsDeleteLoading] = useState(false)
+  const { showToast } = useContext<any>(ToastContext)
 
   const onCreateList = async (event) => {
     setIsCreateLoading(true)
@@ -40,8 +42,10 @@ const WishlistDesktop = ({
         setNameListAccountTable,
         setIsModalAccountTable,
       })
+      showToast('You created a new Wishlist')
       setIsCreateLoading(false)
     } catch (error) {
+      showToast(error)
       console.error(error)
       await fetchData()
       setIsCreateLoading(false)
