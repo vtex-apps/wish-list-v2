@@ -8,6 +8,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Share List component
+- URL's from Faststore
+- General fixes and improvements
+- Email issues on rendering pages
+- Removed validation for the email field on getting the lists
+
 ## [2.0.5] - 2024-08-12
 
 ### Fixed

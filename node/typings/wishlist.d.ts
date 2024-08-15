@@ -2,7 +2,7 @@ export interface Wishlist {
   id: string
   email: string
   wishlistType: string
-  products: Productos[]
+  products: Products[]
   isPublic: boolean
   fieldsConfig?: FieldsConfig
 }
@@ -12,7 +12,7 @@ export interface FieldsConfig {
   description: string
 }
 
-export interface Productos {
+export interface Products {
   ID: number
   Image: string
   unitValue: number

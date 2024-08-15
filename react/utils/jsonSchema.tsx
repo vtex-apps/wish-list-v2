@@ -12,17 +12,16 @@ import styles from '../styles.css'
 import SkuName from '../components/SkuName'
 import { removePrefixRegex } from './stringUtils'
 
-const getProductPath = (rowData: any) => {
+export const getProductPath = (rowData: any) => {
   const isFastStore = (window?.location?.hostname ?? '').startsWith('secure')
 
   const linkUrl = rowData.linkProduct || ''
   const parts = linkUrl.split('.br/')
+  const id = rowData.itemId || rowData.ID
 
   // eslint-disable-next-line prefer-destructuring
   const productSlug = parts[parts.length - 1]?.split('/')?.[0] ?? ''
-  const productPath = isFastStore
-    ? `${productSlug}-${rowData.itemId}`
-    : productSlug
+  const productPath = isFastStore ? `${productSlug}-${id}` : productSlug
 
   const hostUrl = removePrefixRegex(window.location.host ?? '', 'secure.')
   const newBaseUrl = `https://${hostUrl}`

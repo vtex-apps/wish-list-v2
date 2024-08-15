@@ -29,7 +29,5 @@ export const createWishlist = async (
     email,
   }
 
-  const newWishlist = await md.createWishlist(wishlist)
-
-  return newWishlist
+  return md.createWishlist(wishlist)
 }

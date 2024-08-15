@@ -27,7 +27,7 @@ const useGetWishlist = () => {
   const { createWishlist } = useMutationCreateWishlist(async (d) => {
     const datarefect = await refetch()
 
-    const find = datarefect?.data?.getWishlistsByEmail.find(
+    const find = datarefect?.data?.getWishlistsByEmail?.find(
       (item: { wishlistType: string }) => item.wishlistType === nameListWishlist
     )
 
@@ -52,7 +52,7 @@ const useGetWishlist = () => {
   const nameProduct = product?.productName
   const linkProduct = product?.link
   const idProduct = Number(selectedItem?.itemId)
-  const urlImageProduct = product?.items.find((item: any) => item)?.images[0]
+  const urlImageProduct = product?.items?.find((item: any) => item)?.images[0]
     ?.imageUrl
 
   const quantityProduct = selectedQuantity
