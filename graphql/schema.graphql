@@ -38,6 +38,7 @@ input ProductsInput {
   department: String
   bundle: Int
   notes: String
+  unitValue: Float
 }
 
 type Products {

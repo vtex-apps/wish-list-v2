@@ -1,20 +1,22 @@
 import React, { useContext, useState } from 'react'
 import { useCssHandles } from 'vtex.css-handles'
 import {
+  Button,
   Table,
+  ToastConsumer,
   ToastContext,
   ToastProvider,
-  ToastConsumer,
-  Button,
 } from 'vtex.styleguide'
 import { usePixel } from 'vtex.pixel-manager'
 import { useOrderItems } from 'vtex.order-items/OrderItems'
 import { useRuntime } from 'vtex.render-runtime'
+import PropTypes from 'prop-types'
 
 import { ProductStepper } from './ProductStepper'
 import useAddSharedListPage from '../../hooks/useAddSharedListPage'
 import ModalCreateList from '../ModalCreateList'
 import styles from '../../styles.css'
+import { getProductPath } from '../../utils/jsonSchema'
 
 const CSS_HANDLES = [
   'importList__generalContainer',
@@ -22,24 +24,42 @@ const CSS_HANDLES = [
   'importList__modalContainer',
 ]
 
-export default function TableWishList({ products, queryId }) {
+export default function TableWishList({
+  products,
+  queryId,
+}: {
+  products: any
+  queryId: string
+}) {
   const { addItems } = useOrderItems()
   const { push } = usePixel()
   const { showToast } = useContext(ToastContext)
   const { handles } = useCssHandles(CSS_HANDLES)
-  const [localProducts, setLocalProducts] = useState([...products])
+  const [localProducts, setLocalProducts] = useState([
+    ...products.map((product: any) => ({
+      ...product,
+      unitValue: product.unitValue ?? 0,
+      totalValue: product.quantityProduct * (product.unitValue ?? 0),
+    })),
+  ])
+
   const [, setIsUpdatingQty] = useState(false)
   const runtime = useRuntime()
   const { culture } = runtime
   const currency = culture.customCurrencySymbol
 
   const handleQuantityChange = (productId, newQuantity) => {
-    // Lógica para actualizar la cantidad de productos en la lista...
+    // Lógica para actualizar la cantidad de Products en la lista...
     const updatedProducts = localProducts.map((product) => {
       if (product.id === productId) {
-        const newTotalValue = newQuantity * product.unitValue
+        const newTotalValue = newQuantity * (product.unitValue ?? 0)
 
-        return { ...product, qty: newQuantity, totalValue: newTotalValue }
+        return {
+          ...product,
+          unitValue: product.unitValue ?? 0,
+          qty: newQuantity,
+          totalValue: newTotalValue,
+        }
       }
 
       return product
@@ -71,13 +91,16 @@ export default function TableWishList({ products, queryId }) {
   }
 
   const nameCellRenderer = ({ cellData, rowData }) => {
-    const linkUrl = rowData.linkProduct
-    const parts = linkUrl.split('.br/')
-    const productUrl = `/${parts[parts.length - 1]}`
+    const productUrl = getProductPath(rowData)
     const productName = cellData || rowData.nameProduct
 
     return (
-      <a href={productUrl} className={styles.wishlistProductTexts}>
+      <a
+        href={productUrl}
+        rel="noreferrer"
+        target="_blank"
+        className={styles.wishlistProductTexts}
+      >
         {productName}
       </a>
     )
@@ -109,6 +132,31 @@ export default function TableWishList({ products, queryId }) {
     )
   }
 
+  const addProductsToCart = async (props) => {
+    // Lógica para añadir Products al carrito...
+    const productInfo = localProducts.find((item) => props.name === item.name)
+    const items = [
+      {
+        id: productInfo.ID || productInfo.id,
+        seller: 1,
+        quantity: productInfo.qty,
+        name: productInfo.name,
+      },
+    ]
+
+    addItems(items)
+      .then(async () => {
+        push({
+          event: 'addToCart',
+          id: 'addToCart',
+        })
+        showToast('Item added to the cart')
+      })
+      .catch((error) => {
+        console.error(error)
+      })
+  }
+
   const addCellRenderer = ({ rowData }) => (
     <button
       className={styles.wishlistAddItem}
@@ -117,6 +165,17 @@ export default function TableWishList({ products, queryId }) {
       Add
     </button>
   )
+
+  // ADD SHARED LIST PAGE
+  const {
+    isUserLoggedOut,
+    navigateToLoginPage,
+    isListNameInputVisible,
+    handleInputListNameVisualization,
+    fieldValidationTable,
+    handleNameListTable,
+    createNewList,
+  } = useAddSharedListPage({ queryId, products, updatedProducts: null })
 
   const schema = {
     properties: {
@@ -162,42 +221,6 @@ export default function TableWishList({ products, queryId }) {
       },
     },
   }
-
-  const addProductsToCart = async (props) => {
-    // Lógica para añadir productos al carrito...
-    const productInfo = localProducts.find((item) => props.name === item.name)
-    const items = [
-      {
-        id: productInfo.ID || productInfo.id,
-        seller: 1,
-        quantity: productInfo.qty,
-        name: productInfo.name,
-      },
-    ]
-
-    addItems(items)
-      .then(async () => {
-        push({
-          event: 'addToCart',
-          id: 'addToCart',
-        })
-        showToast('Item added to the cart')
-      })
-      .catch((error) => {
-        console.error(error)
-      })
-  }
-
-  // ADD SHARED LIST PAGE
-  const {
-    isUserLoggedOut,
-    navigateToLoginPage,
-    isListNameInputVisible,
-    handleInputListNameVisualization,
-    fieldValidationTable,
-    handleNameListTable,
-    createNewList,
-  } = useAddSharedListPage({ queryId, products })
 
   return (
     <div className={handles.importList__generalContainer}>
@@ -262,4 +285,10 @@ export default function TableWishList({ products, queryId }) {
       />
     </div>
   )
+}
+
+TableWishList.propTypes = {
+  products: PropTypes.any.isRequired,
+  queryId: PropTypes.string.isRequired,
+  name: PropTypes.string,
 }

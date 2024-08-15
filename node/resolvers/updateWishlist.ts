@@ -1,7 +1,7 @@
 import { AuthenticationError } from '@vtex/api'
 
 import { auth } from '../middleware/auth'
-import type { Productos, WishlistUpdateArs } from '../typings/wishlist'
+import type { Products, WishlistUpdateArs } from '../typings/wishlist'
 
 export const updateWishlist = async (
   _: unknown,
@@ -50,7 +50,7 @@ export const updateWishlist = async (
     email: wishlist?.email || emailUser,
     wishlistType: wishlist?.wishlistType || wishlistType,
     isPublic: wishlist?.isPublic || isPublic,
-    products: data as Productos[],
+    products: data as Products[],
   }
 
   await md.updateWishlist(wishlist.id, updatedWishlist)
