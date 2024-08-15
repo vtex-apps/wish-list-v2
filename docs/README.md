@@ -150,6 +150,40 @@ Schema Name: `0.0.4-mywishlists`
 
 </details>
 
+
+## Wishlist Share Component
+
+To use the Wishlist Share component you must add the route to your store theme
+
+1. Add the route 
+```routes.json```
+```json
+{
+  "store.custom#wishlistshare": {
+    "path": "/wishlist-share"
+  }
+}
+```
+2. Add the block to the store
+
+**Example**
+
+```wishlistshare.jsonc```
+```json
+{
+  "store.custom#wishlistshare": {
+    "blocks": [
+      "flex-layout.row#wishlistshare"
+    ]
+  },
+  "flex-layout.row#wishlistshare": {
+    "children": [
+      "wishlist-share"
+    ]
+  }
+}
+```
+
 ## Customization
 
 In order to apply CSS customizations in this and other blocks, follow the instructions given in the recipe on [Using CSS Handles for store customization](https://vtex.io/docs/recipes/style/using-css-handles-for-store-customization).
