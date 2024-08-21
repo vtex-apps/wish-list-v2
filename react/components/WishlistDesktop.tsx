@@ -45,7 +45,9 @@ const WishlistDesktop = ({
       showToast('You created a new Wishlist')
       setIsCreateLoading(false)
     } catch (error) {
-      showToast(error)
+
+      showToast({message: `An error occurred. Make sure there isn't a wishlist with the same name.`,  status: 'ERROR',})
+
       console.error(error)
       await fetchData()
       setIsCreateLoading(false)
