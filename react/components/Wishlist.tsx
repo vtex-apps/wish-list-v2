@@ -158,8 +158,6 @@ function Wishlist({ wishlists, fetchData}) {
     wishlistColumns,
   })
 
-  console.log(`tableSchema`, tableSchema)
-
   const {
     fieldValidationTable,
     isModalAccountTable,
@@ -473,9 +471,6 @@ function Wishlist({ wishlists, fetchData}) {
   const bulkActionsAllRowsSelected = (qty: number) => (
     <React.Fragment>All rows selected {qty}</React.Fragment>
   )
-
-  console.log(tableSchema)
-  
 
   return (
     <>
