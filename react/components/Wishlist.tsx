@@ -16,6 +16,9 @@ import useAddToCart from '../hooks/useAddToCart'
 import useBulkAction from '../hooks/useBulkAction'
 import { JsonSchema } from '../utils/jsonSchema'
 import useStoreGlobal from '../globalStore/globalStore'
+import AppSettings from '../queries/AppSettings.graphql'
+
+
 // Table config
 import {
   handleNextClick,
@@ -34,13 +37,27 @@ import WishlistDesktop from './WishlistDesktop'
 import WishlistMobile from './WishlistMobile'
 // Styles
 import styles from '../styles.css'
+import { useQuery } from 'react-apollo'
 
-function Wishlist({ wishlists, fetchData }) {
+
+
+
+
+
+function Wishlist({ wishlists, fetchData}) {
   const { deviceInfo } = useRuntime()
   const emailIDInfo = getEmailID(wishlists)
   const { selectedWishlist, setSelectedWishlist } = useStoreGlobal()
   const { showToast } = useContext<any>(ToastContext)
   const [filterState, setfilterState] = useState<any>([])
+
+  const { data: wishlistColumns } = useQuery(AppSettings, {
+    variables: {
+      // eslint-disable-next-line no-undef
+      version: process.env.VTEX_APP_VERSION,
+    },
+    ssr: false,
+  })
 
   const handleSelectWishlist = useCallback(
     (id) => {
@@ -138,7 +155,10 @@ function Wishlist({ wishlists, fetchData }) {
     wishlist,
     wishlists,
     updateWishlist,
+    wishlistColumns,
   })
+
+  console.log(`tableSchema`, tableSchema)
 
   const {
     fieldValidationTable,
@@ -367,7 +387,7 @@ function Wishlist({ wishlists, fetchData }) {
       setIsLoadingSKU(false)
     }
   }
-
+  
   const tableFilterOptions = {
     department: {
       label: 'Department',
@@ -453,6 +473,9 @@ function Wishlist({ wishlists, fetchData }) {
   const bulkActionsAllRowsSelected = (qty: number) => (
     <React.Fragment>All rows selected {qty}</React.Fragment>
   )
+
+  console.log(tableSchema)
+  
 
   return (
     <>

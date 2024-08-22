@@ -29,7 +29,7 @@
     "vtex.store": "2.x",
     "vtex.search-graphql": "0.x",
     "vtex.checkout-graphql": "0.x",
-    "vtex.apps-graphql": "2.x",
+    "vtex.apps-graphql": "3.x",
     "vtex.store-icons": "0.x"
   },
   "peerDependencies": {
@@ -38,6 +38,61 @@
   "registries": [
     "smartcheckout"
   ],
+  "settingsSchema": {
+    "title": "Wishlist Columns",
+    "type": "object",
+    "access": "public",
+    "properties": {
+      "image": {
+        "title": "image",
+        "type": "boolean",
+        "description": "image",
+        "default": true
+      },
+      "skuName": {
+        "title": "skuName",
+        "type": "boolean",
+        "description": "skuName",
+        "default": true
+      },
+      "department": {
+        "title": "department",
+        "type": "boolean",
+        "description": "department",
+        "default": true
+      },
+      "skuReferenceCode": {
+        "title": "skuReferenceCode",
+        "type": "boolean",
+        "description": "skuReferenceCode",
+        "default": true
+      },
+      "quantity": {
+        "title": "quantity",
+        "type": "boolean",
+        "description": "quantity",
+        "default": true
+      },
+      "unitValue": {
+        "title": "unitValue",
+        "type": "boolean",
+        "description": "unitValue",
+        "default": true
+      },
+      "totalValue": {
+        "title": "totalValue",
+        "type": "boolean",
+        "description": "totalValue",
+        "default": true
+      },
+      "notes": {
+        "title": "notes",
+        "type": "boolean",
+        "description": "notes",
+        "default": true
+      }
+    }
+  },
   "policies": [
     {
       "name": "colossus-fire-event"
