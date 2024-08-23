@@ -53,10 +53,12 @@ function EditableWishlistTitle({ initialTitle, wishlist, fetchData }) {
       ) : (
         <div
           className={styles.wishlistNameContainer}
-          onClick={handleEditClick}
           aria-hidden="true"
         >
-          <h1 className={styles.wishlistName}>
+          <h1
+            className={styles.wishlistName}
+            onClick={handleEditClick}
+          >
             {title} {title && <IconEdit />}
           </h1>
         </div>

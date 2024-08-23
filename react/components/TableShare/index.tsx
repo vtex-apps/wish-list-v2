@@ -12,11 +12,15 @@ import { useOrderItems } from 'vtex.order-items/OrderItems'
 import { useRuntime } from 'vtex.render-runtime'
 import PropTypes from 'prop-types'
 
+import SkuName from '../../components/SkuName'
+
 import { ProductStepper } from './ProductStepper'
 import useAddSharedListPage from '../../hooks/useAddSharedListPage'
 import ModalCreateList from '../ModalCreateList'
 import styles from '../../styles.css'
 import { getProductPath } from '../../utils/jsonSchema'
+
+
 
 const CSS_HANDLES = [
   'importList__generalContainer',
@@ -27,9 +31,11 @@ const CSS_HANDLES = [
 export default function TableWishList({
   products,
   queryId,
+  columns,
 }: {
   products: any
   queryId: string
+  columns: any
 }) {
   const { addItems } = useOrderItems()
   const { push } = usePixel()
@@ -42,6 +48,10 @@ export default function TableWishList({
       totalValue: product.quantityProduct * (product.unitValue ?? 0),
     })),
   ])
+
+  console.log(products)
+
+
 
   const [, setIsUpdatingQty] = useState(false)
   const runtime = useRuntime()
@@ -177,13 +187,25 @@ export default function TableWishList({
     createNewList,
   } = useAddSharedListPage({ queryId, products, updatedProducts: null })
 
-  const schema = {
+  const skuNameCellRenderer = ({ rowData }) => {
+    const productUrl = getProductPath(rowData)
+
+    return <SkuName itemId={rowData.itemId} productUrl={productUrl} />
+  }
+
+  let schema = {
     properties: {
       // Definición del esquema de la tabla...
       image: {
         title: 'Image',
         width: 100,
         cellRenderer: imageCellRenderer,
+      },
+      skuName: {
+        title: 'Name',
+        width: 200,
+        active:true,
+        cellRenderer: skuNameCellRenderer,
       },
       department: {
         title: 'Department',
@@ -221,6 +243,16 @@ export default function TableWishList({
       },
     },
   }
+
+  const wishlistColumnsSettings = JSON.parse(columns.publicSettingsForApp.message)
+
+  for (const [key, value] of Object.entries(wishlistColumnsSettings)) {
+    if(!value && key != "add") { 
+      delete schema.properties[key]
+    }
+  }
+
+  console.log(localProducts)
 
   return (
     <div className={handles.importList__generalContainer}>
