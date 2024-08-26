@@ -49,10 +49,6 @@ export default function TableWishList({
     })),
   ])
 
-  console.log(products)
-
-
-
   const [, setIsUpdatingQty] = useState(false)
   const runtime = useRuntime()
   const { culture } = runtime
