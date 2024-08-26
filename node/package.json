@@ -35,5 +35,5 @@
   "scripts": {
     "lint": "tsc --noEmit && tslint -c tslint.json './**/*.ts'"
   },
-  "version": "2.0.6"
+  "version": "2.1.2"
 }
