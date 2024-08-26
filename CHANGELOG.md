@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- admin setup to manage the columns
+
 ## [2.1.1] - 2024-08-21
 
 ## [2.1.0] - 2024-08-15

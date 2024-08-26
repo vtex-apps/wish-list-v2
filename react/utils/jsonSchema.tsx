@@ -36,6 +36,7 @@ export const JsonSchema = ({
   wishlist,
   wishlists,
   updateWishlist,
+  wishlistColumns,
 }) => {
   const runtime = useRuntime()
   const { culture } = runtime
@@ -172,27 +173,33 @@ export const JsonSchema = ({
     return <SkuName itemId={rowData.itemId} productUrl={productUrl} />
   }
 
-  const jsonschema = {
+  
+
+  let jsonschema = {
     properties: {
       image: {
         title: 'Image',
         width: 80,
+        active:true,
         cellRenderer: imageCellRenderer,
       },
       skuName: {
         title: 'Name',
         width: 200,
+        active:true,
         cellRenderer: skuNameCellRenderer,
       },
       department: {
         sortable: true,
         title: 'Department',
         width: 150,
+        active:true,
         cellRenderer: departmentCellRenderer,
       },
       skuReferenceCode: {
         title: 'Part #',
         width: 125,
+        active:true,
         cellRenderer: skuReferenceCodeCellRenderer,
       },
       // description: {
@@ -235,5 +242,14 @@ export const JsonSchema = ({
     },
   }
 
+  
+  if (!wishlistColumns?.publicSettingsForApp?.message) return jsonschema
+  const wishlistColumnsSettings = JSON.parse(wishlistColumns.publicSettingsForApp.message)
+
+  for (const [key, value] of Object.entries(wishlistColumnsSettings)) {
+    if(!value) { 
+      delete jsonschema.properties[key]
+    }
+  }
   return jsonschema
 }
