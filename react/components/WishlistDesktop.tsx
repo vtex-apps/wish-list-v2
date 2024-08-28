@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react'
-import { ToastContext, ModalDialog } from 'vtex.styleguide'
+import { ToastContext, ModalDialog, Button } from 'vtex.styleguide'
 
 import EditableWishlistTitle from './WishlistName/WishlistName'
 import ModalCreateList from './ModalCreateList'
@@ -61,6 +61,9 @@ const WishlistDesktop = ({
     try {
       await deleteWishlist()
       setIsDeleteLoading(false)
+      if(wishlists.length === 1){
+        window.location.reload()
+      }
       closeModal()
     } catch (error) {
       console.error(error)
@@ -79,8 +82,9 @@ const WishlistDesktop = ({
   }
 
   return (
-    <div id="wish-list-desktop">
-
+    <>
+    <Button href="/account/#/profile" >RETURN</Button> <div id="wish-list-desktop">
+      
       <ModalDialog
         centered
         loading={isDeleteLoading}
@@ -88,6 +92,8 @@ const WishlistDesktop = ({
           onClick: onDeleteList,
           label: 'Yes',
           isDangerous: true,
+          testId: "deleteConfirmBtn"
+
         }}
         cancelation={{
           onClick: closeModal,
@@ -113,9 +119,11 @@ const WishlistDesktop = ({
         wishlist={selectedWishlist !== null ? wishlist : wishlists[0]}
         fetchData={fetchData}
       />
+          
       <div className={styles.wishlistOptionsContainer}>
+ 
         <div className={styles.wishlistSelector}>
-          <p className={styles.wishlistSelectListOneText}>Favourites List</p>
+          <p className={styles.wishlistSelectListOneText}> Favourites List</p>
           <select
             className={styles.wishlistSelectListOne}
             id="selectListTable"
@@ -173,7 +181,8 @@ const WishlistDesktop = ({
           </button>
         </section>
       </div>
-    </div>
+    </div></>
+   
   )
 }
 
