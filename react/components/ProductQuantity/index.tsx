@@ -57,7 +57,6 @@ export const ProductStepper = ({
 
   return (
     <>
-    <div>oi</div>
     <NumericStepper
       value={QTY}
       size="small"
