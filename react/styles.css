@@ -318,7 +318,11 @@
   align-items: center;
   width: 100%;
 }
+.wishlistCreateWishlistUI{
+}
+.wishlistCreateWishlistPageTitle {
 
+}
 .wishlistCreateNew,
 .wishlistDelete,
 .wishlistAddItem,
