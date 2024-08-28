@@ -93,7 +93,7 @@ const MyWishLists = () => {
   if (wishlists.length === 0) {
     return (
       <section className={styles.wishlistCreateWishlistUI}>
-        <Button href="/account/#/profile">RETURN</Button>
+        <Button href="/account">RETURN</Button>
         <h1 className={styles.wishlistCreateWishlistPageTitle}>Create your wishlist!</h1>
         <button className={styles.wishlistCreateNew} onClick={buttonModal}>
           New Wishlist

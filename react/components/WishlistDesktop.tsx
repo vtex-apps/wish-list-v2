@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react'
-import { ToastContext } from 'vtex.styleguide'
+import { ToastContext, ModalDialog } from 'vtex.styleguide'
 
 import EditableWishlistTitle from './WishlistName/WishlistName'
 import ModalCreateList from './ModalCreateList'
@@ -29,6 +29,7 @@ const WishlistDesktop = ({
 }) => {
   const [isCreateLoading, setIsCreateLoading] = useState(false)
   const [isDeleteLoading, setIsDeleteLoading] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false)
   const { showToast } = useContext<any>(ToastContext)
 
   const onCreateList = async (event) => {
@@ -55,19 +56,55 @@ const WishlistDesktop = ({
   }
 
   const onDeleteList = async () => {
+
     setIsDeleteLoading(true)
     try {
       await deleteWishlist()
       setIsDeleteLoading(false)
+      closeModal()
     } catch (error) {
       console.error(error)
       await fetchData()
       setIsDeleteLoading(false)
+      closeModal()
     }
+  }
+
+  const closeModal = () => {
+    setIsModalOpen(false)
+  }
+
+  const openModal = () => {
+    setIsModalOpen(true)
   }
 
   return (
     <div id="wish-list-desktop">
+
+      <ModalDialog
+        centered
+        loading={isDeleteLoading}
+        confirmation={{
+          onClick: onDeleteList,
+          label: 'Yes',
+          isDangerous: true,
+        }}
+        cancelation={{
+          onClick: closeModal,
+          label: 'Cancel',
+        }}
+        isOpen={isModalOpen}
+        onClose={closeModal}>
+        <div className="">
+          <p className="f3 f3-ns fw3 gray">
+            Are you sure you want to delete your wishlist {emailIDInfo.find( list => list.value == selectedWishlist)?.label} ?
+          </p>
+          <p>
+            This action is irreversible.
+          </p>
+        </div>
+      </ModalDialog>
+
       <EditableWishlistTitle
         initialTitle={selectedWishlist !== null ? wishlist.wishlistType : ''}
         wishlistId={
@@ -129,7 +166,7 @@ const WishlistDesktop = ({
           />
           <button
             className={styles.wishlistDeleteWishList}
-            onClick={onDeleteList}
+            onClick={openModal}
             disabled={isDeleteLoading}
           >
             {isDeleting ? `Deleting...` : `Delete Selected List`}
