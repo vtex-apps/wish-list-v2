@@ -59,6 +59,9 @@ const WishlistMobile = ({
     try {
       await deleteWishlist()
       setIsDeleteLoading(false)
+      if(wishlists.length === 1){
+        window.location.reload()
+      }
       closeModal()
     } catch (error) {
       console.error(error)
@@ -87,13 +90,15 @@ const WishlistMobile = ({
         onClick: onDeleteList,
         label: 'Yes',
         isDangerous: true,
+        testId: "deleteConfirmBtn"
       }}
       cancelation={{
         onClick: closeModal,
         label: 'Cancel',
       }}
       isOpen={isModalOpen}
-      onClose={closeModal}>
+      onClose={closeModal}
+      >
       <div className="">
         <p className="f3 f3-ns fw3 gray">
           Are you sure you want to delete your wishlist {emailIDInfo.find( list => list.value == selectedWishlist)?.label} ?
