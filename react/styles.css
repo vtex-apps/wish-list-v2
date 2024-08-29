@@ -321,7 +321,6 @@
 .wishlistCreateWishlistUI{
 }
 .wishlistCreateWishlistPageTitle {
-
 }
 .wishlistCreateNew,
 .wishlistDelete,
@@ -405,7 +404,7 @@
   border: 1.8px solid #cacbcc;
   padding-left: 15px;
 }
-
+.wishlistSelectListTitle{}
 .wishlistSelectListOne {
   cursor: pointer;
   width: 100%;

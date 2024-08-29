@@ -107,7 +107,7 @@ const WishlistMobile = ({
     <div className={styles.wishlistOptionsContainer}>
 
       <div className={styles.wishlistSelector}>
-        <div>
+        <div className={styles.wishlistSelectListTitle}>
         <Button href="/account/#/profile" >RETURN</Button>
         <p className={styles.wishlistSelectListOneText}>Favourites List</p>
         </div>
