@@ -82,8 +82,7 @@ const WishlistDesktop = ({
   }
 
   return (
-    <>
-    <Button href="/account/#/profile" >RETURN</Button> <div id="wish-list-desktop">
+    <div id="wish-list-desktop">
       
       <ModalDialog
         centered
@@ -181,7 +180,7 @@ const WishlistDesktop = ({
           </button>
         </section>
       </div>
-    </div></>
+    </div>
    
   )
 }

@@ -77,7 +77,7 @@ const WishlistMobile = ({
   }
 
   return (
-    <>    <Button href="/account/#/profile" >RETURN</Button><div id="wish-list-mobile">
+    <>    <div id="wish-list-mobile">
     {/* Mobile Design */}
 
     <ModalDialog
@@ -107,7 +107,11 @@ const WishlistMobile = ({
     <div className={styles.wishlistOptionsContainer}>
 
       <div className={styles.wishlistSelector}>
+        <div>
+        <Button href="/account/#/profile" >RETURN</Button>
         <p className={styles.wishlistSelectListOneText}>Favourites List</p>
+        </div>
+      
         <div className={`${styles.createListandAndSelectFav}`}>
           <select
             className={styles.wishlistSelectListOne}
