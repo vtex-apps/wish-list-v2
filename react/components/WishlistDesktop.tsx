@@ -122,7 +122,7 @@ const WishlistDesktop = ({
       <div className={styles.wishlistOptionsContainer}>
  
         <div className={styles.wishlistSelector}>
-          <p className={styles.wishlistSelectListOneText}> Favourites List</p>
+          <p className={styles.wishlistSelectListOneText}>Favourites List</p>
           <select
             className={styles.wishlistSelectListOne}
             id="selectListTable"
