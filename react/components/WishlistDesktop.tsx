@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react'
-import { ToastContext, ModalDialog, Button } from 'vtex.styleguide'
+import { ToastContext, ModalDialog } from 'vtex.styleguide'
 
 import EditableWishlistTitle from './WishlistName/WishlistName'
 import ModalCreateList from './ModalCreateList'
