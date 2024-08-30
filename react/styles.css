@@ -318,7 +318,10 @@
   align-items: center;
   width: 100%;
 }
-
+.wishlistCreateWishlistUI{
+}
+.wishlistCreateWishlistPageTitle {
+}
 .wishlistCreateNew,
 .wishlistDelete,
 .wishlistAddItem,
@@ -401,7 +404,7 @@
   border: 1.8px solid #cacbcc;
   padding-left: 15px;
 }
-
+.wishlistSelectListTitle{}
 .wishlistSelectListOne {
   cursor: pointer;
   width: 100%;

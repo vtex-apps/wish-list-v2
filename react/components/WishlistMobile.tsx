@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react'
-import { ToastContext, ModalDialog } from 'vtex.styleguide'
+import { ToastContext, ModalDialog, Button } from 'vtex.styleguide'
 
 import EditableWishlistTitle from './WishlistName/WishlistName'
 import ModalCreateList from './ModalCreateList'
@@ -59,6 +59,9 @@ const WishlistMobile = ({
     try {
       await deleteWishlist()
       setIsDeleteLoading(false)
+      if(wishlists.length === 1){
+        window.location.reload()
+      }
       closeModal()
     } catch (error) {
       console.error(error)
@@ -106,7 +109,11 @@ const WishlistMobile = ({
 
       <div className={styles.wishlistOptionsContainer}>
         <div className={styles.wishlistSelector}>
+        <div className={styles.wishlistSelectListTitle}>
+        <Button href="/account" >RETURN</Button>
           <p className={styles.wishlistSelectListOneText}>Favourites List</p>
+          </div>
+      
           <div className={`${styles.createListandAndSelectFav}`}>
             <select
               className={styles.wishlistSelectListOne}

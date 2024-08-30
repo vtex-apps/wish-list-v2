@@ -94,7 +94,7 @@ const MyWishLists = () => {
     return (
       <section className={styles.wishlistCreateWishlistUI}>
         <Button href="/account">RETURN</Button>
-        <h1>Create your wishlist!</h1>
+        <h1 className={styles.wishlistCreateWishlistPageTitle}>Create your wishlist!</h1>
         <button className={styles.wishlistCreateNew} onClick={buttonModal}>
           New Wishlist
         </button>

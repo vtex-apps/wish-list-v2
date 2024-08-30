@@ -61,6 +61,9 @@ const WishlistDesktop = ({
     try {
       await deleteWishlist()
       setIsDeleteLoading(false)
+      if(wishlists.length === 1){
+        window.location.reload()
+      }
       closeModal()
     } catch (error) {
       console.error(error)
@@ -80,7 +83,7 @@ const WishlistDesktop = ({
 
   return (
     <div id="wish-list-desktop">
-
+      
       <ModalDialog
         centered
         loading={isDeleteLoading}
@@ -88,6 +91,8 @@ const WishlistDesktop = ({
           onClick: onDeleteList,
           label: 'Yes',
           isDangerous: true,
+          testId: "deleteConfirmBtn"
+
         }}
         cancelation={{
           onClick: closeModal,
@@ -113,7 +118,9 @@ const WishlistDesktop = ({
         wishlist={selectedWishlist !== null ? wishlist : wishlists[0]}
         fetchData={fetchData}
       />
+          
       <div className={styles.wishlistOptionsContainer}>
+ 
         <div className={styles.wishlistSelector}>
           <p className={styles.wishlistSelectListOneText}>Favourites List</p>
           <select
@@ -174,6 +181,7 @@ const WishlistDesktop = ({
         </section>
       </div>
     </div>
+   
   )
 }
 
