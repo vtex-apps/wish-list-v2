@@ -90,6 +90,7 @@ const WishlistMobile = ({
           onClick: onDeleteList,
           label: 'Yes',
           isDangerous: true,
+          testId: "deleteConfirmBtn"
         }}
         cancelation={{
           onClick: closeModal,
