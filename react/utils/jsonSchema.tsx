@@ -246,10 +246,23 @@ export const JsonSchema = ({
   if (!wishlistColumns?.publicSettingsForApp?.message) return jsonschema
   const wishlistColumnsSettings = JSON.parse(wishlistColumns.publicSettingsForApp.message)
 
+  jsonschema.properties.image.title = wishlistColumnsSettings.imageName
+  jsonschema.properties.skuName.title = wishlistColumnsSettings.skuNameTitle
+  jsonschema.properties.department.title = wishlistColumnsSettings.departmentTitle
+  jsonschema.properties.skuReferenceCode.title = wishlistColumnsSettings.skuReferenceCodeTitle
+  jsonschema.properties.quantity.title = wishlistColumnsSettings.quantityTitle
+  jsonschema.properties.unitValue.title = wishlistColumnsSettings.unitValueTitle
+  jsonschema.properties.totalValue.title = wishlistColumnsSettings.totalValueTitle
+  jsonschema.properties.add.title = wishlistColumnsSettings.addTitle
+  jsonschema.properties.remove.title = wishlistColumnsSettings.removeTitle
+
   for (const [key, value] of Object.entries(wishlistColumnsSettings)) {
     if(!value) { 
       delete jsonschema.properties[key]
     }
   }
+
+  console.log(`wishlistColumnsSettings`, wishlistColumnsSettings)
+  console.log(`jsonschema`, jsonschema)
   return jsonschema
 }

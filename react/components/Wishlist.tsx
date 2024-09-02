@@ -158,6 +158,10 @@ function Wishlist({ wishlists, fetchData}) {
     wishlistColumns,
   })
 
+
+  console.log(`tableSchema`, tableSchema)
+
+
   const {
     fieldValidationTable,
     isModalAccountTable,
@@ -528,7 +532,9 @@ function Wishlist({ wishlists, fetchData}) {
       />
       <section className={styles.wishlistSearchContainer}>
         <Table
+          fullWidth
           density="medium"
+          updateTableKey={`vtex-table=${Math.floor(Math.random() * 1000) }`}
           schema={tableSchema}
           items={paginatedData || []}
           toolbar={{

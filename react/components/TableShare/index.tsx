@@ -20,6 +20,9 @@ import ModalCreateList from '../ModalCreateList'
 import styles from '../../styles.css'
 import { getProductPath } from '../../utils/jsonSchema'
 
+import ProductPriceTotal from '../ProductPriceTotal'
+import UnitPrice from '../UnitPrice'
+
 
 
 const CSS_HANDLES = [
@@ -49,6 +52,10 @@ export default function TableWishList({
     })),
   ])
 
+  console.log( products,
+    queryId,
+    columns)
+
   const [, setIsUpdatingQty] = useState(false)
   const runtime = useRuntime()
   const { culture } = runtime
@@ -73,6 +80,28 @@ export default function TableWishList({
 
     // Actualiza el estado local
     setLocalProducts(updatedProducts)
+  }
+
+
+  const priceCellRenderer = ({ rowData }) => {
+
+    return (
+      <ProductPriceTotal
+        itemId={rowData?.ID}
+        productQuantity={rowData?.quantityProduct}
+        currency={currency}
+      />
+    )
+  }
+
+  const unitValueCellRenderer = ({ rowData }) => {
+    return (
+      <UnitPrice
+        itemId={rowData?.ID}
+        skuReference={rowData?.skuCodeReference}
+        currency={currency}
+      />
+    )
   }
 
   const imageCellRenderer = ({ cellData, rowData }) => (
@@ -124,20 +153,6 @@ export default function TableWishList({
     />
   )
 
-  const unitValueCellRenderer = ({ cellData }) => {
-    const formattedValue = `${currency} ${parseFloat(cellData).toFixed(2)}`
-
-    return <span>{formattedValue}</span>
-  }
-
-  const totalValueCellRenderer = ({ cellData }) => {
-    const formattedValue = `${currency} ${parseFloat(cellData).toFixed(2)}`
-
-    return (
-      <span className={styles.wishlistProductUnitValue}>{formattedValue}</span>
-    )
-  }
-
   const addProductsToCart = async (props) => {
     // Lógica para añadir Products al carrito...
     const productInfo = localProducts.find((item) => props.name === item.name)
@@ -186,7 +201,7 @@ export default function TableWishList({
   const skuNameCellRenderer = ({ rowData }) => {
     const productUrl = getProductPath(rowData)
 
-    return <SkuName itemId={rowData.itemId} productUrl={productUrl} />
+    return <SkuName itemId={rowData.ID} productUrl={productUrl} />
   }
 
   let schema = {
@@ -197,7 +212,7 @@ export default function TableWishList({
         width: 100,
         cellRenderer: imageCellRenderer,
       },
-      skuName: {
+      nameProduct: {
         title: 'Name',
         width: 200,
         active:true,
@@ -230,7 +245,7 @@ export default function TableWishList({
       totalValue: {
         title: 'Total Value',
         width: 120,
-        cellRenderer: totalValueCellRenderer,
+        cellRenderer: priceCellRenderer,
       },
       add: {
         title: 'Add',
@@ -242,13 +257,25 @@ export default function TableWishList({
 
   const wishlistColumnsSettings = JSON.parse(columns.publicSettingsForApp.message)
 
+  if(wishlistColumnsSettings) {
+    schema.properties.image.title = wishlistColumnsSettings.imageName
+    schema.properties.nameProduct.title = wishlistColumnsSettings.skuNameTitle
+    schema.properties.department.title = wishlistColumnsSettings.departmentTitle
+    schema.properties.skuReferenceCode.title = wishlistColumnsSettings.skuReferenceCodeTitle
+    schema.properties.quantity.title = wishlistColumnsSettings.quantityTitle
+    schema.properties.unitValue.title = wishlistColumnsSettings.unitValueTitle
+    schema.properties.totalValue.title = wishlistColumnsSettings.totalValueTitle
+    schema.properties.add.title = wishlistColumnsSettings.addTitle
+  }
+
+
   for (const [key, value] of Object.entries(wishlistColumnsSettings)) {
     if(!value && key != "add") { 
       delete schema.properties[key]
     }
   }
 
-  console.log(localProducts)
+  console.log(localProducts, schema)
 
   return (
     <div className={handles.importList__generalContainer}>

@@ -75,6 +75,8 @@ export default function useAddSharedListPage({
     refetch()
     const data = wishlistsByEmail
 
+    console.log(`wishlistsByEmail`, wishlistsByEmail)
+
     setWishlists(data || [])
     setIsLoading(false)
   }
@@ -158,6 +160,10 @@ export default function useAddSharedListPage({
       navigate({ to: '/account#/my-wishlists' })
     }
   }
+
+
+  console.log(`updatedProducts`, updatedProducts)
+
 
   // RETURN
   return {
