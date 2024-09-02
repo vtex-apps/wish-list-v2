@@ -476,6 +476,8 @@ function Wishlist({ wishlists, fetchData}) {
     <React.Fragment>All rows selected {qty}</React.Fragment>
   )
 
+
+  console.log(`paginatedData`, paginatedData)
   return (
     <>
       {deviceInfo.type === 'phone' ? (
