@@ -1,6 +1,6 @@
 {
   "name": "my-wishlists",
-  "version": "2.1.6",
+  "version": "2.2.0",
   "scripts": {
     "test": "vtex-test-tools test"
   },
