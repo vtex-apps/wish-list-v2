@@ -14,17 +14,17 @@ interface UseAddSharedListPageProps {
   updatedProducts: any
 }
 
-interface Product {
-  id: string
-  image: string
-  bundle: string
-  unitValue: string
-  linkProduct: string
-  name: string
-  qty: number
-  skuReferenceCode: string
-  department: string
-}
+// interface Product {
+//   id: string
+//   image: string
+//   bundle: string
+//   unitValue: string
+//   linkProduct: string
+//   name: string
+//   qty: number
+//   skuReferenceCode: string
+//   department: string
+// }
 
 export default function useAddSharedListPage({
   queryId,
@@ -107,7 +107,8 @@ export default function useAddSharedListPage({
     } else {
       const listProducts: any[] = []
 
-      if (Object.keys(updatedProducts).length > 0) {
+      if (Object.keys(updatedProducts).length > 0 && updatedProducts.filter( item => item.ID).length) {
+
         Object.values(updatedProducts).forEach((prod: any) => {
           const newProduct: any = {
             ID: prod.ID,
@@ -124,16 +125,16 @@ export default function useAddSharedListPage({
           listProducts.push(newProduct)
         })
       } else {
-        products.forEach((prod: Product) => {
+        products.forEach((prod: any) => {
           const newProduct = {
-            ID: prod.id,
-            Image: prod.image,
+            ID: prod.id || prod.ID,
+            Image: prod.image || prod.Image,
             bundle: prod.bundle,
             unitValue: prod.unitValue,
             linkProduct: prod.linkProduct,
-            nameProduct: prod.name,
-            quantityProduct: prod.qty,
-            skuCodeReference: prod.skuReferenceCode,
+            nameProduct: prod.name || prod.nameProduct,
+            quantityProduct: prod.qty || prod.quantityProduct,
+            skuCodeReference: prod.skuReferenceCode || prod.skuCodeReference,
             department: prod.department,
           }
 
@@ -158,6 +159,7 @@ export default function useAddSharedListPage({
       navigate({ to: '/account#/my-wishlists' })
     }
   }
+
 
   // RETURN
   return {
