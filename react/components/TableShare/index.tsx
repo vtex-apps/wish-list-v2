@@ -52,10 +52,6 @@ export default function TableWishList({
     })),
   ])
 
-  console.log( products,
-    queryId,
-    columns)
-
   const [, setIsUpdatingQty] = useState(false)
   const runtime = useRuntime()
   const { culture } = runtime
@@ -121,22 +117,6 @@ export default function TableWishList({
         rel="noopener noreferrer"
       >
         {cellData || rowData.skuCodeReference}
-      </a>
-    )
-  }
-
-  const nameCellRenderer = ({ cellData, rowData }) => {
-    const productUrl = getProductPath(rowData)
-    const productName = cellData || rowData.nameProduct
-
-    return (
-      <a
-        href={productUrl}
-        rel="noreferrer"
-        target="_blank"
-        className={styles.wishlistProductTexts}
-      >
-        {productName}
       </a>
     )
   }
@@ -214,7 +194,7 @@ export default function TableWishList({
       },
       nameProduct: {
         title: 'Name',
-        width: 200,
+        width: 300,
         active:true,
         cellRenderer: skuNameCellRenderer,
       },
@@ -226,11 +206,6 @@ export default function TableWishList({
         title: 'Part #',
         width: 130,
         cellRenderer: skuReferenceCodeCellRenderer,
-      },
-      name: {
-        title: 'Description',
-        width: 250,
-        cellRenderer: nameCellRenderer,
       },
       quantity: {
         title: 'Qty',
@@ -274,8 +249,6 @@ export default function TableWishList({
       delete schema.properties[key]
     }
   }
-
-  console.log(localProducts, schema)
 
   return (
     <div className={handles.importList__generalContainer}>
@@ -333,6 +306,7 @@ export default function TableWishList({
       )}
       <Table
         fullWidth
+        updateTableKey={`vtex-table=${Math.floor(Math.random() * 1000) }`}
         schema={schema}
         density="medium"
         items={localProducts}

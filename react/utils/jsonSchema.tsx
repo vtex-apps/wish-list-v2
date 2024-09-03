@@ -185,7 +185,7 @@ export const JsonSchema = ({
       },
       skuName: {
         title: 'Name',
-        width: 200,
+        width: 300,
         active:true,
         cellRenderer: skuNameCellRenderer,
       },
@@ -262,7 +262,5 @@ export const JsonSchema = ({
     }
   }
 
-  console.log(`wishlistColumnsSettings`, wishlistColumnsSettings)
-  console.log(`jsonschema`, jsonschema)
   return jsonschema
 }

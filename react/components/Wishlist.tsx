@@ -159,9 +159,6 @@ function Wishlist({ wishlists, fetchData}) {
   })
 
 
-  console.log(`tableSchema`, tableSchema)
-
-
   const {
     fieldValidationTable,
     isModalAccountTable,
@@ -476,8 +473,6 @@ function Wishlist({ wishlists, fetchData}) {
     <React.Fragment>All rows selected {qty}</React.Fragment>
   )
 
-
-  console.log(`paginatedData`, paginatedData)
   return (
     <>
       {deviceInfo.type === 'phone' ? (

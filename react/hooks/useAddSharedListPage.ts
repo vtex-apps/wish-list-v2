@@ -75,8 +75,6 @@ export default function useAddSharedListPage({
     refetch()
     const data = wishlistsByEmail
 
-    console.log(`wishlistsByEmail`, wishlistsByEmail)
-
     setWishlists(data || [])
     setIsLoading(false)
   }
@@ -111,7 +109,6 @@ export default function useAddSharedListPage({
 
       if (Object.keys(updatedProducts).length > 0 && updatedProducts.filter( item => item.ID).length) {
 
-        console.log(`@@@@@@@`)
         Object.values(updatedProducts).forEach((prod: any) => {
           const newProduct: any = {
             ID: prod.ID,
@@ -162,9 +159,6 @@ export default function useAddSharedListPage({
       navigate({ to: '/account#/my-wishlists' })
     }
   }
-
-
-  console.log(`updatedProducts`, updatedProducts)
 
 
   // RETURN
