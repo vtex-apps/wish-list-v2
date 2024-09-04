@@ -1,7 +1,7 @@
 {
   "vendor": "vtex",
   "name": "my-wishlists",
-  "version": "2.1.6",
+  "version": "2.2.0",
   "title": "My Wish Lists",
   "description": "Custom app for managing users' wishlists on the My Account Dashboard",
   "builders": {
@@ -49,46 +49,88 @@
         "description": "Text to display on share page title",
         "default": "Favourites Lists"
       },
+      "imageName": {
+        "title": "Image Title",
+        "type": "string",
+        "description": "image column title",
+        "default": "Image"
+      },
       "image": {
         "title": "image",
         "type": "boolean",
-        "description": "image",
+        "description": "active",
         "default": true
+      },
+      "skuNameTitle": {
+        "title": "skuName column title",
+        "type": "string",
+        "description": "skuName column title",
+        "default": "Name"
       },
       "skuName": {
         "title": "skuName",
         "type": "boolean",
-        "description": "skuName",
+        "description": "active",
         "default": true
+      },
+      "departmentTitle": {
+        "title": "department column title",
+        "type": "string",
+        "description": "department column title",
+        "default": "Department"
       },
       "department": {
         "title": "department",
         "type": "boolean",
-        "description": "department",
+        "description": "active",
         "default": true
+      },
+      "skuReferenceCodeTitle": {
+        "title": "skuReferenceCode Column title",
+        "type": "string",
+        "description": "skuReferenceCode",
+        "default": "Part #"
       },
       "skuReferenceCode": {
         "title": "skuReferenceCode",
         "type": "boolean",
-        "description": "skuReferenceCode",
+        "description": "active",
         "default": true
+      },
+      "quantityTitle": {
+        "title": "quantity column title",
+        "type": "string",
+        "description": "quantity",
+        "default": "Qty"
       },
       "quantity": {
         "title": "quantity",
         "type": "boolean",
-        "description": "quantity",
+        "description": "active",
         "default": true
+      },
+      "unitValueTitle": {
+        "title": "unitValue column title",
+        "type": "string",
+        "description": "unitValue",
+        "default": "Unit Value"
       },
       "unitValue": {
         "title": "unitValue",
         "type": "boolean",
-        "description": "unitValue",
+        "description": "active",
         "default": true
+      },
+      "totalValueTitle": {
+        "title": "totalValue column title",
+        "type": "string",
+        "description": "totalValue",
+        "default": "Price"
       },
       "totalValue": {
         "title": "totalValue",
         "type": "boolean",
-        "description": "totalValue",
+        "description": "active",
         "default": true
       },
       "notes": {
@@ -97,16 +139,28 @@
         "description": "notes",
         "default": true
       },
+      "addTitle": {
+        "title": "add column title",
+        "type": "string",
+        "description": "add",
+        "default": "Add"
+      },
       "add": {
         "title": "add",
         "type": "boolean",
-        "description": "add",
+        "description": "active",
         "default": true
+      },
+      "removeTitle": {
+        "title": "remove column title",
+        "type": "string",
+        "description": "remove",
+        "default": "Remove"
       },
       "remove": {
         "title": "remove",
         "type": "boolean",
-        "description": "remove",
+        "description": "active",
         "default": true
       }
     }

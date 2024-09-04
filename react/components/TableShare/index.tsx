@@ -20,6 +20,9 @@ import ModalCreateList from '../ModalCreateList'
 import styles from '../../styles.css'
 import { getProductPath } from '../../utils/jsonSchema'
 
+import ProductPriceTotal from '../ProductPriceTotal'
+import UnitPrice from '../UnitPrice'
+
 
 
 const CSS_HANDLES = [
@@ -75,6 +78,28 @@ export default function TableWishList({
     setLocalProducts(updatedProducts)
   }
 
+
+  const priceCellRenderer = ({ rowData }) => {
+
+    return (
+      <ProductPriceTotal
+        itemId={rowData?.ID}
+        productQuantity={rowData?.quantityProduct}
+        currency={currency}
+      />
+    )
+  }
+
+  const unitValueCellRenderer = ({ rowData }) => {
+    return (
+      <UnitPrice
+        itemId={rowData?.ID}
+        skuReference={rowData?.skuCodeReference}
+        currency={currency}
+      />
+    )
+  }
+
   const imageCellRenderer = ({ cellData, rowData }) => (
     <img src={cellData || rowData.Image} alt="" />
   )
@@ -96,22 +121,6 @@ export default function TableWishList({
     )
   }
 
-  const nameCellRenderer = ({ cellData, rowData }) => {
-    const productUrl = getProductPath(rowData)
-    const productName = cellData || rowData.nameProduct
-
-    return (
-      <a
-        href={productUrl}
-        rel="noreferrer"
-        target="_blank"
-        className={styles.wishlistProductTexts}
-      >
-        {productName}
-      </a>
-    )
-  }
-
   const qtyCellRenderer = ({ rowData }) => (
     <ProductStepper
       initialQty={rowData.qty || rowData.quantityProduct}
@@ -123,20 +132,6 @@ export default function TableWishList({
       handleQuantityChange={handleQuantityChange}
     />
   )
-
-  const unitValueCellRenderer = ({ cellData }) => {
-    const formattedValue = `${currency} ${parseFloat(cellData).toFixed(2)}`
-
-    return <span>{formattedValue}</span>
-  }
-
-  const totalValueCellRenderer = ({ cellData }) => {
-    const formattedValue = `${currency} ${parseFloat(cellData).toFixed(2)}`
-
-    return (
-      <span className={styles.wishlistProductUnitValue}>{formattedValue}</span>
-    )
-  }
 
   const addProductsToCart = async (props) => {
     // Lógica para añadir Products al carrito...
@@ -186,7 +181,7 @@ export default function TableWishList({
   const skuNameCellRenderer = ({ rowData }) => {
     const productUrl = getProductPath(rowData)
 
-    return <SkuName itemId={rowData.itemId} productUrl={productUrl} />
+    return <SkuName itemId={rowData.ID} productUrl={productUrl} />
   }
 
   let schema = {
@@ -197,9 +192,9 @@ export default function TableWishList({
         width: 100,
         cellRenderer: imageCellRenderer,
       },
-      skuName: {
+      nameProduct: {
         title: 'Name',
-        width: 200,
+        width: 300,
         active:true,
         cellRenderer: skuNameCellRenderer,
       },
@@ -211,11 +206,6 @@ export default function TableWishList({
         title: 'Part #',
         width: 130,
         cellRenderer: skuReferenceCodeCellRenderer,
-      },
-      name: {
-        title: 'Description',
-        width: 250,
-        cellRenderer: nameCellRenderer,
       },
       quantity: {
         title: 'Qty',
@@ -230,7 +220,7 @@ export default function TableWishList({
       totalValue: {
         title: 'Total Value',
         width: 120,
-        cellRenderer: totalValueCellRenderer,
+        cellRenderer: priceCellRenderer,
       },
       add: {
         title: 'Add',
@@ -242,13 +232,23 @@ export default function TableWishList({
 
   const wishlistColumnsSettings = JSON.parse(columns.publicSettingsForApp.message)
 
+  if(wishlistColumnsSettings) {
+    schema.properties.image.title = wishlistColumnsSettings.imageName
+    schema.properties.nameProduct.title = wishlistColumnsSettings.skuNameTitle
+    schema.properties.department.title = wishlistColumnsSettings.departmentTitle
+    schema.properties.skuReferenceCode.title = wishlistColumnsSettings.skuReferenceCodeTitle
+    schema.properties.quantity.title = wishlistColumnsSettings.quantityTitle
+    schema.properties.unitValue.title = wishlistColumnsSettings.unitValueTitle
+    schema.properties.totalValue.title = wishlistColumnsSettings.totalValueTitle
+    schema.properties.add.title = wishlistColumnsSettings.addTitle
+  }
+
+
   for (const [key, value] of Object.entries(wishlistColumnsSettings)) {
     if(!value && key != "add") { 
       delete schema.properties[key]
     }
   }
-
-  console.log(localProducts)
 
   return (
     <div className={handles.importList__generalContainer}>
@@ -306,6 +306,7 @@ export default function TableWishList({
       )}
       <Table
         fullWidth
+        updateTableKey={`vtex-table=${Math.floor(Math.random() * 1000) }`}
         schema={schema}
         density="medium"
         items={localProducts}
