@@ -912,3 +912,14 @@
 
 .wishlistShare{
 }
+
+.wishlistShareTableImage{
+  padding: 12px 0;
+}
+.wishlistShareTableAdd,
+.wishlistShareTableQty{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}

@@ -23,6 +23,7 @@ import { getProductPath } from '../../utils/jsonSchema'
 import ProductPriceTotal from '../ProductPriceTotal'
 import UnitPrice from '../UnitPrice'
 
+import { AdminSettings, PublicSettingsForApp } from '../../interfaces'
 
 
 const CSS_HANDLES = [
@@ -30,7 +31,9 @@ const CSS_HANDLES = [
   'importList__buttonContainer',
   'importList__modalContainer',
 ]
-
+interface ITableWishListColumns {
+  publicSettingsForApp: PublicSettingsForApp
+}
 export default function TableWishList({
   products,
   queryId,
@@ -38,7 +41,7 @@ export default function TableWishList({
 }: {
   products: any
   queryId: string
-  columns: any
+  columns: ITableWishListColumns
 }) {
   const { addItems } = useOrderItems()
   const { push } = usePixel()
@@ -100,10 +103,12 @@ export default function TableWishList({
     )
   }
 
-  const imageCellRenderer = ({ cellData, rowData }) => (
-    <img src={cellData || rowData.Image} alt="" />
-  )
-
+  const imageCellRenderer = ({ cellData, rowData, updateCellMeasurements }) => {
+    return (
+      <img src={cellData || rowData.Image} alt="" className={styles.wishlistShareTableImage} onLoad={() => updateCellMeasurements()}/>
+    )
+  }
+  
   const skuReferenceCodeCellRenderer = ({ cellData, rowData }) => {
     const linkUrl = rowData.linkProduct
     const parts = linkUrl.split('.br/')
@@ -122,15 +127,17 @@ export default function TableWishList({
   }
 
   const qtyCellRenderer = ({ rowData }) => (
+    <div className={styles.wishlistShareTableQty}>
     <ProductStepper
-      initialQty={rowData.qty || rowData.quantityProduct}
-      productName={rowData.name || rowData.nameProduct}
-      bundle={rowData.bundle}
-      setIsUpdatingQty={(value) => setIsUpdatingQty(value)}
-      rowData={rowData}
-      productId={rowData.id}
-      handleQuantityChange={handleQuantityChange}
-    />
+          initialQty={rowData.qty || rowData.quantityProduct}
+          productName={rowData.name || rowData.nameProduct}
+          bundle={rowData.bundle}
+          setIsUpdatingQty={(value) => setIsUpdatingQty(value)}
+          rowData={rowData}
+          productId={rowData.id}
+          handleQuantityChange={handleQuantityChange}
+        />
+    </div>
   )
 
   const addProductsToCart = async (props) => {
@@ -159,12 +166,14 @@ export default function TableWishList({
   }
 
   const addCellRenderer = ({ rowData }) => (
-    <button
-      className={styles.wishlistAddItem}
-      onClick={() => addProductsToCart(rowData)}
-    >
-      Add
-    </button>
+    <div className={styles.wishlistShareTableAdd}>
+      <button
+        className={styles.wishlistAddItem}
+        onClick={() => addProductsToCart(rowData)}
+      >
+        Add
+      </button>
+    </div>
   )
 
   // ADD SHARED LIST PAGE
@@ -180,7 +189,7 @@ export default function TableWishList({
 
   const skuNameCellRenderer = ({ rowData }) => {
     const productUrl = getProductPath(rowData)
-
+    
     return <SkuName itemId={rowData.ID} productUrl={productUrl} />
   }
 
@@ -230,17 +239,25 @@ export default function TableWishList({
     },
   }
 
-  const wishlistColumnsSettings = JSON.parse(columns.publicSettingsForApp.message)
-
+  const wishlistColumnsSettings: AdminSettings = JSON.parse(columns.publicSettingsForApp.message)
+  
   if(wishlistColumnsSettings) {
     schema.properties.image.title = wishlistColumnsSettings.imageName
+    schema.properties.image.width = wishlistColumnsSettings.imageRowWidth
     schema.properties.nameProduct.title = wishlistColumnsSettings.skuNameTitle
+    schema.properties.nameProduct.width = wishlistColumnsSettings.skuNameRowWidth
     schema.properties.department.title = wishlistColumnsSettings.departmentTitle
+    schema.properties.department.width = wishlistColumnsSettings.departmentRowWidth
     schema.properties.skuReferenceCode.title = wishlistColumnsSettings.skuReferenceCodeTitle
+    schema.properties.skuReferenceCode.width = wishlistColumnsSettings.skuNameRowWidth
     schema.properties.quantity.title = wishlistColumnsSettings.quantityTitle
+    schema.properties.quantity.width = wishlistColumnsSettings.quantityRowWidth
     schema.properties.unitValue.title = wishlistColumnsSettings.unitValueTitle
+    schema.properties.unitValue.width = wishlistColumnsSettings.unitValueRowWidth
     schema.properties.totalValue.title = wishlistColumnsSettings.totalValueTitle
+    schema.properties.totalValue.width = wishlistColumnsSettings.totalValueRowWidth
     schema.properties.add.title = wishlistColumnsSettings.addTitle
+    schema.properties.add.width = wishlistColumnsSettings.addRowWidth
   }
 
 
@@ -306,6 +323,7 @@ export default function TableWishList({
       )}
       <Table
         fullWidth
+        dynamicRowHeight={true}
         updateTableKey={`vtex-table=${Math.floor(Math.random() * 1000) }`}
         schema={schema}
         density="medium"

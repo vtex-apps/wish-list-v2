@@ -32,3 +32,45 @@ export interface PropsModal {
   children: any
   blockClass: string
 }
+
+export interface AdminSetup {
+  storeLogoUrl: string;
+  hasSchema: boolean;
+  schemaVersion: string;
+};
+
+export interface AdminSettings {
+  defaultTitleText: string;
+  imageName: string;
+  image: boolean;
+  imageRowWidth: number;
+  skuNameTitle: string;
+  skuName: boolean;
+  skuNameRowWidth: number;
+  departmentTitle: string;
+  department: boolean;
+  departmentRowWidth: number;
+  skuReferenceCodeTitle: string;
+  skuReferenceCode: boolean;
+  skuReferenceCodeRowWidth: number;
+  quantityTitle: string;
+  quantity: boolean;
+  quantityRowWidth: number;
+  unitValueTitle: string;
+  unitValue: boolean;
+  unitValueRowWidth: number;
+  totalValueTitle: string;
+  totalValue: boolean;
+  totalValueRowWidth: number;
+  notes: boolean;
+  addTitle: string;
+  add: boolean;
+  addRowWidth: number;
+  removeTitle: string;
+  remove: boolean;
+  adminSetup: AdminSetup;
+};
+
+export interface PublicSettingsForApp {
+  message: string;
+};
