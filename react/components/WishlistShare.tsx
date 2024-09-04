@@ -8,6 +8,8 @@ import AppSettings from '../queries/AppSettings.graphql'
 import TableShare from './TableShare'
 import GET_WISHLIST_BY_ID from '../graphql/queries/getWishlistById.gql'
 
+import styles from '../styles.css'
+
 export default function WishlistShare() {
   const { query } = useRuntime()
   const { id } = query
@@ -25,7 +27,7 @@ export default function WishlistShare() {
     },
     ssr: false,
   })
-
+ 
   if (loading) {
     return (
       <div
@@ -43,10 +45,12 @@ export default function WishlistShare() {
 
   const { products, email } = data?.getWishlist || { products: [], email: '' }
 
+  const {defaultTitleText} = JSON.parse(wishlistColumns.publicSettingsForApp.message)
+
   return (
-    <div>
+    <div className={`${styles.wishlistShare}`}>
       <h2 className="flex justify-center mt6">
-        {`${email}'s Favourites List`}
+        {`${email}'s ${defaultTitleText ?? 'Favourites List'}`}
       </h2>
       {products && <TableShare products={products} columns={wishlistColumns} queryId={id} />}
     </div>

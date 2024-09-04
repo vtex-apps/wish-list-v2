@@ -43,6 +43,12 @@
     "type": "object",
     "access": "public",
     "properties": {
+      "defaultTitleText": {
+        "title": "Title",
+        "type": "string",
+        "description": "Text to display on share page title",
+        "default": "Favourites Lists"
+      },
       "image": {
         "title": "image",
         "type": "boolean",
