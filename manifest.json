@@ -43,6 +43,12 @@
     "type": "object",
     "access": "public",
     "properties": {
+      "defaultTitleText": {
+        "title": "Title",
+        "type": "string",
+        "description": "Text to display on share page title",
+        "default": "Favourites Lists"
+      },
       "imageName": {
         "title": "Image Title",
         "type": "string",
@@ -55,6 +61,12 @@
         "description": "active",
         "default": true
       },
+      "imageRowWidth": {
+        "title": "Image row width",
+        "type": "number",
+        "description": "image column title",
+        "default": 100
+      },
       "skuNameTitle": {
         "title": "skuName column title",
         "type": "string",
@@ -62,10 +74,16 @@
         "default": "Name"
       },
       "skuName": {
-        "title": "skuName",
+        "title": "Sku name field",
         "type": "boolean",
         "description": "active",
         "default": true
+      },
+      "skuNameRowWidth": {
+        "title": "Sku Name row width",
+        "type": "number",
+        "description": "Sku Name row width",
+        "default": 300
       },
       "departmentTitle": {
         "title": "department column title",
@@ -74,10 +92,16 @@
         "default": "Department"
       },
       "department": {
-        "title": "department",
+        "title": "Department field",
         "type": "boolean",
         "description": "active",
         "default": true
+      },
+      "departmentRowWidth": {
+        "title": "Department row width",
+        "type": "number",
+        "description": "Department row width",
+        "default": 190
       },
       "skuReferenceCodeTitle": {
         "title": "skuReferenceCode Column title",
@@ -86,10 +110,16 @@
         "default": "Part #"
       },
       "skuReferenceCode": {
-        "title": "skuReferenceCode",
+        "title": "Sku Reference Code field",
         "type": "boolean",
         "description": "active",
         "default": true
+      },
+      "skuReferenceCodeRowWidth": {
+        "title": "Sku Reference Code row width",
+        "type": "number",
+        "description": "Sku Reference Code row width",
+        "default": 130
       },
       "quantityTitle": {
         "title": "quantity column title",
@@ -98,10 +128,16 @@
         "default": "Qty"
       },
       "quantity": {
-        "title": "quantity",
+        "title": "Quantity field",
         "type": "boolean",
         "description": "active",
         "default": true
+      },
+      "quantityRowWidth": {
+        "title": "Quantity row width",
+        "type": "number",
+        "description": "Quantity row width",
+        "default": 130
       },
       "unitValueTitle": {
         "title": "unitValue column title",
@@ -110,10 +146,16 @@
         "default": "Unit Value"
       },
       "unitValue": {
-        "title": "unitValue",
+        "title": "Unit Value field",
         "type": "boolean",
         "description": "active",
         "default": true
+      },
+      "unitValueRowWidth": {
+        "title": "Unit Value row width",
+        "type": "number",
+        "description": "Unit Value row width",
+        "default": 145
       },
       "totalValueTitle": {
         "title": "totalValue column title",
@@ -122,10 +164,16 @@
         "default": "Price"
       },
       "totalValue": {
-        "title": "totalValue",
+        "title": "Total Value field",
         "type": "boolean",
         "description": "active",
         "default": true
+      },
+      "totalValueRowWidth": {
+        "title": "Total Value row width",
+        "type": "number",
+        "description": "Total Value row width",
+        "default": 120
       },
       "notes": {
         "title": "notes",
@@ -140,10 +188,16 @@
         "default": "Add"
       },
       "add": {
-        "title": "add",
+        "title": "Add field",
         "type": "boolean",
         "description": "active",
         "default": true
+      },
+      "addRowWidth": {
+        "title": "Add row width",
+        "type": "number",
+        "description": "Add row width",
+        "default": 100
       },
       "removeTitle": {
         "title": "remove column title",
