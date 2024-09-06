@@ -61,9 +61,10 @@ export default function TableWishList({
   const currency = culture.customCurrencySymbol
 
   const handleQuantityChange = (productId, newQuantity) => {
+      
     // Lógica para actualizar la cantidad de Products en la lista...
     const updatedProducts = localProducts.map((product) => {
-      if (product.id === productId) {
+      if (product.ID === productId) {
         const newTotalValue = newQuantity * (product.unitValue ?? 0)
 
         return {
@@ -104,8 +105,13 @@ export default function TableWishList({
   }
 
   const imageCellRenderer = ({ cellData, rowData, updateCellMeasurements }) => {
+    const productUrl = getProductPath(rowData)
     return (
-      <img src={cellData || rowData.Image} alt="" className={styles.wishlistShareTableImage} onLoad={() => updateCellMeasurements()}/>
+      <a href={productUrl}
+      target="_blank"
+      rel="noopener noreferrer" className={styles.wishlistShareTableCell}>
+        <img src={cellData || rowData.Image} alt="" className={styles.wishlistShareTableImage} onLoad={() => updateCellMeasurements()}/>
+      </a>
     )
   }
   
@@ -113,7 +119,7 @@ export default function TableWishList({
     const linkUrl = rowData.linkProduct
     const parts = linkUrl.split('.br/')
     const productUrl = `/${parts[parts.length - 1]}`
-
+    
     return (
       <a
         href={productUrl}
@@ -127,14 +133,14 @@ export default function TableWishList({
   }
 
   const qtyCellRenderer = ({ rowData }) => (
-    <div className={styles.wishlistShareTableQty}>
+    <div className={styles.wishlistShareTableCell}>
     <ProductStepper
           initialQty={rowData.qty || rowData.quantityProduct}
           productName={rowData.name || rowData.nameProduct}
           bundle={rowData.bundle}
           setIsUpdatingQty={(value) => setIsUpdatingQty(value)}
           rowData={rowData}
-          productId={rowData.id}
+          productId={rowData.ID}
           handleQuantityChange={handleQuantityChange}
         />
     </div>
@@ -166,7 +172,7 @@ export default function TableWishList({
   }
 
   const addCellRenderer = ({ rowData }) => (
-    <div className={styles.wishlistShareTableAdd}>
+    <div className={styles.wishlistShareTableCell}>
       <button
         className={styles.wishlistAddItem}
         onClick={() => addProductsToCart(rowData)}

@@ -25,19 +25,17 @@ export const ProductStepper = ({
     setIsUpdatingQty(true)
 
     let finalValue = 0 + newValue
-
+  
     const quantity = finalValue
     const minimumQuantity = bundle || 1
     const maximumQuantity = qtyRef.current
-
+   
     if (eventType === 'click') {
       if (quantity < minimumQuantity) {
         finalValue = minimumQuantity
       } else if (quantity === maximumQuantity) {
         finalValue = quantity - minimumQuantity + 1
-      } else {
-        finalValue = quantity + minimumQuantity
-      }
+      } 
     } else if (eventType === 'change') {
       const roundedQty = Math.ceil(quantity / minimumQuantity) * minimumQuantity
 
@@ -46,10 +44,8 @@ export const ProductStepper = ({
         Math.min(roundedQty, maximumQuantity)
       )
     }
-
+   
     setQTY(finalValue)
-    handleQuantityChange(productId, finalValue)
-    handleQuantityChange(finalValue)
     handleQuantityChange(productId, finalValue)
   }
 
@@ -59,7 +55,6 @@ export const ProductStepper = ({
       size="small"
       onChange={(e) => {
         const newValue = e.value
-
         setQTY(newValue)
         modifyProductQTY(newValue, e.type)
       }}
