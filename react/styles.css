@@ -913,13 +913,13 @@
 .wishlistShare{
 }
 
-.wishlistShareTableImage{
+.wishlistProductImage{
   padding: 2px 0;
   max-width: 36px;
   object-fit: contain;
 }
 
-.wishlistShareTableCell{
+.wishlistTableCell{
   display: flex;
   align-items: center;
   justify-content: center;

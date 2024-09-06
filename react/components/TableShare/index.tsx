@@ -110,7 +110,7 @@ export default function TableWishList({
       <a href={productUrl}
       target="_blank"
       rel="noopener noreferrer" className={styles.wishlistShareTableCell}>
-        <img src={cellData || rowData.Image} alt="" className={styles.wishlistShareTableImage} onLoad={() => updateCellMeasurements()}/>
+        <img src={cellData || rowData.Image} alt="" className={styles.wishlistProductImage} onLoad={() => updateCellMeasurements()}/>
       </a>
     )
   }

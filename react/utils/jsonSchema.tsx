@@ -46,7 +46,7 @@ export const JsonSchema = ({
     const productUrl = getProductPath(rowData)
 
     return (
-      <a href={productUrl || ''} target="_blank" rel="noreferrer">
+      <a href={productUrl || ''} target="_blank" rel="noreferrer" className={styles.wishlistTableCell}>
         <img
           src={cellData || rowData.Image || ''}
           alt={rowData.name || ''}
@@ -179,26 +179,26 @@ export const JsonSchema = ({
     properties: {
       image: {
         title: 'Image',
-        width: 80,
+        width: undefined,
         active:true,
         cellRenderer: imageCellRenderer,
       },
       skuName: {
         title: 'Name',
-        width: 300,
+        width: undefined,
         active:true,
         cellRenderer: skuNameCellRenderer,
       },
       department: {
         sortable: true,
         title: 'Department',
-        width: 150,
+        width: undefined,
         active:true,
         cellRenderer: departmentCellRenderer,
       },
       skuReferenceCode: {
         title: 'Part #',
-        width: 125,
+        width: undefined,
         active:true,
         cellRenderer: skuReferenceCodeCellRenderer,
       },
@@ -211,32 +211,32 @@ export const JsonSchema = ({
       // },
       quantity: {
         title: 'Qty',
-        width: 145,
+        width: undefined,
         cellRenderer: qtyCellRenderer,
       },
       unitValue: {
         title: 'Unit Value',
-        width: 110,
+        width: undefined,
         cellRenderer: unitValueCellRenderer,
       },
       totalValue: {
         title: 'Price',
-        width: 110,
+        width: undefined,
         cellRenderer: priceCellRenderer,
       },
       notes: {
         title: 'Notes',
-        width: 110,
+        width: undefined,
         cellRenderer: notesCellRenderer,
       },
       add: {
         title: 'Add',
-        width: 100,
+        width: undefined,
         cellRenderer: addToCartCellRenderer,
       },
       remove: {
         title: 'Remove',
-        width: 90,
+        width: undefined,
         cellRenderer: removeCellRenderer,
       },
     },
