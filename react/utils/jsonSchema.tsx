@@ -11,6 +11,31 @@ import styles from '../styles.css'
 // import ProductDescription from '../components/ProductDescription'
 import SkuName from '../components/SkuName'
 import { removePrefixRegex } from './stringUtils'
+import { AdminSettings } from '../interfaces'
+
+
+interface CellProps {
+  title: string;
+  width?: number;
+  active?: boolean;
+  sortable?: boolean;
+  cellRenderer: (value: any, rowData: any) => JSX.Element; // Tipo genérico para a função de renderização
+}
+
+interface IJsonSchema {properties: {
+  image: CellProps;
+  skuName: CellProps;
+  department: CellProps;
+  skuReferenceCode: CellProps;
+  quantity: CellProps;
+  unitValue: CellProps;
+  totalValue: CellProps;
+  notes: CellProps;
+  add: CellProps;
+  remove: CellProps;
+}
+ 
+}
 
 export const getProductPath = (rowData: any) => {
   const isFastStore = (window?.location?.hostname ?? '').startsWith('secure')
@@ -173,9 +198,7 @@ export const JsonSchema = ({
     return <SkuName itemId={rowData.itemId} productUrl={productUrl} />
   }
 
-  
-
-  let jsonschema = {
+  let jsonschema: IJsonSchema  = {
     properties: {
       image: {
         title: 'Image',
@@ -241,19 +264,26 @@ export const JsonSchema = ({
       },
     },
   }
-
   
   if (!wishlistColumns?.publicSettingsForApp?.message) return jsonschema
-  const wishlistColumnsSettings = JSON.parse(wishlistColumns.publicSettingsForApp.message)
+  const wishlistColumnsSettings: AdminSettings = JSON.parse(wishlistColumns.publicSettingsForApp.message)
 
   jsonschema.properties.image.title = wishlistColumnsSettings.imageName
+  jsonschema.properties.image.width = wishlistColumnsSettings.imageRowWidth
   jsonschema.properties.skuName.title = wishlistColumnsSettings.skuNameTitle
+  jsonschema.properties.skuName.width = wishlistColumnsSettings.skuNameRowWidth
   jsonschema.properties.department.title = wishlistColumnsSettings.departmentTitle
+  jsonschema.properties.department.width = wishlistColumnsSettings.departmentRowWidth
   jsonschema.properties.skuReferenceCode.title = wishlistColumnsSettings.skuReferenceCodeTitle
+  jsonschema.properties.skuReferenceCode.width = wishlistColumnsSettings.skuReferenceCodeRowWidth
   jsonschema.properties.quantity.title = wishlistColumnsSettings.quantityTitle
+  jsonschema.properties.quantity.width = wishlistColumnsSettings.quantityRowWidth
   jsonschema.properties.unitValue.title = wishlistColumnsSettings.unitValueTitle
+  jsonschema.properties.unitValue.width = wishlistColumnsSettings.unitValueRowWidth
   jsonschema.properties.totalValue.title = wishlistColumnsSettings.totalValueTitle
+  jsonschema.properties.totalValue.width = wishlistColumnsSettings.totalValueRowWidth
   jsonschema.properties.add.title = wishlistColumnsSettings.addTitle
+  jsonschema.properties.add.width = wishlistColumnsSettings.addRowWidth
   jsonschema.properties.remove.title = wishlistColumnsSettings.removeTitle
 
   for (const [key, value] of Object.entries(wishlistColumnsSettings)) {
