@@ -255,7 +255,7 @@ export default function TableWishList({
     schema.properties.department.title = wishlistColumnsSettings.departmentTitle
     schema.properties.department.width = wishlistColumnsSettings.departmentRowWidth
     schema.properties.skuReferenceCode.title = wishlistColumnsSettings.skuReferenceCodeTitle
-    schema.properties.skuReferenceCode.width = wishlistColumnsSettings.skuNameRowWidth
+    schema.properties.skuReferenceCode.width = wishlistColumnsSettings.skuReferenceCodeRowWidth
     schema.properties.quantity.title = wishlistColumnsSettings.quantityTitle
     schema.properties.quantity.width = wishlistColumnsSettings.quantityRowWidth
     schema.properties.unitValue.title = wishlistColumnsSettings.unitValueTitle
