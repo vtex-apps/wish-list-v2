@@ -116,13 +116,15 @@ export const JsonSchema = ({
 
   const qtyCellRenderer = ({ rowData }) => {
     return (
-      <ProductStepper
+      <div className={styles.wishlistTableCell}>
+ <ProductStepper
         initialQty={rowData.quantity || null}
         wishlist={selectedWishlist !== null ? wishlist : wishlists[0]}
         bundle={rowData.bundle || null}
         updateWishlist={updateWishlist}
         skuReferenceCode={rowData.skuReferenceCode || ''}
       />
+      </div>
     )
   }
 

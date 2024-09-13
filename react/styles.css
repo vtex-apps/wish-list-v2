@@ -919,6 +919,7 @@
   object-fit: contain;
 }
 
+.wishlistShareTableCell,
 .wishlistTableCell{
   display: flex;
   align-items: center;
