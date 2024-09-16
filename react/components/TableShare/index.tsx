@@ -110,7 +110,7 @@ export default function TableWishList({
       <a href={productUrl}
       target="_blank"
       rel="noopener noreferrer" className={styles.wishlistShareTableCell}>
-        <img src={cellData || rowData.Image} alt="" className={styles.wishlistShareTableImage} onLoad={() => updateCellMeasurements()}/>
+        <img src={cellData || rowData.Image} alt="" className={styles.wishlistProductImage} onLoad={() => updateCellMeasurements()}/>
       </a>
     )
   }
@@ -199,47 +199,47 @@ export default function TableWishList({
     return <SkuName itemId={rowData.ID} productUrl={productUrl} />
   }
 
-  let schema = {
+  let schema: any = {
     properties: {
       // Definición del esquema de la tabla...
       image: {
         title: 'Image',
-        width: 100,
+        // width: 100,
         cellRenderer: imageCellRenderer,
       },
       nameProduct: {
         title: 'Name',
-        width: 300,
+        // width: 300,
         active:true,
         cellRenderer: skuNameCellRenderer,
       },
       department: {
         title: 'Department',
-        width: 190,
+        // width: 190,
       },
       skuReferenceCode: {
         title: 'Part #',
-        width: 130,
+        // width: 130,
         cellRenderer: skuReferenceCodeCellRenderer,
       },
       quantity: {
         title: 'Qty',
-        width: 130,
+        // width: 130,
         cellRenderer: qtyCellRenderer,
       },
       unitValue: {
         title: 'Unit Value',
-        width: 145,
+        // width: 145,
         cellRenderer: unitValueCellRenderer,
       },
       totalValue: {
         title: 'Total Value',
-        width: 120,
+        // width: 120,
         cellRenderer: priceCellRenderer,
       },
       add: {
         title: 'Add',
-        width: 100,
+        // width: 100,
         cellRenderer: addCellRenderer,
       },
     },
@@ -255,7 +255,7 @@ export default function TableWishList({
     schema.properties.department.title = wishlistColumnsSettings.departmentTitle
     schema.properties.department.width = wishlistColumnsSettings.departmentRowWidth
     schema.properties.skuReferenceCode.title = wishlistColumnsSettings.skuReferenceCodeTitle
-    schema.properties.skuReferenceCode.width = wishlistColumnsSettings.skuNameRowWidth
+    schema.properties.skuReferenceCode.width = wishlistColumnsSettings.skuReferenceCodeRowWidth
     schema.properties.quantity.title = wishlistColumnsSettings.quantityTitle
     schema.properties.quantity.width = wishlistColumnsSettings.quantityRowWidth
     schema.properties.unitValue.title = wishlistColumnsSettings.unitValueTitle
