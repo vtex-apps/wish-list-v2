@@ -344,16 +344,16 @@ function Wishlist({ wishlists, fetchData}) {
 
     const newProduct = {
       ID: Number(item.itemId),
-      Image: item.images[0].imageUrl,
+      Image: item?.images?.[0]?.imageUrl,
       // unitValue: productData.priceRange.sellingPrice.highPrice,
-      linkProduct: productData.link,
-      nameProduct: productData.productName,
+      linkProduct: productData?.link,
+      nameProduct: productData?.productName,
       quantityProduct: 1,
-      skuCodeReference: item.referenceId[0].Value,
-      department: productData.categoryTree[0].name,
+      skuCodeReference: item?.referenceId?.[0]?.Value,
+      department: productData?.categoryTree?.[0]?.name,
       bundle: hasBundle ? unitMultiplierValue : item.unitMultiplier,
     }
-
+ 
     if (newProduct.bundle > 1) {
       newProduct.quantityProduct *= newProduct.bundle
     }
