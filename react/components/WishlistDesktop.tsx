@@ -46,8 +46,12 @@ const WishlistDesktop = ({
       showToast('You created a new Wishlist')
       setIsCreateLoading(false)
     } catch (error) {
-
-      showToast({message: `An error occurred. Make sure there isn't a wishlist with the same name.`,  status: 'ERROR',})
+      showToast({
+        message:
+          error?.message?.replace('GraphQL error: ', '') ??
+          `An error occurred. Make sure there isn't a wishlist with the same name.`,
+        status: 'ERROR',
+      })
 
       console.error(error)
       await fetchData()
@@ -56,12 +60,11 @@ const WishlistDesktop = ({
   }
 
   const onDeleteList = async () => {
-
     setIsDeleteLoading(true)
     try {
       await deleteWishlist()
       setIsDeleteLoading(false)
-      if(wishlists.length === 1){
+      if (wishlists.length === 1) {
         window.location.reload()
       }
       closeModal()
@@ -83,7 +86,6 @@ const WishlistDesktop = ({
 
   return (
     <div id="wish-list-desktop">
-      
       <ModalDialog
         centered
         loading={isDeleteLoading}
@@ -91,22 +93,22 @@ const WishlistDesktop = ({
           onClick: onDeleteList,
           label: 'Yes',
           isDangerous: true,
-          testId: "deleteConfirmBtn"
-
+          testId: 'deleteConfirmBtn',
         }}
         cancelation={{
           onClick: closeModal,
           label: 'Cancel',
         }}
         isOpen={isModalOpen}
-        onClose={closeModal}>
+        onClose={closeModal}
+      >
         <div className="">
           <p className="f3 f3-ns fw3 gray">
-            Are you sure you want to delete your wishlist {emailIDInfo.find( list => list.value == selectedWishlist)?.label} ?
+            Are you sure you want to delete your wishlist{' '}
+            {emailIDInfo.find((list) => list.value === selectedWishlist)?.label}{' '}
+            ?
           </p>
-          <p>
-            This action is irreversible.
-          </p>
+          <p>This action is irreversible.</p>
         </div>
       </ModalDialog>
 
@@ -118,9 +120,8 @@ const WishlistDesktop = ({
         wishlist={selectedWishlist !== null ? wishlist : wishlists[0]}
         fetchData={fetchData}
       />
-          
+
       <div className={styles.wishlistOptionsContainer}>
- 
         <div className={styles.wishlistSelector}>
           <p className={styles.wishlistSelectListOneText}>Favourites List</p>
           <select
@@ -181,7 +182,6 @@ const WishlistDesktop = ({
         </section>
       </div>
     </div>
-   
   )
 }
 

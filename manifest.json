@@ -79,8 +79,14 @@
         "description": "active",
         "default": true
       },
-      "skuNameRowWidth": {
-        "title": "Sku Name row width",
+      "skuNameRowWidthAccount": {
+        "title": "Sku Name row width *on account page*",
+        "type": "number",
+        "description": "Sku Name row width",
+        "default": 300
+      },
+      "skuNameRowWidthShare": {
+        "title": "Sku Name row width *on shared page*",
         "type": "number",
         "description": "Sku Name row width",
         "default": 300
