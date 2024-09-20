@@ -13,28 +13,27 @@ import SkuName from '../components/SkuName'
 import { removePrefixRegex } from './stringUtils'
 import { AdminSettings } from '../interfaces'
 
-
 interface CellProps {
-  title: string;
-  width?: number;
-  active?: boolean;
-  sortable?: boolean;
-  cellRenderer: (value: any, rowData: any) => JSX.Element; // Tipo genérico para a função de renderização
+  title: string
+  width?: number
+  active?: boolean
+  sortable?: boolean
+  cellRenderer: (value: any, rowData: any) => JSX.Element // Tipo genérico para a função de renderização
 }
 
-interface IJsonSchema {properties: {
-  image: CellProps;
-  skuName: CellProps;
-  department: CellProps;
-  skuReferenceCode: CellProps;
-  quantity: CellProps;
-  unitValue: CellProps;
-  totalValue: CellProps;
-  notes: CellProps;
-  add: CellProps;
-  remove: CellProps;
-}
- 
+interface IJsonSchema {
+  properties: {
+    image: CellProps
+    skuName: CellProps
+    department: CellProps
+    skuReferenceCode: CellProps
+    quantity: CellProps
+    unitValue: CellProps
+    totalValue: CellProps
+    notes: CellProps
+    add: CellProps
+    remove: CellProps
+  }
 }
 
 export const getProductPath = (rowData: any) => {
@@ -71,7 +70,12 @@ export const JsonSchema = ({
     const productUrl = getProductPath(rowData)
 
     return (
-      <a href={productUrl || ''} target="_blank" rel="noreferrer" className={styles.wishlistTableCell}>
+      <a
+        href={productUrl || ''}
+        target="_blank"
+        rel="noreferrer"
+        className={styles.wishlistTableCell}
+      >
         <img
           src={cellData || rowData.Image || ''}
           alt={rowData.name || ''}
@@ -117,13 +121,13 @@ export const JsonSchema = ({
   const qtyCellRenderer = ({ rowData }) => {
     return (
       <div className={styles.wishlistTableCell}>
- <ProductStepper
-        initialQty={rowData.quantity || null}
-        wishlist={selectedWishlist !== null ? wishlist : wishlists[0]}
-        bundle={rowData.bundle || null}
-        updateWishlist={updateWishlist}
-        skuReferenceCode={rowData.skuReferenceCode || ''}
-      />
+        <ProductStepper
+          initialQty={rowData.quantity || null}
+          wishlist={selectedWishlist !== null ? wishlist : wishlists[0]}
+          bundle={rowData.bundle || null}
+          updateWishlist={updateWishlist}
+          skuReferenceCode={rowData.skuReferenceCode || ''}
+        />
       </div>
     )
   }
@@ -200,31 +204,31 @@ export const JsonSchema = ({
     return <SkuName itemId={rowData.itemId} productUrl={productUrl} />
   }
 
-  let jsonschema: IJsonSchema  = {
+  let jsonschema: IJsonSchema = {
     properties: {
       image: {
         title: 'Image',
         // width: undefined,
-        active:true,
+        active: true,
         cellRenderer: imageCellRenderer,
       },
       skuName: {
         title: 'Name',
         // width: undefined,
-        active:true,
+        active: true,
         cellRenderer: skuNameCellRenderer,
       },
       department: {
         sortable: true,
         title: 'Department',
         // width: undefined,
-        active:true,
+        active: true,
         cellRenderer: departmentCellRenderer,
       },
       skuReferenceCode: {
         title: 'Part #',
         // width: undefined,
-        active:true,
+        active: true,
         cellRenderer: skuReferenceCodeCellRenderer,
       },
       // description: {
@@ -266,30 +270,41 @@ export const JsonSchema = ({
       },
     },
   }
-  
+
   if (!wishlistColumns?.publicSettingsForApp?.message) return jsonschema
-  const wishlistColumnsSettings: AdminSettings = JSON.parse(wishlistColumns.publicSettingsForApp.message)
+  const wishlistColumnsSettings: AdminSettings = JSON.parse(
+    wishlistColumns.publicSettingsForApp.message
+  )
 
   jsonschema.properties.image.title = wishlistColumnsSettings.imageName
   jsonschema.properties.image.width = wishlistColumnsSettings.imageRowWidth
   jsonschema.properties.skuName.title = wishlistColumnsSettings.skuNameTitle
-  jsonschema.properties.skuName.width = wishlistColumnsSettings.skuNameRowWidth
-  jsonschema.properties.department.title = wishlistColumnsSettings.departmentTitle
-  jsonschema.properties.department.width = wishlistColumnsSettings.departmentRowWidth
-  jsonschema.properties.skuReferenceCode.title = wishlistColumnsSettings.skuReferenceCodeTitle
-  jsonschema.properties.skuReferenceCode.width = wishlistColumnsSettings.skuReferenceCodeRowWidth
+  jsonschema.properties.skuName.width =
+    wishlistColumnsSettings.skuNameRowWidthAccount
+  jsonschema.properties.department.title =
+    wishlistColumnsSettings.departmentTitle
+  jsonschema.properties.department.width =
+    wishlistColumnsSettings.departmentRowWidth
+  jsonschema.properties.skuReferenceCode.title =
+    wishlistColumnsSettings.skuReferenceCodeTitle
+  jsonschema.properties.skuReferenceCode.width =
+    wishlistColumnsSettings.skuReferenceCodeRowWidth
   jsonschema.properties.quantity.title = wishlistColumnsSettings.quantityTitle
-  jsonschema.properties.quantity.width = wishlistColumnsSettings.quantityRowWidth
+  jsonschema.properties.quantity.width =
+    wishlistColumnsSettings.quantityRowWidth
   jsonschema.properties.unitValue.title = wishlistColumnsSettings.unitValueTitle
-  jsonschema.properties.unitValue.width = wishlistColumnsSettings.unitValueRowWidth
-  jsonschema.properties.totalValue.title = wishlistColumnsSettings.totalValueTitle
-  jsonschema.properties.totalValue.width = wishlistColumnsSettings.totalValueRowWidth
+  jsonschema.properties.unitValue.width =
+    wishlistColumnsSettings.unitValueRowWidth
+  jsonschema.properties.totalValue.title =
+    wishlistColumnsSettings.totalValueTitle
+  jsonschema.properties.totalValue.width =
+    wishlistColumnsSettings.totalValueRowWidth
   jsonschema.properties.add.title = wishlistColumnsSettings.addTitle
   jsonschema.properties.add.width = wishlistColumnsSettings.addRowWidth
   jsonschema.properties.remove.title = wishlistColumnsSettings.removeTitle
 
   for (const [key, value] of Object.entries(wishlistColumnsSettings)) {
-    if(!value) { 
+    if (!value) {
       delete jsonschema.properties[key]
     }
   }
