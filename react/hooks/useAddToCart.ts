@@ -12,10 +12,13 @@ const useAddToCart = () => {
   const { showToast } = useContext<any>(ToastContext)
   const { orderForm } = useOrderForm()
 
-  const addProductsToCart = (props: { name: string }, wishlist: any) => {
+  const addProductsToCart = (
+    props: { name: string; itemId: number },
+    wishlist: any
+  ) => {
     const productsByOrders = orderForm.items
     const findProductQuantity = productsByOrders?.find(
-      (item: { name: string }) => item.name === props.name
+      (item: { id: string }) => Number(item.id) === props.itemId
     )
 
     const quantityAlreadyAdd = findProductQuantity?.quantity
