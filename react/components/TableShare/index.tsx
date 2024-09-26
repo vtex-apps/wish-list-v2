@@ -7,8 +7,6 @@ import {
   ToastContext,
   ToastProvider,
 } from 'vtex.styleguide'
-import { usePixel } from 'vtex.pixel-manager'
-import { useOrderItems } from 'vtex.order-items/OrderItems'
 import { useRuntime } from 'vtex.render-runtime'
 import PropTypes from 'prop-types'
 
@@ -21,6 +19,7 @@ import { getProductPath } from '../../utils/jsonSchema'
 import ProductPriceTotal from '../ProductPriceTotal'
 import UnitPrice from '../UnitPrice'
 import { AdminSettings, PublicSettingsForApp } from '../../interfaces'
+import useAddToCart from '../../hooks/useAddToCart'
 
 const CSS_HANDLES = [
   'importList__generalContainer',
@@ -40,8 +39,6 @@ export default function TableWishList({
   queryId: string
   columns: ITableWishListColumns
 }) {
-  const { addItems } = useOrderItems()
-  const { push } = usePixel()
   const { showToast } = useContext(ToastContext)
   const { handles } = useCssHandles(CSS_HANDLES)
   const [localProducts, setLocalProducts] = useState([
@@ -56,7 +53,7 @@ export default function TableWishList({
   const runtime = useRuntime()
   const { culture } = runtime
   const currency = culture.customCurrencySymbol
-
+  const addProductsToCart = useAddToCart()
   const handleQuantityChange = (productId, newQuantity) => {
     // Lógica para actualizar la cantidad de Products en la lista...
     const updatedProducts = localProducts.map((product) => {
@@ -149,36 +146,16 @@ export default function TableWishList({
     </div>
   )
 
-  const addProductsToCart = async (props) => {
-    // Lógica para añadir Products al carrito...
-    const productInfo = localProducts.find((item) => props.name === item.name)
-    const items = [
-      {
-        id: productInfo.ID || productInfo.id,
-        seller: 1,
-        quantity: productInfo.qty,
-        name: productInfo.name,
-      },
-    ]
-
-    addItems(items)
-      .then(async () => {
-        push({
-          event: 'addToCart',
-          id: 'addToCart',
-        })
-        showToast('Item added to the cart')
-      })
-      .catch((error) => {
-        console.error(error)
-      })
-  }
-
   const addCellRenderer = ({ rowData }) => (
     <div className={styles.wishlistShareTableCell}>
       <button
         className={styles.wishlistAddItem}
-        onClick={() => addProductsToCart(rowData)}
+        onClick={() =>
+          addProductsToCart(
+            { name: rowData.name, itemId: rowData.ID },
+            { products }
+          )
+        }
       >
         Add
       </button>

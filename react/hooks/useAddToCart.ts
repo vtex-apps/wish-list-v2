@@ -36,7 +36,7 @@ const useAddToCart = () => {
     })
 
     const productInfo = dataExtract.find(
-      (item: { name: string }) => props.name === item.name
+      (item: { id: string }) => props.itemId === Number(item.id)
     )
 
     const items = [
