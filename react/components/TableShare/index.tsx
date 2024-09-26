@@ -12,17 +12,14 @@ import { useOrderItems } from 'vtex.order-items/OrderItems'
 import { useRuntime } from 'vtex.render-runtime'
 import PropTypes from 'prop-types'
 
-import SkuName from '../../components/SkuName'
-
+import SkuName from '../SkuName'
 import { ProductStepper } from './ProductStepper'
 import useAddSharedListPage from '../../hooks/useAddSharedListPage'
 import ModalCreateList from '../ModalCreateList'
 import styles from '../../styles.css'
 import { getProductPath } from '../../utils/jsonSchema'
-
 import ProductPriceTotal from '../ProductPriceTotal'
 import UnitPrice from '../UnitPrice'
-
 import { AdminSettings, PublicSettingsForApp } from '../../interfaces'
 
 const CSS_HANDLES = [
@@ -30,6 +27,7 @@ const CSS_HANDLES = [
   'importList__buttonContainer',
   'importList__modalContainer',
 ]
+
 interface ITableWishListColumns {
   publicSettingsForApp: PublicSettingsForApp
 }
@@ -102,6 +100,7 @@ export default function TableWishList({
 
   const imageCellRenderer = ({ cellData, rowData, updateCellMeasurements }) => {
     const productUrl = getProductPath(rowData)
+
     return (
       <a
         href={productUrl}
@@ -203,7 +202,7 @@ export default function TableWishList({
     return <SkuName itemId={rowData.ID} productUrl={productUrl} />
   }
 
-  let schema: any = {
+  const schema: any = {
     properties: {
       // Definición del esquema de la tabla...
       image: {
@@ -279,7 +278,7 @@ export default function TableWishList({
   }
 
   for (const [key, value] of Object.entries(wishlistColumnsSettings)) {
-    if (!value && key != 'add') {
+    if (!value) {
       delete schema.properties[key]
     }
   }
@@ -340,7 +339,7 @@ export default function TableWishList({
       )}
       <Table
         fullWidth
-        dynamicRowHeight={true}
+        dynamicRowHeight
         updateTableKey={`vtex-table=${Math.floor(Math.random() * 1000)}`}
         schema={schema}
         density="medium"
