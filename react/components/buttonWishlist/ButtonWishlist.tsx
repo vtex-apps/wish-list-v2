@@ -31,7 +31,6 @@ const ButtonWishlist = () => {
     isMessage,
     isShowForm2,
     clickCreate,
-    setIsButton,
     errorName,
     isLoading,
   } = useGetWishlist()
@@ -110,7 +109,6 @@ const ButtonWishlist = () => {
                   handleSendData2={sendData2}
                   clickCreate={clickCreate}
                   handleCloseModal={() => setIsShowSelect(false)}
-                  setIsButton={setIsButton}
                   handleCreateLengthZero={createLengthZero}
                   selectRef={selectRef}
                   selectSize={selectSize}
