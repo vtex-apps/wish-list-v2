@@ -13,7 +13,7 @@ const useAddToCart = () => {
   const { orderForm } = useOrderForm()
 
   const addProductsToCart = (
-    props: { name: string; itemId: number },
+    props: { name: string; itemId: number; quantity?: number },
     wishlist: any
   ) => {
     const productsByOrders = orderForm.items
@@ -39,12 +39,12 @@ const useAddToCart = () => {
       (item: { id: string }) => props.itemId === Number(item.id)
     )
 
+    const quantityToAdd = props.quantity ?? Number(productInfo.quantity)
     const items = [
       {
         id: productInfo.id,
         seller: 1,
-        quantity:
-          Number(productInfo.quantity) + Number(quantityAlreadyAdd ?? 0),
+        quantity: quantityToAdd + Number(quantityAlreadyAdd ?? 0),
         name: productInfo.name,
       },
     ]

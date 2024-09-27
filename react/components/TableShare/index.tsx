@@ -152,7 +152,13 @@ export default function TableWishList({
         className={styles.wishlistAddItem}
         onClick={() =>
           addProductsToCart(
-            { name: rowData.name, itemId: rowData.ID },
+            {
+              name: rowData.name,
+              itemId: rowData.ID,
+              quantity:
+                localProducts?.find((product) => product.ID === rowData.ID)
+                  ?.qty ?? rowData.quantity,
+            },
             { products }
           )
         }
