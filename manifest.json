@@ -47,7 +47,7 @@
         "title": "Title",
         "type": "string",
         "description": "Text to display on share page title",
-        "default": "Favourites Lists"
+        "default": "Favorites Lists"
       },
       "imageName": {
         "title": "Image Title",

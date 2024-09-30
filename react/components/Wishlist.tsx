@@ -375,7 +375,7 @@ function Wishlist({ wishlists, fetchData}) {
           },
         },
       })
-      showToast('Successfully added to the Favourites List')
+      showToast('Successfully added to the Favorites List')
 
       return true
     } catch (error) {
