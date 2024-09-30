@@ -26,5 +26,5 @@ export const getWishlistsByEmail = async (
 
   const wishlists = await md.searchWistlist('email', email, pagination)
 
-  return wishlists || []
+  return wishlists || null
 }

@@ -1,4 +1,4 @@
-import type { InstanceOptions, IOContext } from '@vtex/api'
+import type { InstanceOptions, IOContext, RequestConfig } from '@vtex/api'
 import { JanusClient } from '@vtex/api'
 
 import { DATA_ENTITY_NAME, FIELDS, SCHEMA_NAME } from '../utils/constant'
@@ -44,17 +44,27 @@ export default class MasterDataClient extends JanusClient {
   public async searchForExistingWishList(
     where: string,
     pagination?: { page: number; pageSize: number }
-  ): Promise<Wishlist[]> {
+  ): Promise<Wishlist[] | null> {
     const { page, pageSize } = pagination ?? {}
 
-    return this.http.get(
-      `/api/dataentities/${DATA_ENTITY_NAME}/search?_where=${where} &_fields=${FIELDS}&_sort=createdIn&_schema=${SCHEMA_NAME}`,
-      {
-        headers: {
-          'REST-Range': `resources=${page ?? 0}-${pageSize ?? 100}`,
-        },
-      }
-    )
+    const config: RequestConfig = {
+      headers: {
+        'REST-Range': `resources=${page ?? 0}-${pageSize ?? 100}`,
+      },
+      retries: 1,
+      initialBackoffDelay: 2000,
+      exponentialBackoffCoefficient: 2,
+      verbose: true,
+    }
+
+    try {
+      return this.http.get(
+        `/api/dataentities/${DATA_ENTITY_NAME}/search?_where=${where} &_fields=${FIELDS}&_sort=createdIn&_schema=${SCHEMA_NAME}`,
+        config
+      )
+    } catch (err) {
+      throw new Error(err)
+    }
   }
 
   public async createWishlist(payload: Wishlist) {
