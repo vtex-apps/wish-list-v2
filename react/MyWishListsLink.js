@@ -4,7 +4,7 @@ import { intlShape, injectIntl } from 'react-intl'
 const MyWishListsLink = ({ render, intl }) => {
   return render([
     {
-      name: intl.formatMessage({ id: 'Favourites Lists' }),
+      name: intl.formatMessage({ id: 'Favorites Lists' }),
       path: '/my-wishlists',
     },
   ])
