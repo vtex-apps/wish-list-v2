@@ -112,7 +112,7 @@ const WishlistMobile = ({
         <div className={styles.wishlistSelector}>
         <div className={styles.wishlistSelectListTitle}>
         <Button href="/account" >RETURN</Button>
-          <p className={styles.wishlistSelectListOneText}>Favourites List</p>
+          <p className={styles.wishlistSelectListOneText}>Favorites List</p>
           </div>
       
           <div className={`${styles.createListandAndSelectFav}`}>
