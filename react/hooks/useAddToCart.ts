@@ -12,10 +12,13 @@ const useAddToCart = () => {
   const { showToast } = useContext<any>(ToastContext)
   const { orderForm } = useOrderForm()
 
-  const addProductsToCart = (props: { name: string }, wishlist: any) => {
+  const addProductsToCart = (
+    props: { name: string; itemId: number; quantity?: number },
+    wishlist: any
+  ) => {
     const productsByOrders = orderForm.items
     const findProductQuantity = productsByOrders?.find(
-      (item: { name: string }) => item.name === props.name
+      (item: { id: string }) => Number(item.id) === props.itemId
     )
 
     const quantityAlreadyAdd = findProductQuantity?.quantity
@@ -33,15 +36,15 @@ const useAddToCart = () => {
     })
 
     const productInfo = dataExtract.find(
-      (item: { name: string }) => props.name === item.name
+      (item: { id: string }) => props.itemId === Number(item.id)
     )
 
+    const quantityToAdd = props.quantity ?? Number(productInfo.quantity)
     const items = [
       {
         id: productInfo.id,
         seller: 1,
-        quantity:
-          Number(productInfo.quantity) + Number(quantityAlreadyAdd ?? 0),
+        quantity: quantityToAdd + Number(quantityAlreadyAdd ?? 0),
         name: productInfo.name,
       },
     ]
