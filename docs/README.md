@@ -24,7 +24,7 @@ In your theme's `manifest.json`, add the Search Result app as a dependency:
 
 ```json
 "dependencies": {
-    "vtex.my-wishlists": "3.x"
+    "vtex.my-wishlists": "2.x"
 }
 ```
 
