@@ -82,7 +82,7 @@ const SelectWishlist = (props: SelectWishList) => {
                     <>
                       <button
                         className={`${handles.containerButtonAddList}`}
-                        onClick={props.handleAddList}
+                        onClick={props.handleAddToList}
                       >
                         Add to list
                       </button>

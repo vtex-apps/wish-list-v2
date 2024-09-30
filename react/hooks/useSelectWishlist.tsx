@@ -62,7 +62,7 @@ const useSelectWishlist = () => {
   }
 
   const addToList = () => {
-    if (textSelect.trim() === '') {
+    if (textSelect.trim().length === 0) {
       setErrorSelect('Select a list to save your product')
 
       return
