@@ -19,7 +19,7 @@ import CREATE_WISHLIST from '../mutation/createWishList.gql'
 const MyWishLists = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [isLoadingPage, setIsLoadingPage] = useState(false)
-  const [errorMessage, setErrorMessage] = useState('')
+  const [errorMessage, setErrorMessage] = useState<string | null>(null)
   const { setSelectedWishlist, selectedWishlist } = useStoreGlobal()
   const setWishlists = useStoreGlobal((state) => state.setWishlists)
   const wishlists = useStoreGlobal((state) => state.wishlists)
@@ -54,8 +54,6 @@ const MyWishLists = () => {
 
     if (error) {
       setErrorMessage(error.message)
-    } else {
-      setErrorMessage('Error')
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
