@@ -31,7 +31,6 @@ const ButtonWishlist = () => {
     isMessage,
     isShowForm2,
     clickCreate,
-    setIsButton,
     errorName,
     isLoading,
   } = useGetWishlist()
@@ -80,7 +79,7 @@ const ButtonWishlist = () => {
                       })
                     }
                   >
-                    Add to Favourites List
+                    Add to Favorites List
                   </Button>
                 </div>
               </div>
@@ -90,7 +89,7 @@ const ButtonWishlist = () => {
       ) : (
         <div className={`${handles.containerLoggedIn}`}>
           <Button size="small" variation="secondary" onClick={close}>
-            Add to Favourites List
+            Add to Favorites List
           </Button>
           <div className={`${handles.containerLoggedIn} relative`}>
             <ModalWishList blockClass="vtex-select-or-create-wishlist">
@@ -110,7 +109,6 @@ const ButtonWishlist = () => {
                   handleSendData2={sendData2}
                   clickCreate={clickCreate}
                   handleCloseModal={() => setIsShowSelect(false)}
-                  setIsButton={setIsButton}
                   handleCreateLengthZero={createLengthZero}
                   selectRef={selectRef}
                   selectSize={selectSize}

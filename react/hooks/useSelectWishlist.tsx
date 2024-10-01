@@ -62,7 +62,7 @@ const useSelectWishlist = () => {
   }
 
   const addToList = () => {
-    if (textSelect.trim() === '') {
+    if (textSelect.trim().length === 0) {
       setErrorSelect('Select a list to save your product')
 
       return
@@ -107,7 +107,7 @@ const useSelectWishlist = () => {
           refetchQueries: ['getWishlists'],
         })
           .then(() => {
-            showToast('Successfully added to the Favourites List')
+            showToast('Successfully added to the Favouites List')
           })
           .catch((error) => {
             console.error('PUT request failed:', error)
@@ -143,7 +143,7 @@ const useSelectWishlist = () => {
         axios
           .put(urlPut, existingWishlist)
           .then(() => {
-            showToast('Successfully added to the Favourites List')
+            showToast('Successfully added to the Favorites List')
           })
           .catch((error) => {
             console.error('PUT request failed:', error)

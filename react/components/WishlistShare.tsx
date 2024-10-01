@@ -50,7 +50,7 @@ export default function WishlistShare() {
   return (
     <div className={`${styles.wishlistShare}`}>
       <h2 className="flex justify-center mt6">
-        {`${email}'s ${defaultTitleText ?? 'Favourites List'}`}
+        {`${email}'s ${defaultTitleText ?? 'Favorites List'}`}
       </h2>
       {products && <TableShare products={products} columns={wishlistColumns} queryId={id} />}
     </div>

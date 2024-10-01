@@ -173,7 +173,6 @@ const useGetWishlist = () => {
     isLoading,
     setIsShowSelect,
     setIsShowForm,
-    setIsButton,
     handleChange,
     addList,
     sendData1,
