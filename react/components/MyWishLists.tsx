@@ -18,11 +18,13 @@ import CREATE_WISHLIST from '../mutation/createWishList.gql'
 
 const MyWishLists = () => {
   const [isLoading, setIsLoading] = useState(false)
+  const [isLoadingPage, setIsLoadingPage] = useState(false)
+  const [errorMessage, setErrorMessage] = useState<string | null>(null)
   const { setSelectedWishlist, selectedWishlist } = useStoreGlobal()
   const setWishlists = useStoreGlobal((state) => state.setWishlists)
   const wishlists = useStoreGlobal((state) => state.wishlists)
 
-  const { data, loading, refetch } = useQueryWishlists()
+  const { data, loading, refetch, error } = useQueryWishlists()
 
   const [createNewListMutaion] = useMutation(CREATE_WISHLIST, {})
 
@@ -39,15 +41,27 @@ const MyWishLists = () => {
   } = useCreateListAccount()
 
   useEffect(() => {
-    if (data?.getWishlistsByEmail?.length > 0) {
-      setWishlists(data.getWishlistsByEmail)
-
-      if (!selectedWishlist) {
-        setSelectedWishlist(data.getWishlistsByEmail[0].id)
+    if (data?.getWishlistsByEmail) {
+      if (data.getWishlistsByEmail.length > 0) {
+        setWishlists(data.getWishlistsByEmail)
+        if (!selectedWishlist) {
+          setSelectedWishlist(data.getWishlistsByEmail[0].id)
+        }
+      } else {
+        setWishlists([])
       }
     }
+
+    if (error) {
+      setErrorMessage(error.message)
+    }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data])
+  }, [data, error])
+
+  useEffect(() => {
+    wishlists && setIsLoadingPage(loading)
+  }, [loading, wishlists])
 
   // Create list post
   const handleSubmitData = (event: { preventDefault: () => void }) => {
@@ -73,8 +87,8 @@ const MyWishLists = () => {
           setIsModalAccount(false)
           setIsLoading(false)
         })
-        .catch((error) => {
-          console.error(error)
+        .catch((errorSubmit) => {
+          console.error(errorSubmit)
           setNameListAccount('')
           setFieldValidation('')
           setIsModalAccount(false)
@@ -88,13 +102,22 @@ const MyWishLists = () => {
     buttonCloseModal()
   }
 
-  if (loading) return <Spinner />
+  if (errorMessage)
+    return (
+      <p className={styles.errorMessage}>
+        Could not find the wishlists: {errorMessage}
+      </p>
+    )
+
+  if (isLoadingPage) return <Spinner />
 
   if (wishlists.length === 0) {
     return (
       <section className={styles.wishlistCreateWishlistUI}>
         <Button href="/account">RETURN</Button>
-        <h1 className={styles.wishlistCreateWishlistPageTitle}>Create your wishlist!</h1>
+        <h1 className={styles.wishlistCreateWishlistPageTitle}>
+          Create your wishlist!
+        </h1>
         <button className={styles.wishlistCreateNew} onClick={buttonModal}>
           New Wishlist
         </button>
