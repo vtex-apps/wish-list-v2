@@ -21,6 +21,19 @@ interface CellProps {
   cellRenderer: (value: any, rowData: any) => JSX.Element // Tipo genérico para a função de renderização
 }
 
+interface ProductItemRowData {
+  bundle: string | null
+  department: string
+  id: number
+  image: string
+  itemId: number
+  linkProduct: string
+  name: string
+  notes: string | null
+  quantity: number
+  skuReferenceCode: string
+}
+
 interface IJsonSchema {
   properties: {
     image: CellProps
@@ -36,12 +49,12 @@ interface IJsonSchema {
   }
 }
 
-export const getProductPath = (rowData: any) => {
+export const getProductPath = (rowData: ProductItemRowData) => {
   const isFastStore = (window?.location?.hostname ?? '').startsWith('secure')
 
   const linkUrl = rowData.linkProduct || ''
   const parts = linkUrl.split('.br/')
-  const id = rowData.itemId || rowData.ID
+  const id = rowData.itemId || rowData.id
 
   // eslint-disable-next-line prefer-destructuring
   const productSlug = parts[parts.length - 1]?.split('/')?.[0] ?? ''
@@ -204,7 +217,7 @@ export const JsonSchema = ({
     return <SkuName itemId={rowData.itemId} productUrl={productUrl} />
   }
 
-  let jsonschema: IJsonSchema = {
+  const jsonschema: IJsonSchema = {
     properties: {
       image: {
         title: 'Image',

@@ -14,26 +14,48 @@ export const updateWishlist = async (
 
   const { email } = await auth(ctx)
 
-  const { wishlist } = args || {}
+  const { wishlist: wishlistArgs } = args || {}
 
-  if (!wishlist?.id) {
+  if (!wishlistArgs?.id) {
     throw new Error('An id must be provided')
   }
 
-  const { email: emailUser, id, wishlistType, isPublic, products } =
-    (await md.getWishlist(wishlist.id)) || {}
+  const {
+    email: emailUser,
+    id,
+    wishlistType,
+    isPublic,
+    products: productsWishMD,
+  } = (await md.getWishlist(wishlistArgs.id)) || {}
 
   const existWishlist = id
 
-  const data = wishlist?.products.map((prod) => {
-    const d = products?.find((pro) => pro.ID === prod.ID)
+  const skuIds = wishlistArgs.products.map((prod) => prod.ID).join(',')
+
+  const skuResponse = await ctx.clients.product.getProducts(
+    skuIds.split(',').map((item) => item.trim())
+  )
+
+  const skusWithLinks = skuResponse?.reduce((acc, sku) => {
+    acc[sku.productReference] = sku.link
+
+    return acc
+  }, {} as Record<string, string>)
+
+  const data = wishlistArgs?.products.map((prodWishArgs) => {
+    const matchWishProd = productsWishMD?.find(
+      (prod) => prod.ID === prodWishArgs.ID
+    )
 
     return {
-      ...prod,
-      quantityProduct: prod.quantityProduct
-        ? prod.quantityProduct
-        : d?.quantityProduct ?? 1,
-      notes: prod.notes ? prod.notes : d?.notes,
+      ...prodWishArgs,
+      quantityProduct: prodWishArgs.quantityProduct
+        ? prodWishArgs.quantityProduct
+        : matchWishProd?.quantityProduct ?? 1,
+      notes: prodWishArgs.notes ?? matchWishProd?.notes,
+      linkProduct: skusWithLinks
+        ? skusWithLinks[prodWishArgs.skuCodeReference]
+        : `/${prodWishArgs.skuCodeReference}/p`,
     }
   })
 
@@ -47,16 +69,16 @@ export const updateWishlist = async (
 
   const updatedWishlist = {
     id,
-    email: wishlist?.email || emailUser,
-    wishlistType: wishlist?.wishlistType || wishlistType,
-    isPublic: wishlist?.isPublic || isPublic,
+    email: wishlistArgs?.email || emailUser,
+    wishlistType: wishlistArgs?.wishlistType || wishlistType,
+    isPublic: wishlistArgs?.isPublic || isPublic,
     products: data as Products[],
   }
 
-  await md.updateWishlist(wishlist.id, updatedWishlist)
+  await md.updateWishlist(wishlistArgs.id, updatedWishlist)
 
   return {
-    id: wishlist.id,
+    id: wishlistArgs.id,
     success: true,
   }
 }
