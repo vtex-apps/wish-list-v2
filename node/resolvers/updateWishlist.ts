@@ -1,4 +1,5 @@
 import { AuthenticationError } from '@vtex/api'
+import { Product } from 'vtex.product-context/react/ProductTypes'
 
 import { auth } from '../middleware/auth'
 import type { Products, WishlistUpdateArs } from '../typings/wishlist'
@@ -36,11 +37,22 @@ export const updateWishlist = async (
     skuIds.split(',').map((item) => item.trim())
   )
 
-  const skusWithLinks = skuResponse?.reduce((acc, sku) => {
-    acc[sku.productReference] = sku.link
+  const findProductLinkBySkuId = (
+    products: Product[],
+    skuId: number
+  ): string | null => {
+    for (const product of products) {
+      const foundItem = product.items.find(
+        (item) => item.itemId === String(skuId)
+      )
 
-    return acc
-  }, {} as Record<string, string>)
+      if (foundItem) {
+        return product.link
+      }
+    }
+
+    return null
+  }
 
   const data = wishlistArgs?.products.map((prodWishArgs) => {
     const matchWishProd = productsWishMD?.find(
@@ -53,8 +65,8 @@ export const updateWishlist = async (
         ? prodWishArgs.quantityProduct
         : matchWishProd?.quantityProduct ?? 1,
       notes: prodWishArgs.notes ?? matchWishProd?.notes,
-      linkProduct: skusWithLinks
-        ? skusWithLinks[prodWishArgs.skuCodeReference]
+      linkProduct: skuResponse
+        ? findProductLinkBySkuId(skuResponse, prodWishArgs.ID)
         : `/${prodWishArgs.skuCodeReference}/p`,
     }
   })
