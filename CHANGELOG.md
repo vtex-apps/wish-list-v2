@@ -10,6 +10,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Errors loading Lists
+- Minor code changes to prevent error when data is not yet available
+
+### Added
+- Fetch lists retry
 
 ## [2.3.7] - 2024-10-03
 
