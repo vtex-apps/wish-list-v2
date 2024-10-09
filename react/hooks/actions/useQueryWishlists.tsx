@@ -15,7 +15,6 @@ const useQueryWishlists = () => {
     const handleRetry = async () => {
       if (error && retryCount < maxRetries) {
         retryCount += 1
-        console.log(`Retry attempt => ${retryCount}`)
         await new Promise(resolve => setTimeout(resolve, retryTimeout))
         refetch()
       }
@@ -23,8 +22,6 @@ const useQueryWishlists = () => {
 
     handleRetry()
   }, [error, refetch])
-
-  console.log('useQueryWishlists => ', {query: GET_WISHLISTS, data, loading, error, refetch})
 
   return {
     data,

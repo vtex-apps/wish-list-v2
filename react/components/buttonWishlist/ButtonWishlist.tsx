@@ -54,9 +54,6 @@ const ButtonWishlist = () => {
     setCloseSelect(true)
   }
 
-console.log('isLoggedIn => ', isLoggedIn)
-console.log('listWishlist => ', listWishlist)
-
   return (
     <div className={`${handles.container}`}>
       {!isLoggedIn ? (
