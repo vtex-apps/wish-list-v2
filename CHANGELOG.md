@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.3.8] - 2024-10-15
+
 ### Fixed
 - Errors loading Lists
 - Minor code changes to prevent error when data is not yet available
