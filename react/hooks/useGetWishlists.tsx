@@ -52,12 +52,12 @@ const useGetWishlist = () => {
   const nameProduct = product?.productName
   const linkProduct = product?.link
   const idProduct = Number(selectedItem?.itemId)
-  const urlImageProduct = product?.items?.find((item: any) => item)?.images[0]
+  const urlImageProduct = product?.items?.find((item: any) => item)?.images?.[0]
     ?.imageUrl
 
   const quantityProduct = selectedQuantity
   const price = Number(product?.priceRange?.sellingPrice?.highPrice)
-  const skuCodeReference = product?.items[0]?.referenceId?.[0]?.Value
+  const skuCodeReference = product?.items?.[0]?.referenceId?.[0]?.Value
   const departmentArray = product?.categoryTree
   const department = departmentArray?.[0]?.name
 
