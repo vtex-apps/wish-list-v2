@@ -105,7 +105,7 @@ const MyWishLists = () => {
   if (errorMessage)
     return (
       <p className={styles.errorMessage}>
-        Could not find the wishlists: {errorMessage}
+        Your wishlist failed to load, please refresh the page.
       </p>
     )
 
