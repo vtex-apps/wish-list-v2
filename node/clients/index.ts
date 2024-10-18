@@ -6,6 +6,7 @@ import MasterDataClient from './masterdata'
 import VtexId from './vtexId'
 import { DATA_ENTITY_NAME } from '../utils/constant'
 import RequestHub from '../utils/HUB'
+import ProductSearchClient from './product'
 
 export class Clients extends IOClients {
   public get wishlist() {
@@ -25,5 +26,9 @@ export class Clients extends IOClients {
 
   public get hub() {
     return this.getOrSet('hub', RequestHub)
+  }
+
+  public get product() {
+    return this.getOrSet('product', ProductSearchClient)
   }
 }
