@@ -2,8 +2,9 @@
 import React, { useEffect, useState, useContext, useCallback } from 'react'
 import { Table, ToastContext } from 'vtex.styleguide'
 import { useRuntime } from 'vtex.render-runtime'
-
 // Components
+import { useQuery } from 'react-apollo'
+
 import AutocompleteBlock from './SearchSKU/AutocompleteBlock'
 import useCreateListAccount from '../hooks/useCreateListAccount'
 // Helpers & Utils
@@ -17,8 +18,6 @@ import useBulkAction from '../hooks/useBulkAction'
 import { JsonSchema } from '../utils/jsonSchema'
 import useStoreGlobal from '../globalStore/globalStore'
 import AppSettings from '../queries/AppSettings.graphql'
-
-
 // Table config
 import {
   handleNextClick,
@@ -37,14 +36,8 @@ import WishlistDesktop from './WishlistDesktop'
 import WishlistMobile from './WishlistMobile'
 // Styles
 import styles from '../styles.css'
-import { useQuery } from 'react-apollo'
 
-
-
-
-
-
-function Wishlist({ wishlists, fetchData}) {
+function Wishlist({ wishlists, fetchData }) {
   const { deviceInfo } = useRuntime()
   const emailIDInfo = getEmailID(wishlists)
   const { selectedWishlist, setSelectedWishlist } = useStoreGlobal()
@@ -157,7 +150,6 @@ function Wishlist({ wishlists, fetchData}) {
     updateWishlist,
     wishlistColumns,
   })
-
 
   const {
     fieldValidationTable,
@@ -353,7 +345,7 @@ function Wishlist({ wishlists, fetchData}) {
       department: productData?.categoryTree?.[0]?.name,
       bundle: hasBundle ? unitMultiplierValue : item.unitMultiplier,
     }
- 
+
     if (newProduct.bundle > 1) {
       newProduct.quantityProduct *= newProduct.bundle
     }
@@ -386,7 +378,7 @@ function Wishlist({ wishlists, fetchData}) {
       setIsLoadingSKU(false)
     }
   }
-  
+
   const tableFilterOptions = {
     department: {
       label: 'Department',
@@ -531,7 +523,7 @@ function Wishlist({ wishlists, fetchData}) {
         <Table
           fullWidth
           density="medium"
-          updateTableKey={`vtex-table=${Math.floor(Math.random() * 1000) }`}
+          updateTableKey={`vtex-table=${Math.floor(Math.random() * 1000)}`}
           schema={tableSchema}
           items={paginatedData || []}
           toolbar={{

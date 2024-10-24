@@ -49,15 +49,18 @@ const useAddToCart = () => {
       },
     ]
 
+    if (items.length === 0) return
+
     addItems(items)
-      .then(async () => {
+      .then(() => {
         push({
           event: 'addToCart',
           id: 'addToCart',
+          items: [productInfo],
         })
         showToast('Item added to the cart')
       })
-      .catch((error: any) => {
+      .catch((error) => {
         console.error(error)
       })
   }

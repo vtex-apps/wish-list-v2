@@ -74,3 +74,16 @@ export interface AdminSettings {
 export interface PublicSettingsForApp {
   message: string
 }
+
+export interface WishlistProductItem {
+  id: number
+  itemId: number
+  image: string
+  department: string
+  skuReferenceCode: string
+  name: string
+  quantity: number
+  linkProduct: string
+  bundle: null | string
+  notes: null | string
+}

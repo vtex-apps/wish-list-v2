@@ -14,6 +14,8 @@ const deleteItemFromWishlist = async ({
     (item: { name: string }) => item.name === selectedRow.name
   )
 
+  if (!wishlistItem) return
+
   const updatedWishlistProducts = wishlistProducts.filter(
     (item: { id: number }) => item.id !== wishlistItem.id
   )

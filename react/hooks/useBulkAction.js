@@ -40,6 +40,7 @@ const useBulkAction = ({
             push({
               event: 'addToCart',
               id: 'addToCart',
+              items: selectedRows,
             })
             showToast('Items added to the cart')
           })
