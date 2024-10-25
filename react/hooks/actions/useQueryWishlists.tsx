@@ -1,5 +1,6 @@
 import { useQuery } from 'react-apollo'
 import { useEffect } from 'react'
+
 import GET_WISHLISTS from '../../graphql/queries/getWishlists.gql'
 
 const useQueryWishlists = () => {
@@ -15,7 +16,7 @@ const useQueryWishlists = () => {
     const handleRetry = async () => {
       if (error && retryCount < maxRetries) {
         retryCount += 1
-        await new Promise(resolve => setTimeout(resolve, retryTimeout))
+        await new Promise((resolve) => setTimeout(resolve, retryTimeout))
         refetch()
       }
     }

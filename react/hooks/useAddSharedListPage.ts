@@ -7,24 +7,13 @@ import { useUserEmail } from './useUserEmail'
 import useStoreGlobal from '../globalStore/globalStore'
 import useMutationCreateWishlist from './actions/useMutationCreateWishlist'
 import useQueryWishlists from './actions/useQueryWishlists'
+import { WishlistProduct } from '../interfaces'
 
 interface UseAddSharedListPageProps {
   queryId: string
-  products: any
+  products: WishlistProduct[]
   updatedProducts: any
 }
-
-// interface Product {
-//   id: string
-//   image: string
-//   bundle: string
-//   unitValue: string
-//   linkProduct: string
-//   name: string
-//   qty: number
-//   skuReferenceCode: string
-//   department: string
-// }
 
 export default function useAddSharedListPage({
   queryId,
@@ -107,8 +96,10 @@ export default function useAddSharedListPage({
     } else {
       const listProducts: any[] = []
 
-      if (Object.keys(updatedProducts).length > 0 && updatedProducts.filter( item => item.ID).length) {
-
+      if (
+        Object.keys(updatedProducts).length > 0 &&
+        updatedProducts.filter((item) => item.ID).length
+      ) {
         Object.values(updatedProducts).forEach((prod: any) => {
           const newProduct: any = {
             ID: prod.ID,
@@ -159,7 +150,6 @@ export default function useAddSharedListPage({
       navigate({ to: '/account#/my-wishlists' })
     }
   }
-
 
   // RETURN
   return {

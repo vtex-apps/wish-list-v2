@@ -5,6 +5,7 @@ import { usePixel } from 'vtex.pixel-manager'
 
 import extractProductData from './extractProductData'
 
+// function not used in the project
 const AddProductToCart = ({ name }, wishlist) => {
   const { addItems } = useOrderItems()
   const { showToast } = useContext<any>(ToastContext)

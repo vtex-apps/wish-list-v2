@@ -1,4 +1,6 @@
-const useBundleMinQuantity = (productContextValue: { properties: any[] }): number => {
+const useBundleMinQuantity = (productContextValue: {
+  properties: any[]
+}): number => {
   const unitMultiplier = productContextValue?.properties?.find(
     (property) => property.name === 'UnitMultiplier'
   )?.values?.[0]

@@ -1,6 +1,6 @@
-import { WishlistProductItem } from '../../interfaces'
+import { ExtractedWishlistProductItem } from '../../interfaces'
 
-const extractProductData = ({ items }): WishlistProductItem[] => {
+const extractProductData = ({ items }): ExtractedWishlistProductItem[] => {
   return items?.map(
     ({
       ID,

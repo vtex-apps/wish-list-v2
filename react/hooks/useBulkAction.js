@@ -1,20 +1,20 @@
 import { useContext } from 'react'
 import { ToastContext } from 'vtex.styleguide'
 import { useOrderItems } from 'vtex.order-items/OrderItems'
-import { usePixel } from 'vtex.pixel-manager'
 
+import handleDataLayerEvent from '../utils/handleDataLayerEvent'
 import {
   extractProductData,
   formatProductForWishlist,
 } from '../components/helpers'
 
+// wishlist button in my-account, used to add the product from the table row to the cart
 const useBulkAction = ({
   wishlist,
   selectedWishlist,
   setUpdatedSelectedRows,
   updateWishlist,
 }) => {
-  const { push } = usePixel()
   const { addItems } = useOrderItems()
   const { showToast } = useContext(ToastContext)
 
@@ -37,11 +37,7 @@ const useBulkAction = ({
       if (itemsToAdd.length > 0) {
         addItems(itemsToAdd)
           .then(() => {
-            push({
-              event: 'addToCart',
-              id: 'addToCart',
-              items: selectedRows,
-            })
+            handleDataLayerEvent('addToCart', selectedRows)
             showToast('Items added to the cart')
           })
           .catch((error) => {

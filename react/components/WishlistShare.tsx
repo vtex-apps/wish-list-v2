@@ -1,14 +1,13 @@
 import React from 'react'
 import { useRuntime } from 'vtex.render-runtime'
 import { Spinner } from 'vtex.styleguide'
-
 import { useQuery } from 'react-apollo'
-import AppSettings from '../queries/AppSettings.graphql'
 
+import AppSettings from '../queries/AppSettings.graphql'
 import TableShare from './TableShare'
 import GET_WISHLIST_BY_ID from '../graphql/queries/getWishlistById.gql'
-
 import styles from '../styles.css'
+import { WishlistMD } from '../interfaces'
 
 export default function WishlistShare() {
   const { query } = useRuntime()
@@ -27,7 +26,7 @@ export default function WishlistShare() {
     },
     ssr: false,
   })
- 
+
   if (loading) {
     return (
       <div
@@ -43,16 +42,27 @@ export default function WishlistShare() {
     )
   }
 
-  const { products, email } = data?.getWishlist || { products: [], email: '' }
+  const wishlistMD: WishlistMD = data?.getWishlist || {
+    products: [],
+    email: '',
+  }
 
-  const {defaultTitleText} = JSON.parse(wishlistColumns.publicSettingsForApp.message)
+  const { defaultTitleText } = JSON.parse(
+    wishlistColumns.publicSettingsForApp.message
+  )
 
   return (
     <div className={`${styles.wishlistShare}`}>
       <h2 className="flex justify-center mt6">
-        {`${email}'s ${defaultTitleText ?? 'Favorites List'}`}
+        {`${wishlistMD.email}'s ${defaultTitleText ?? 'Favorites List'}`}
       </h2>
-      {products && <TableShare products={products} columns={wishlistColumns} queryId={id} />}
+      {wishlistMD.products && (
+        <TableShare
+          wishlistMD={wishlistMD}
+          columns={wishlistColumns}
+          queryId={id}
+        />
+      )}
     </div>
   )
 }
