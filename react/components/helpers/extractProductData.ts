@@ -1,4 +1,6 @@
-const extractProductData = ({ items }) => {
+import { ExtractedWishlistProductItem } from '../../interfaces'
+
+const extractProductData = ({ items }): ExtractedWishlistProductItem[] => {
   return items?.map(
     ({
       ID,

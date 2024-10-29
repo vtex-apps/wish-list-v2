@@ -18,7 +18,11 @@ import styles from '../../styles.css'
 import { getProductPath } from '../../utils/jsonSchema'
 import ProductPriceTotal from '../ProductPriceTotal'
 import UnitPrice from '../UnitPrice'
-import { AdminSettings, PublicSettingsForApp } from '../../interfaces'
+import {
+  AdminSettings,
+  PublicSettingsForApp,
+  WishlistMD,
+} from '../../interfaces'
 import useAddToCart from '../../hooks/useAddToCart'
 
 const CSS_HANDLES = [
@@ -31,18 +35,18 @@ interface ITableWishListColumns {
   publicSettingsForApp: PublicSettingsForApp
 }
 export default function TableWishList({
-  products,
+  wishlistMD,
   queryId,
   columns,
 }: {
-  products: any
+  wishlistMD: WishlistMD
   queryId: string
   columns: ITableWishListColumns
 }) {
   const { showToast } = useContext(ToastContext)
   const { handles } = useCssHandles(CSS_HANDLES)
   const [localProducts, setLocalProducts] = useState([
-    ...products.map((product: any) => ({
+    ...wishlistMD?.products.map((product: any) => ({
       ...product,
       unitValue: product.unitValue ?? 0,
       totalValue: product.quantityProduct * (product.unitValue ?? 0),
@@ -159,7 +163,7 @@ export default function TableWishList({
                 localProducts?.find((product) => product.ID === rowData.ID)
                   ?.qty ?? rowData.quantity,
             },
-            { products }
+            wishlistMD
           )
         }
       >
@@ -177,7 +181,11 @@ export default function TableWishList({
     fieldValidationTable,
     handleNameListTable,
     createNewList,
-  } = useAddSharedListPage({ queryId, products, updatedProducts: null })
+  } = useAddSharedListPage({
+    queryId,
+    products: wishlistMD.products,
+    updatedProducts: null,
+  })
 
   const skuNameCellRenderer = ({ rowData }) => {
     const productUrl = getProductPath(rowData)

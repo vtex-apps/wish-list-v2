@@ -5,6 +5,7 @@ import { usePixel } from 'vtex.pixel-manager'
 
 import extractProductData from './extractProductData'
 
+// function not used in the project
 const AddProductToCart = ({ name }, wishlist) => {
   const { addItems } = useOrderItems()
   const { showToast } = useContext<any>(ToastContext)
@@ -13,10 +14,12 @@ const AddProductToCart = ({ name }, wishlist) => {
   const data = extractProductData({ items: wishlist.products })
   const product = data.find((item) => name === item.name)
 
+  if (!product) return
+
   const item = {
     id: product.id,
     seller: 1,
-    quantity: product.qty,
+    quantity: product.quantity,
     name: product.name,
   }
 

@@ -1,20 +1,21 @@
 import { useContext } from 'react'
 import { ToastContext } from 'vtex.styleguide'
-import { usePixel } from 'vtex.pixel-manager'
 import { useOrderItems } from 'vtex.order-items/OrderItems'
 import { useOrderForm } from 'vtex.order-manager/OrderForm'
 
 import { extractProductData } from '../components/helpers'
+import handleDataLayerEvent from '../utils/handleDataLayerEvent'
+import { WishlistMD } from '../interfaces'
 
 const useAddToCart = () => {
-  const { push } = usePixel()
   const { addItems } = useOrderItems()
   const { showToast } = useContext<any>(ToastContext)
   const { orderForm } = useOrderForm()
 
+  // hook used to add several products from the wishlist table to the cart
   const addProductsToCart = (
     props: { name: string; itemId: number; quantity?: number },
-    wishlist: any
+    wishlist: WishlistMD
   ) => {
     const productsByOrders = orderForm.items
     const findProductQuantity = productsByOrders?.find(
@@ -49,15 +50,14 @@ const useAddToCart = () => {
       },
     ]
 
+    if (items.length === 0) return
+
     addItems(items)
-      .then(async () => {
-        push({
-          event: 'addToCart',
-          id: 'addToCart',
-        })
+      .then(() => {
+        handleDataLayerEvent('addToCart', [productInfo])
         showToast('Item added to the cart')
       })
-      .catch((error: any) => {
+      .catch((error) => {
         console.error(error)
       })
   }

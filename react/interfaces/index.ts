@@ -74,3 +74,42 @@ export interface AdminSettings {
 export interface PublicSettingsForApp {
   message: string
 }
+
+export interface WishlistMD {
+  email: string
+  wishlistType: string
+  products: WishlistProduct[]
+  isPublic: boolean
+  fieldsConfig: any[]
+}
+
+export interface WishlistProduct {
+  id: number
+  image: string
+  bundle: string | null
+  department: string
+  linkProduct: string
+  nameProduct: string
+  notes: string | null
+  quantityProduct: number
+  skuCodeReference: string
+}
+
+export interface ExtractedWishlistProductItem {
+  id: number
+  itemId: number
+  image: string
+  department: string
+  skuReferenceCode: string
+  name: string
+  quantity: number
+  linkProduct: string
+  bundle: null | string
+  notes: null | string
+}
+
+declare global {
+  interface Window {
+    dataLayer: any[]
+  }
+}
