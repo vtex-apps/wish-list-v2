@@ -2,6 +2,7 @@ import { useContext } from 'react'
 import { ToastContext } from 'vtex.styleguide'
 import { useOrderItems } from 'vtex.order-items/OrderItems'
 import { useOrderForm } from 'vtex.order-manager/OrderForm'
+import { useRuntime } from 'vtex.render-runtime'
 
 import { extractProductData } from '../components/helpers'
 import handleDataLayerEvent from '../utils/handleDataLayerEvent'
@@ -12,6 +13,10 @@ const useAddToCart = () => {
   const { addItems } = useOrderItems()
   const { showToast } = useContext<any>(ToastContext)
   const { orderForm } = useOrderForm()
+
+  const runtime = useRuntime()
+  const { culture } = runtime
+  const { currency } = culture
 
   // hook used to add several products from the wishlist table to the cart
   const addProductsToCart = async (
@@ -53,7 +58,10 @@ const useAddToCart = () => {
 
     if (items.length === 0) return
 
-    const productDataToEvent = await mapProductDataToEvent([productInfo], 'USD')
+    const productDataToEvent = await mapProductDataToEvent(
+      [productInfo],
+      currency
+    )
 
     addItems(items)
       .then(() => {

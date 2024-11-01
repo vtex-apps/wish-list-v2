@@ -1,6 +1,7 @@
 import { useContext } from 'react'
 import { ToastContext } from 'vtex.styleguide'
 import { useOrderItems } from 'vtex.order-items/OrderItems'
+import { useRuntime } from 'vtex.render-runtime'
 
 import handleDataLayerEvent from '../utils/handleDataLayerEvent'
 import mapProductDataToEvent from '../utils/mapProductDataToEvent'
@@ -18,6 +19,10 @@ const useBulkAction = ({
 }) => {
   const { addItems } = useOrderItems()
   const { showToast } = useContext(ToastContext)
+
+  const runtime = useRuntime()
+  const { culture } = runtime
+  const { currency } = culture
 
   const handleBulkAction = async (selectedRows, actionId) => {
     if (actionId === 'addToCart') {
@@ -38,7 +43,7 @@ const useBulkAction = ({
       if (itemsToAdd.length > 0) {
         const productDataToEvent = await mapProductDataToEvent(
           selectedRows,
-          'USD'
+          currency
         )
 
         addItems(itemsToAdd)
