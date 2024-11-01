@@ -5,6 +5,7 @@ import { useOrderForm } from 'vtex.order-manager/OrderForm'
 
 import { extractProductData } from '../components/helpers'
 import handleDataLayerEvent from '../utils/handleDataLayerEvent'
+import mapProductDataToEvent from '../utils/mapProductDataToEvent'
 import { WishlistMD } from '../interfaces'
 
 const useAddToCart = () => {
@@ -13,7 +14,7 @@ const useAddToCart = () => {
   const { orderForm } = useOrderForm()
 
   // hook used to add several products from the wishlist table to the cart
-  const addProductsToCart = (
+  const addProductsToCart = async (
     props: { name: string; itemId: number; quantity?: number },
     wishlist: WishlistMD
   ) => {
@@ -52,9 +53,11 @@ const useAddToCart = () => {
 
     if (items.length === 0) return
 
+    const productDataToEvent = await mapProductDataToEvent([productInfo], 'USD')
+
     addItems(items)
       .then(() => {
-        handleDataLayerEvent('addToCart', [productInfo])
+        handleDataLayerEvent('addToCart', [productDataToEvent])
         showToast('Item added to the cart')
       })
       .catch((error) => {

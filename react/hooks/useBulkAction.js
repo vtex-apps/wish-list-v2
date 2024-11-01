@@ -3,6 +3,7 @@ import { ToastContext } from 'vtex.styleguide'
 import { useOrderItems } from 'vtex.order-items/OrderItems'
 
 import handleDataLayerEvent from '../utils/handleDataLayerEvent'
+import mapProductDataToEvent from '../utils/mapProductDataToEvent'
 import {
   extractProductData,
   formatProductForWishlist,
@@ -35,9 +36,14 @@ const useBulkAction = ({
       })
 
       if (itemsToAdd.length > 0) {
+        const productDataToEvent = await mapProductDataToEvent(
+          selectedRows,
+          'USD'
+        )
+
         addItems(itemsToAdd)
           .then(() => {
-            handleDataLayerEvent('addToCart', selectedRows)
+            handleDataLayerEvent('addToCart', productDataToEvent)
             showToast('Items added to the cart')
           })
           .catch((error) => {

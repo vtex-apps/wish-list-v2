@@ -86,13 +86,13 @@ export interface WishlistMD {
 export interface WishlistProduct {
   id: number
   image: string
-  bundle: string | null
   department: string
-  linkProduct: string
-  nameProduct: string
-  notes: string | null
-  quantityProduct: number
   skuCodeReference: string
+  nameProduct: string
+  quantityProduct: number
+  linkProduct: string
+  bundle: string | null
+  notes: string | null
 }
 
 export interface ExtractedWishlistProductItem {
