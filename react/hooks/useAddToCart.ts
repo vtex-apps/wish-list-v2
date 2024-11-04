@@ -65,7 +65,7 @@ const useAddToCart = () => {
 
     addItems(items)
       .then(() => {
-        handleDataLayerEvent('addToCart', [productDataToEvent])
+        handleDataLayerEvent('addToCart', productDataToEvent)
         showToast('Item added to the cart')
       })
       .catch((error) => {

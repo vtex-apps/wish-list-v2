@@ -1,29 +1,19 @@
 import { ExtractedWishlistProductItem } from '../interfaces'
+import { EcommerceEvent, ItemToEvent } from '../interfaces/dataLayerEvents'
 import { ProductSearchApi } from '../interfaces/productSearchApi'
 import getProductsBySkuIds from './getProductsBySkuIds'
-
-interface ItemToEvent {
-  item_variant: string
-  item_name: string
-  quantity: number
-  product_reference_id: string
-  item_brand: string
-  item_id: string
-  price: number
-  discount?: number
-  currency: string
-  item_variant_name: string
-}
 
 export default async function mapProductDataToEvent(
   items: ExtractedWishlistProductItem[],
   currency: string
-): Promise<ItemToEvent[]> {
+): Promise<EcommerceEvent> {
   const skuIds = items.map((item) => item.itemId)
 
   const products: ProductSearchApi[] = await getProductsBySkuIds(skuIds)
 
-  const result = items.map((item) => {
+  let totalValue = 0
+
+  const mappedItems: ItemToEvent[] = items.map((item) => {
     let matchedItem: ProductSearchApi['items'][0] | undefined
     let matchedProduct: ProductSearchApi | undefined
 
@@ -37,19 +27,29 @@ export default async function mapProductDataToEvent(
       }
     }
 
+    const price = matchedItem?.sellers[0]?.commertialOffer.Price ?? 0
+    const { quantity } = item
+    const itemTotal = price * quantity
+
+    totalValue += itemTotal
+
     return {
       item_variant: item.itemId.toString(),
       item_name: item.name,
-      quantity: item.quantity,
+      quantity,
       product_reference_id: item.skuReferenceCode,
       item_brand: matchedProduct ? matchedProduct.brand : '',
       item_id: matchedProduct ? matchedProduct.productId : '',
-      price: matchedItem?.sellers[0]?.commertialOffer.Price || 0,
-      discount: undefined,
+      price,
+      discount: 0,
       currency,
       item_variant_name: matchedItem ? matchedItem.name : '',
     }
   })
 
-  return result
+  return {
+    currency,
+    value: totalValue,
+    items: mappedItems,
+  }
 }
