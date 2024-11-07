@@ -1,7 +1,7 @@
 {
-  "vendor": "lyonbakeryus",
+  "vendor": "vtex",
   "name": "my-wishlists",
-  "version": "3.8.0",
+  "version": "2.3.10",
   "title": "My Wish Lists",
   "description": "Custom app for managing users' wishlists on the My Account Dashboard",
   "builders": {
