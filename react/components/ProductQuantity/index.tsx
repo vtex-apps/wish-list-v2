@@ -1,17 +1,20 @@
-import React, { useState, useEffect, useRef, useContext } from 'react'
-import { NumericStepper, ToastContext } from 'vtex.styleguide'
+import React, { useState, useEffect, useRef } from 'react'
+import { useMutation } from 'react-apollo'
+import { NumericStepper } from 'vtex.styleguide'
+
+import UPDATE_WISHLIST from '../../graphql/mutations/updateWishlist.gql'
 
 export const ProductStepper = ({
   initialQty,
   wishlist: initialWishlist,
   bundle,
-  updateWishlist,
   skuReferenceCode,
 }) => {
   const [QTY, setQTY] = useState(initialQty)
   const wishlistRef = useRef(initialWishlist)
+  const timeoutRef = useRef<number | null>(null)
 
-  const { showToast } = useContext<any>(ToastContext)
+  const [updateWishlist] = useMutation(UPDATE_WISHLIST)
 
   useEffect(() => {
     setQTY(initialQty)
@@ -24,7 +27,7 @@ export const ProductStepper = ({
   const modifyProductQTY = (newValue: string, eventType: string) => {
     const quantity = Number(newValue)
     const roundedQuantity =
-      eventType === 'change'
+      eventType === 'change' && bundle
         ? Math.max(quantity - (quantity % bundle), bundle)
         : Math.max(bundle, quantity)
 
@@ -39,21 +42,33 @@ export const ProductStepper = ({
           : product
     )
 
-    updateWishlist({
-      variables: {
-        wishlist: {
-          id: wishlistRef.current.id,
-          products: updatedProducts,
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current)
+    }
+
+    timeoutRef.current = window.setTimeout(() => {
+      updateWishlist({
+        variables: {
+          wishlist: {
+            id: wishlistRef.current.id,
+            products: updatedProducts,
+            isPublic: true,
+            wishlistType: wishlistRef.current.wishlistType,
+          },
         },
-      },
-    })
-      .then(() => {
-        showToast('Quantity updated')
-      })
-      .catch((error: unknown) => {
+      }).catch((error: unknown) => {
         console.error('Error updating products:', error)
       })
+    }, 700)
   }
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current)
+      }
+    }
+  }, [])
 
   return (
     <NumericStepper
