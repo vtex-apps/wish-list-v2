@@ -1,7 +1,7 @@
 {
   "vendor": "vtex",
   "name": "my-wishlists",
-  "version": "2.3.10",
+  "version": "2.3.11",
   "title": "My Wish Lists",
   "description": "Custom app for managing users' wishlists on the My Account Dashboard",
   "builders": {
@@ -35,7 +35,9 @@
   "peerDependencies": {
     "vtex.quickorder": "3.x"
   },
-  "registries": ["smartcheckout"],
+  "registries": [
+    "smartcheckout"
+  ],
   "settingsSchema": {
     "title": "Wishlist Columns",
     "type": "object",
