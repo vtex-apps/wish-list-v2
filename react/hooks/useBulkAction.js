@@ -67,7 +67,7 @@ const useBulkAction = ({
     setUpdatedSelectedRows((prevSelectedRows) =>
       prevSelectedRows.filter((row) => !selectedRows.includes(row))
     )
-    await updateWishlist({
+    updateWishlist({
       variables: {
         wishlist: {
           id: selectedWishlist,

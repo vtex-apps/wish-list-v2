@@ -7,7 +7,7 @@ export const NoteIcon = () => {
       height="20px"
       viewBox="0 0 24 24"
       fill="none"
-      xmlns="http://www.w3.org/2000/svg"
+      xmlns="https://www.w3.org/2000/svg"
     >
       <path
         d="M20 8.25V18C20 21 18.21 22 16 22H8C5.79 22 4 21 4 18V8.25C4 5 5.79 4.25 8 4.25C8 4.87 8.24997 5.43 8.65997 5.84C9.06997 6.25 9.63 6.5 10.25 6.5H13.75C14.99 6.5 16 5.49 16 4.25C18.21 4.25 20 5 20 8.25Z"
@@ -48,8 +48,8 @@ export const SearchIcon = () => {
       height="24"
       viewBox="0 0 25 24"
       fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      xmlnsXlink="http://www.w3.org/1999/xlink"
+      xmlns="https://www.w3.org/2000/svg"
+      xmlnsXlink="https://www.w3.org/1999/xlink"
     >
       <rect width="25" height="24" fill="url(#pattern0_904_1396)" />
       <defs>

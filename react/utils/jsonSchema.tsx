@@ -125,7 +125,6 @@ export const JsonSchema = ({
           initialQty={rowData.quantity || null}
           wishlist={selectedWishlist !== null ? wishlist : wishlists[0]}
           bundle={rowData.bundle || null}
-          updateWishlist={updateWishlist}
           skuReferenceCode={rowData.skuReferenceCode || ''}
         />
       </div>
@@ -204,7 +203,7 @@ export const JsonSchema = ({
     return <SkuName itemId={rowData.itemId} productUrl={productUrl} />
   }
 
-  let jsonschema: IJsonSchema = {
+  const jsonschema: IJsonSchema = {
     properties: {
       image: {
         title: 'Image',
