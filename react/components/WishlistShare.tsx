@@ -1,13 +1,13 @@
 import React from 'react'
+import { useQuery } from 'react-apollo'
 import { useRuntime } from 'vtex.render-runtime'
 import { Spinner } from 'vtex.styleguide'
-import { useQuery } from 'react-apollo'
 
-import AppSettings from '../queries/AppSettings.graphql'
-import TableShare from './TableShare'
 import GET_WISHLIST_BY_ID from '../graphql/queries/getWishlistById.gql'
-import styles from '../styles.css'
 import { WishlistMD } from '../interfaces'
+import AppSettings from '../queries/AppSettings.graphql'
+import styles from '../styles.css'
+import TableShare from './TableShare'
 
 export default function WishlistShare() {
   const { query } = useRuntime()

@@ -1,7 +1,7 @@
-import React from 'react'
 import PropTypes from 'prop-types'
+import React from 'react'
 import { useCssHandles } from 'vtex.css-handles'
-import { Input, Button } from 'vtex.styleguide'
+import { Button, Input } from 'vtex.styleguide'
 
 import ModalWishList from '../modal'
 
@@ -21,42 +21,51 @@ const CSS_HANDLES = [
 const ModalCreateList = (props) => {
   const { handles } = useCssHandles(CSS_HANDLES)
 
+  const handleSubmitForm = (e) => {
+    e.preventDefault()
+    props.handleSubmitData()
+  }
+
   return (
     <ModalWishList blockClass={props.blockClass}>
-      <div className={`${handles.containerSelectFlexAccount}`}>
-        <div className={`${handles.containerButtonCloseBox}`}>
-          <button
-            // eslint-disable-next-line react/jsx-handler-names
-            onClick={props.buttonCloseModal}
-            className={`${handles.buttonCloseModal}`}
-          >
-            X
-          </button>
-        </div>
-        <p className={`${handles.containerTitleCreateList}`}>
-          Create a name for the list
-        </p>
-        <Input
-          className={`${handles.containerInput}`}
-          type="text"
-          placeholder="List name"
-          name="nameList"
-          onChange={props.handleNameList}
-        />
-        {props.fieldValidation && (
-          <p className={`${handles.containerErrorAdd}`}>
-            {props.fieldValidation}
+      <form onSubmit={handleSubmitForm}>
+        <div className={`${handles.containerSelectFlexAccount}`}>
+          <div className={`${handles.containerButtonCloseBox}`}>
+            <button
+              // eslint-disable-next-line react/jsx-handler-names
+              onClick={props.buttonCloseModal}
+              className={`${handles.buttonCloseModal}`}
+              type="button"
+            >
+              X
+            </button>
+          </div>
+          <p className={`${handles.containerTitleCreateList}`}>
+            Create a name for the list
           </p>
-        )}
-        <Button
-          onClick={props.handleSubmitData}
-          className={`${handles.containerButtonCreateList2}`}
-          variation="primary"
-          isLoading={props.isButtonLoading}
-        >
-          Create List
-        </Button>
-      </div>
+          <Input
+            className={`${handles.containerInput}`}
+            type="text"
+            placeholder="List name"
+            name="nameList"
+            onChange={props.handleNameList}
+          />
+          {props.fieldValidation && (
+            <p className={`${handles.containerErrorAdd}`}>
+              {props.fieldValidation}
+            </p>
+          )}
+          <Button
+            onClick={props.handleSubmitData}
+            type="submit"
+            className={`${handles.containerButtonCreateList2}`}
+            variation="primary"
+            isLoading={props.isButtonLoading}
+          >
+            Create List
+          </Button>
+        </div>
+      </form>
     </ModalWishList>
   )
 }
