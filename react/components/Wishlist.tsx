@@ -1,41 +1,81 @@
 // Hooks
-import React, { useEffect, useState, useContext, useCallback } from 'react'
-import { Table, ToastContext } from 'vtex.styleguide'
+import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { useRuntime } from 'vtex.render-runtime'
+import { Table, ToastContext } from 'vtex.styleguide'
 // Components
 import { useQuery } from 'react-apollo'
 
-import AutocompleteBlock from './SearchSKU/AutocompleteBlock'
 import useCreateListAccount from '../hooks/useCreateListAccount'
+import AutocompleteBlock from './SearchSKU/AutocompleteBlock'
 // Helpers & Utils
-import { extractProductData, deleteItemsWishlist, getEmailID } from './helpers'
-import useQueryWishlistById from '../hooks/actions/useQueryWishlistById'
+import useStoreGlobal from '../globalStore/globalStore'
 import useCreateWishlist from '../hooks/actions/useMutationCreateWishlist'
-import useUpdateWishlist from '../hooks/actions/useMutationUpdateWishlist'
 import useDeleteWishlist from '../hooks/actions/useMutationDeleteWishlist'
+import useUpdateWishlist from '../hooks/actions/useMutationUpdateWishlist'
+import useQueryWishlistById from '../hooks/actions/useQueryWishlistById'
 import useAddToCart from '../hooks/useAddToCart'
 import useBulkAction from '../hooks/useBulkAction'
-import { JsonSchema } from '../utils/jsonSchema'
-import useStoreGlobal from '../globalStore/globalStore'
 import AppSettings from '../queries/AppSettings.graphql'
+import { JsonSchema } from '../utils/jsonSchema'
+import { deleteItemsWishlist, extractProductData, getEmailID } from './helpers'
 // Table config
+import { initialJsonState } from '../utils/tableRowsSchema'
 import {
+  handleFiltersChange,
   handleNextClick,
   handlePrevClick,
   handleSubmitDataTable,
   SelectorObject,
-  handleFiltersChange,
 } from './helpers/tableConfig'
 import {
   handleInputSearchChange,
   handleInputSearchClear,
   handleInputSearchSubmit,
 } from './helpers/tableSearch'
-import { initialJsonState } from '../utils/tableRowsSchema'
 import WishlistDesktop from './WishlistDesktop'
 import WishlistMobile from './WishlistMobile'
 // Styles
+import { ProductsProvider } from '../context/ProductsContext'
 import styles from '../styles.css'
+
+interface TablePaginationWrapperProps {
+  tableSchema: any
+  toolbar: any
+  bulkActions: any
+  pagination: any
+  filters: any
+  items: any
+}
+
+const TablePaginationWrapper = React.memo<TablePaginationWrapperProps>(
+  ({
+    tableSchema,
+    toolbar,
+    bulkActions,
+    pagination,
+    filters,
+    items,
+  }: TablePaginationWrapperProps) => {
+    return (
+      <Table
+        fullWidth
+        density="medium"
+        updateTableKey={`vtex-table=${Math.floor(Math.random() * 1000)}`}
+        schema={tableSchema}
+        items={items}
+        toolbar={toolbar}
+        bulkActions={bulkActions}
+        pagination={pagination}
+        filters={filters}
+      />
+    )
+  },
+  (prevProps, nextProps) => {
+    return prevProps.items.length === nextProps.items.length
+  }
+)
+
+TablePaginationWrapper.displayName = 'TablePaginationWrapper'
 
 function Wishlist({ wishlists, fetchData }) {
   const { deviceInfo } = useRuntime()
@@ -465,6 +505,100 @@ function Wishlist({ wishlists, fetchData }) {
     <React.Fragment>All rows selected {qty}</React.Fragment>
   )
 
+  const toolbar = {
+    inputSearch: {
+      label: 'Search This List',
+      value: searchValue,
+      onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
+        handleInputSearchChange({
+          e,
+          allProducts,
+          setSearchValue,
+          setDisplayedProducts,
+        }),
+      onClear: () => handleInputSearchClear(setDisplayedProducts, allProducts),
+      onSubmit: (e) =>
+        handleInputSearchSubmit({
+          e,
+          allProducts,
+          searchValue,
+          setDisplayedProducts,
+        }),
+    },
+    fields: {
+      label: 'Toggle visible fields',
+      showAllLabel: 'Show All',
+      hideAllLabel: 'Hide All',
+    },
+  }
+
+  const bulkActions = {
+    selectedRows: updatedSelectedRows,
+    texts: {
+      secondaryActionsLabel: 'Actions',
+      rowsSelected: bulkActionsrowsSelected,
+      selectAll: 'Select all',
+      allRowsSelected: bulkActionsAllRowsSelected,
+    },
+    totalItems: '',
+    onChange: (params) => {
+      setUpdatedSelectedRows(params.selectedRows)
+    },
+    others: [
+      {
+        label: 'Add to cart',
+        handleCallback: (params) => {
+          handleBulkAction(params.selectedRows, 'addToCart')
+        },
+      },
+      {
+        label: 'Remove item(s)',
+        isDangerous: true,
+        handleCallback: (params) =>
+          handleBulkAction(params.selectedRows, 'deleteRowsWishlist'),
+      },
+    ],
+  }
+
+  const pagination = {
+    onNextClick: () =>
+      handleNextClick({
+        currentPage,
+        setCurrentPage,
+        totalItems,
+        itemsPerPage,
+      }),
+    onPrevClick: () => handlePrevClick(currentPage, setCurrentPage),
+    currentItemFrom: (currentPage - 1) * itemsPerPage + 1,
+    currentItemTo: Math.min(currentPage * itemsPerPage, totalItems),
+    onRowsChange: handleRowsChange,
+    textShowRows: 'Show rows',
+    textOf: 'of',
+    totalItems,
+    rowsOptions: [30, 40, 50, 60],
+  }
+
+  const filters = {
+    alwaysVisibleFilters: ['department', 'name'],
+    statements: initialState.filterStatements,
+    onChangeStatements: (e: React.ChangeEvent<HTMLInputElement>) => {
+      handleFiltersChange({
+        statements: initialState.filterStatements,
+        initialState,
+        setInitialState,
+        paginatedData,
+        setPaginatedData,
+        setDisplayedProducts,
+        onChangeStatements: e[2],
+        setfilterState,
+        filterState,
+      })
+    },
+    clearAllFiltersButtonLabel: 'Clear Filters',
+    collapseLeft: true,
+    options: tableFilterOptions,
+  }
+
   return (
     <>
       {deviceInfo.type === 'phone' ? (
@@ -520,104 +654,16 @@ function Wishlist({ wishlists, fetchData }) {
         onAddToWishlist={onAddToWishlist}
       />
       <section className={styles.wishlistSearchContainer}>
-        <Table
-          fullWidth
-          density="medium"
-          updateTableKey={`vtex-table=${Math.floor(Math.random() * 1000)}`}
-          schema={tableSchema}
-          items={paginatedData || []}
-          toolbar={{
-            inputSearch: {
-              label: 'Search This List',
-              value: searchValue,
-              onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
-                handleInputSearchChange({
-                  e,
-                  allProducts,
-                  setSearchValue,
-                  setDisplayedProducts,
-                }),
-              onClear: () =>
-                handleInputSearchClear(setDisplayedProducts, allProducts),
-              onSubmit: (e) =>
-                handleInputSearchSubmit({
-                  e,
-                  allProducts,
-                  searchValue,
-                  setDisplayedProducts,
-                }),
-            },
-            fields: {
-              label: 'Toggle visible fields',
-              showAllLabel: 'Show All',
-              hideAllLabel: 'Hide All',
-            },
-          }}
-          bulkActions={{
-            selectedRows: updatedSelectedRows,
-            texts: {
-              secondaryActionsLabel: 'Actions',
-              rowsSelected: bulkActionsrowsSelected,
-              selectAll: 'Select all',
-              allRowsSelected: bulkActionsAllRowsSelected,
-            },
-            totalItems: '',
-            onChange: (params) => {
-              setUpdatedSelectedRows(params.selectedRows)
-            },
-            others: [
-              {
-                label: 'Add to cart',
-                handleCallback: (params) => {
-                  handleBulkAction(params.selectedRows, 'addToCart')
-                },
-              },
-              {
-                label: 'Remove item(s)',
-                isDangerous: true,
-                handleCallback: (params) =>
-                  handleBulkAction(params.selectedRows, 'deleteRowsWishlist'),
-              },
-            ],
-          }}
-          pagination={{
-            onNextClick: () =>
-              handleNextClick({
-                currentPage,
-                setCurrentPage,
-                totalItems,
-                itemsPerPage,
-              }),
-            onPrevClick: () => handlePrevClick(currentPage, setCurrentPage),
-            currentItemFrom: (currentPage - 1) * itemsPerPage + 1,
-            currentItemTo: Math.min(currentPage * itemsPerPage, totalItems),
-            onRowsChange: handleRowsChange,
-            textShowRows: 'Show rows',
-            textOf: 'of',
-            totalItems,
-            rowsOptions: [30, 40, 50, 60],
-          }}
-          filters={{
-            alwaysVisibleFilters: ['department', 'name'],
-            statements: initialState.filterStatements,
-            onChangeStatements: (e: React.ChangeEvent<HTMLInputElement>) => {
-              handleFiltersChange({
-                statements: initialState.filterStatements,
-                initialState,
-                setInitialState,
-                paginatedData,
-                setPaginatedData,
-                setDisplayedProducts,
-                onChangeStatements: e[2],
-                setfilterState,
-                filterState,
-              })
-            },
-            clearAllFiltersButtonLabel: 'Clear Filters',
-            collapseLeft: true,
-            options: tableFilterOptions,
-          }}
-        />
+        <ProductsProvider items={paginatedData}>
+          <TablePaginationWrapper
+            tableSchema={tableSchema}
+            pagination={pagination}
+            bulkActions={bulkActions}
+            toolbar={toolbar}
+            filters={filters}
+            items={paginatedData}
+          />
+        </ProductsProvider>
       </section>
     </>
   )

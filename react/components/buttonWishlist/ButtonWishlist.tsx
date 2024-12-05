@@ -1,12 +1,12 @@
 import React from 'react'
 import { useCssHandles } from 'vtex.css-handles'
-import { ToastProvider, ToastConsumer, Button } from 'vtex.styleguide'
+import { Button, ToastConsumer, ToastProvider } from 'vtex.styleguide'
 
-import SelectWishlist from '../selectWishlists/selectWishlist'
+import useGetWishlist from '../../hooks/useGetWishlists'
+import useSelectWishlist from '../../hooks/useSelectWishlist'
 import useWishList from '../../hooks/useWishlists'
 import ModalWishList from '../modal'
-import useSelectWishlist from '../../hooks/useSelectWishlist'
-import useGetWishlist from '../../hooks/useGetWishlists'
+import SelectWishlist from '../selectWishlists/selectWishlist'
 
 const CSS_HANDLES = ['container', 'containerLoggedIn'] as const
 
@@ -49,7 +49,7 @@ const ButtonWishlist = () => {
     errorSelect,
   } = useSelectWishlist()
 
-  const close = () => {
+  const handleFavoritesList = () => {
     setIsShowSelect(true)
     setCloseSelect(true)
   }
@@ -88,7 +88,11 @@ const ButtonWishlist = () => {
         </ToastProvider>
       ) : (
         <div className={`${handles.containerLoggedIn}`}>
-          <Button size="small" variation="secondary" onClick={close}>
+          <Button
+            size="small"
+            variation="secondary"
+            onClick={handleFavoritesList}
+          >
             Add to Favorites List
           </Button>
           <div className={`${handles.containerLoggedIn} relative`}>

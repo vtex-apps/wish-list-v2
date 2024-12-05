@@ -1,24 +1,20 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useMutation } from 'react-apollo'
 import { NumericStepper } from 'vtex.styleguide'
 
+import { useProducts } from '../../context/ProductsContext'
+import { useRow } from '../../context/RowContext'
 import UPDATE_WISHLIST from '../../graphql/mutations/updateWishlist.gql'
 
-export const ProductStepper = ({
-  initialQty,
-  wishlist: initialWishlist,
-  bundle,
-  skuReferenceCode,
-}) => {
-  const [QTY, setQTY] = useState(initialQty)
+export const ProductStepper = ({ wishlist: initialWishlist }) => {
+  const { updateQuantity, row } = useRow()
+
+  const [QTY, setQTY] = useState(row?.quantity ?? 0)
+  const { updateQuantityBySkuReferenceCode } = useProducts()
   const wishlistRef = useRef(initialWishlist)
   const timeoutRef = useRef<number | null>(null)
 
   const [updateWishlist] = useMutation(UPDATE_WISHLIST)
-
-  useEffect(() => {
-    setQTY(initialQty)
-  }, [initialQty])
 
   useEffect(() => {
     wishlistRef.current = initialWishlist
@@ -27,17 +23,15 @@ export const ProductStepper = ({
   const modifyProductQTY = (newValue: string, eventType: string) => {
     const quantity = Number(newValue)
     const roundedQuantity =
-      eventType === 'change' && bundle
-        ? Math.max(quantity - (quantity % bundle), bundle)
-        : Math.max(bundle, quantity)
+      eventType === 'change' && row.bundle
+        ? Math.max(quantity - (quantity % row.bundle), row.bundle)
+        : Math.max(row.bundle, quantity)
 
     const finalValue = roundedQuantity + (quantity - roundedQuantity)
 
-    setQTY(finalValue)
-
-    const updatedProducts = wishlistRef.current.products.map(
+    const updatedProducts = wishlistRef.current?.products?.map(
       (product: { skuCodeReference: string }) =>
-        product.skuCodeReference === skuReferenceCode
+        product.skuCodeReference === row.skuReferenceCode
           ? { ...product, quantityProduct: finalValue }
           : product
     )
@@ -46,6 +40,9 @@ export const ProductStepper = ({
       clearTimeout(timeoutRef.current)
     }
 
+    updateQuantity(finalValue)
+    updateQuantityBySkuReferenceCode(row.skuReferenceCode, finalValue)
+    setQTY(finalValue)
     timeoutRef.current = window.setTimeout(() => {
       updateWishlist({
         variables: {

@@ -1,17 +1,18 @@
 /* eslint-disable no-console */
 import React from 'react'
-import { IconDelete } from 'vtex.styleguide'
 import { useRuntime } from 'vtex.render-runtime'
+import { IconDelete } from 'vtex.styleguide'
 
-import { ProductStepper } from '../components/ProductQuantity'
-import ProductPriceTotal from '../components/ProductPriceTotal'
 import Notes from '../components/Notes'
+import ProductPriceTotal from '../components/ProductPriceTotal'
+import { ProductStepper } from '../components/ProductQuantity'
 import UnitPrice from '../components/UnitPrice'
 import styles from '../styles.css'
 // import ProductDescription from '../components/ProductDescription'
 import SkuName from '../components/SkuName'
-import { removePrefixRegex } from './stringUtils'
+import { RowProvider } from '../context/RowContext'
 import { AdminSettings } from '../interfaces'
+import { removePrefixRegex } from './stringUtils'
 
 interface CellProps {
   title: string
@@ -51,6 +52,15 @@ export const getProductPath = (rowData: any) => {
   const newBaseUrl = `https://${hostUrl}`
 
   return `${newBaseUrl}/${productPath}/p`
+}
+
+const WrapperProductStepper = ({ selectedWishlist, wishlists }) => {
+  const currentWishlist =
+    selectedWishlist !== null
+      ? wishlists.find((wish) => wish.id === selectedWishlist)
+      : wishlists[0]
+
+  return <ProductStepper wishlist={currentWishlist} />
 }
 
 export const JsonSchema = ({
@@ -120,14 +130,14 @@ export const JsonSchema = ({
 
   const qtyCellRenderer = ({ rowData }) => {
     return (
-      <div className={styles.wishlistTableCell}>
-        <ProductStepper
-          initialQty={rowData.quantity || null}
-          wishlist={selectedWishlist !== null ? wishlist : wishlists[0]}
-          bundle={rowData.bundle || null}
-          skuReferenceCode={rowData.skuReferenceCode || ''}
-        />
-      </div>
+      <RowProvider row={rowData}>
+        <div className={styles.wishlistTableCell}>
+          <WrapperProductStepper
+            selectedWishlist={selectedWishlist}
+            wishlists={wishlists}
+          />
+        </div>
+      </RowProvider>
     )
   }
 

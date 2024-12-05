@@ -1,5 +1,7 @@
+import PropTypes from 'prop-types'
 import React, { useContext, useState } from 'react'
 import { useCssHandles } from 'vtex.css-handles'
+import { useRuntime } from 'vtex.render-runtime'
 import {
   Button,
   Table,
@@ -7,23 +9,23 @@ import {
   ToastContext,
   ToastProvider,
 } from 'vtex.styleguide'
-import { useRuntime } from 'vtex.render-runtime'
-import PropTypes from 'prop-types'
 
-import SkuName from '../SkuName'
-import { ProductStepper } from './ProductStepper'
+import { ProductsProvider } from '../../context/ProductsContext'
+import { RowProvider, useRow } from '../../context/RowContext'
 import useAddSharedListPage from '../../hooks/useAddSharedListPage'
-import ModalCreateList from '../ModalCreateList'
-import styles from '../../styles.css'
-import { getProductPath } from '../../utils/jsonSchema'
-import ProductPriceTotal from '../ProductPriceTotal'
-import UnitPrice from '../UnitPrice'
+import useAddToCart from '../../hooks/useAddToCart'
 import {
   AdminSettings,
   PublicSettingsForApp,
   WishlistMD,
 } from '../../interfaces'
-import useAddToCart from '../../hooks/useAddToCart'
+import styles from '../../styles.css'
+import { getProductPath } from '../../utils/jsonSchema'
+import ModalCreateList from '../ModalCreateList'
+import ProductPriceTotal from '../ProductPriceTotal'
+import SkuName from '../SkuName'
+import UnitPrice from '../UnitPrice'
+import { ProductStepper } from './ProductStepper'
 
 const CSS_HANDLES = [
   'importList__generalContainer',
@@ -34,6 +36,49 @@ const CSS_HANDLES = [
 interface ITableWishListColumns {
   publicSettingsForApp: PublicSettingsForApp
 }
+
+interface WrapperTableWishListProps {
+  schema: any
+  items: any[]
+}
+
+const WrapperTableWishList: React.FC<WrapperTableWishListProps> = React.memo(
+  ({ schema, items }) => {
+    return (
+      <Table
+        fullWidth
+        dynamicRowHeight
+        updateTableKey={`vtex-table=${Math.floor(Math.random() * 1000)}`}
+        schema={schema}
+        density="medium"
+        items={items}
+        emptyStateLabel="Nothing to show"
+      />
+    )
+  },
+  (prevProps, nextProps) => {
+    return prevProps.items.length === nextProps.items.length
+  }
+)
+
+WrapperTableWishList.displayName = 'WrapperTableWishList'
+
+const WrapperProductStepper = ({ handleQuantityChange, setIsUpdatingQty }) => {
+  const { row: rowData } = useRow()
+
+  return (
+    <ProductStepper
+      initialQty={rowData.qty || rowData.quantityProduct}
+      productName={rowData.name || rowData.nameProduct}
+      bundle={rowData.bundle}
+      setIsUpdatingQty={(value) => setIsUpdatingQty(value)}
+      rowData={rowData}
+      productId={rowData.ID}
+      handleQuantityChange={handleQuantityChange}
+    />
+  )
+}
+
 export default function TableWishList({
   wishlistMD,
   queryId,
@@ -137,17 +182,14 @@ export default function TableWishList({
   }
 
   const qtyCellRenderer = ({ rowData }) => (
-    <div className={styles.wishlistShareTableCell}>
-      <ProductStepper
-        initialQty={rowData.qty || rowData.quantityProduct}
-        productName={rowData.name || rowData.nameProduct}
-        bundle={rowData.bundle}
-        setIsUpdatingQty={(value) => setIsUpdatingQty(value)}
-        rowData={rowData}
-        productId={rowData.ID}
-        handleQuantityChange={handleQuantityChange}
-      />
-    </div>
+    <RowProvider row={rowData}>
+      <div className={styles.wishlistShareTableCell}>
+        <WrapperProductStepper
+          handleQuantityChange={handleQuantityChange}
+          setIsUpdatingQty={setIsUpdatingQty}
+        />
+      </div>
+    </RowProvider>
   )
 
   const addCellRenderer = ({ rowData }) => (
@@ -328,15 +370,9 @@ export default function TableWishList({
           </div>
         </div>
       )}
-      <Table
-        fullWidth
-        dynamicRowHeight
-        updateTableKey={`vtex-table=${Math.floor(Math.random() * 1000)}`}
-        schema={schema}
-        density="medium"
-        items={localProducts}
-        emptyStateLabel="Nothing to show"
-      />
+      <ProductsProvider items={localProducts}>
+        <WrapperTableWishList items={localProducts} schema={schema} />
+      </ProductsProvider>
     </div>
   )
 }
