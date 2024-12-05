@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.3.12] - 2024-12-05
+
 ### Fixed
 
 - On mobile when the quantity was updated some issues were happening. It was added contexts to keep the state among the components
