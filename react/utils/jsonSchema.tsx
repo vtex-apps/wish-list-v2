@@ -76,6 +76,11 @@ export const JsonSchema = ({
   const { culture } = runtime
   const currency = culture.customCurrencySymbol
 
+  const currentWishlist =
+    selectedWishlist !== null
+      ? wishlists.find((wish) => wish.id === selectedWishlist)
+      : wishlists[0]
+
   const imageCellRenderer = ({ cellData, rowData }) => {
     const productUrl = getProductPath(rowData)
 
@@ -155,7 +160,7 @@ export const JsonSchema = ({
     return (
       <button
         className={styles.wishlistAddItem}
-        onClick={() => addProductsToCart(rowData, wishlist || {})}
+        onClick={() => addProductsToCart(rowData, currentWishlist)}
       >
         Add
       </button>
