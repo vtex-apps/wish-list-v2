@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { useIntl } from 'react-intl'
 
 import styles from '../../styles.css'
 
@@ -21,16 +22,17 @@ const SearchSKU = ({
   isShowProductSearch,
   searchProduct,
 }) => {
+  const intl = useIntl()
   return (
     <div className={styles.wishlistSearchSKUContainer}>
-      <label htmlFor="searchInputWishlist">Search SKU</label>
+      <label htmlFor="searchInputWishlist">{intl.formatMessage({ id: 'store/search-sku' })}</label>
       <input
         id="searchInputWishlist"
         type="text"
         value={valueSearchSku}
         onChange={changeValueSku}
       />
-      <button onClick={getSearchProduct}>Buscar</button>
+      <button onClick={getSearchProduct}>{intl.formatMessage({ id: 'store/search' })}</button>
 
       {isShowProductSearch && (
         <div>

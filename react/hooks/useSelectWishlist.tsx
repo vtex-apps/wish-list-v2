@@ -2,6 +2,7 @@ import axios from 'axios'
 import { useState, useEffect, useRef, useContext } from 'react'
 import useProduct from 'vtex.product-context/useProduct'
 import { ToastContext } from 'vtex.styleguide'
+import { useIntl } from 'react-intl'
 
 import useWishList from './useWishlists'
 import useGetWishlist from './useGetWishlists'
@@ -9,6 +10,7 @@ import useBundleMinQuantity from './useBundleMinQuantity'
 import useMutationUpdateWishlist from './actions/useMutationUpdateWishlist'
 
 const useSelectWishlist = () => {
+  const intl = useIntl()
   const {
     emailInfo,
     nameProduct,
@@ -63,7 +65,7 @@ const useSelectWishlist = () => {
 
   const addToList = () => {
     if (textSelect.trim().length === 0) {
-      setErrorSelect('Select a list to save your product')
+      setErrorSelect(intl.formatMessage({ id: 'store/select-list-to-save-product' }))
 
       return
     }
@@ -107,13 +109,13 @@ const useSelectWishlist = () => {
           refetchQueries: ['getWishlists'],
         })
           .then(() => {
-            showToast('Successfully added to the Favouites List')
+            showToast(intl.formatMessage({ id: 'store/successfully-added-to-favourites-list' }))
           })
           .catch((error) => {
             console.error('PUT request failed:', error)
           })
       } else {
-        showToast('You have already added this product to the list')
+        showToast(intl.formatMessage({ id: 'store/you-have-already-added-this-product' }))
       }
     }
 
@@ -143,13 +145,13 @@ const useSelectWishlist = () => {
         axios
           .put(urlPut, existingWishlist)
           .then(() => {
-            showToast('Successfully added to the Favorites List')
+            showToast(intl.formatMessage({ id: 'store/successfully-added-to-favorites' }))
           })
           .catch((error) => {
             console.error('PUT request failed:', error)
           })
       } else {
-        showToast('You have already added this product to the list')
+        showToast(intl.formatMessage({ id: 'store/you-have-already-added-this-product' }))
       }
     }
   }

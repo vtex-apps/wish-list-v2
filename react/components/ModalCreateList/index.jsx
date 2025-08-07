@@ -2,6 +2,7 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import { useCssHandles } from 'vtex.css-handles'
 import { Button, Input } from 'vtex.styleguide'
+import { useIntl } from 'react-intl'
 
 import ModalWishList from '../modal'
 
@@ -20,6 +21,7 @@ const CSS_HANDLES = [
 
 const ModalCreateList = (props) => {
   const { handles } = useCssHandles(CSS_HANDLES)
+  const intl = useIntl()
 
   const handleSubmitForm = (e) => {
     e.preventDefault()
@@ -41,12 +43,12 @@ const ModalCreateList = (props) => {
             </button>
           </div>
           <p className={`${handles.containerTitleCreateList}`}>
-            Create a name for the list
+            {intl.formatMessage({ id: 'store/create-a-name-for-this-list' })}
           </p>
           <Input
             className={`${handles.containerInput}`}
             type="text"
-            placeholder="List name"
+            placeholder={intl.formatMessage({ id: 'store/list-name' })}
             name="nameList"
             onChange={props.handleNameList}
           />
@@ -62,7 +64,7 @@ const ModalCreateList = (props) => {
             variation="primary"
             isLoading={props.isButtonLoading}
           >
-            Create List
+            {intl.formatMessage({ id: 'store/create-list-button' })}
           </Button>
         </div>
       </form>

@@ -1,5 +1,6 @@
 import React, { useState, useContext } from 'react'
 import { ToastContext, ModalDialog, Button } from 'vtex.styleguide'
+import { useIntl } from 'react-intl'
 
 import EditableWishlistTitle from './WishlistName/WishlistName'
 import ModalCreateList from './ModalCreateList'
@@ -32,6 +33,7 @@ const WishlistMobile = ({
   const [isModalOpen, setIsModalOpen] = useState(false)
 
   const { showToast } = useContext<any>(ToastContext)
+  const intl = useIntl()
 
   const onCreateList = async (event: React.FormEvent) => {
     setIsCreateLoading(true)
@@ -44,7 +46,7 @@ const WishlistMobile = ({
         setNameListAccountTable,
         setIsModalAccountTable,
       })
-      showToast('You created a new Wishlist')
+      showToast(intl.formatMessage({ id: 'store/you-created-new-wishlist' }))
       setIsCreateLoading(false)
     } catch (error) {
       showToast(error)
@@ -88,22 +90,22 @@ const WishlistMobile = ({
         loading={isDeleteLoading}
         confirmation={{
           onClick: onDeleteList,
-          label: 'Yes',
+          label: intl.formatMessage({ id: 'store/yes' }),
           isDangerous: true,
           testId: "deleteConfirmBtn"
         }}
         cancelation={{
           onClick: closeModal,
-          label: 'Cancel',
+          label: intl.formatMessage({ id: 'store/cancel' }),
         }}
         isOpen={isModalOpen}
         onClose={closeModal}>
         <div className="">
           <p className="f3 f3-ns fw3 gray">
-            Are you sure you want to delete your wishlist {emailIDInfo.find( list => list.value == selectedWishlist)?.label} ?
+            {intl.formatMessage({ id: 'store/delete-confirm-title' })} {emailIDInfo.find( list => list.value == selectedWishlist)?.label} ?
           </p>
           <p>
-            This action is irreversible.
+            {intl.formatMessage({ id: 'store/delete-confirm-irreversible' })}
           </p>
         </div>
       </ModalDialog>
@@ -111,8 +113,8 @@ const WishlistMobile = ({
       <div className={styles.wishlistOptionsContainer}>
         <div className={styles.wishlistSelector}>
         <div className={styles.wishlistSelectListTitle}>
-        <Button href="/account" >RETURN</Button>
-          <p className={styles.wishlistSelectListOneText}>Favorites List</p>
+        <Button href="/account" >{intl.formatMessage({ id: 'store/return' })}</Button>
+          <p className={styles.wishlistSelectListOneText}>{intl.formatMessage({ id: 'store/favorites-list' })}</p>
           </div>
       
           <div className={`${styles.createListandAndSelectFav}`}>
@@ -126,7 +128,7 @@ const WishlistMobile = ({
               value={selectedWishlist}
             >
               <option value="" disabled selected>
-                Select an option
+                {intl.formatMessage({ id: 'store/select-option' })}
               </option>
               {emailIDInfo.map((newDates) => (
                 <option
@@ -144,7 +146,7 @@ const WishlistMobile = ({
                 className={`${styles.wishlistCreateNew} ${styles.wishlistCreateNewHelper}`}
                 onClick={buttonModalTable}
               >
-                New
+                {intl.formatMessage({ id: 'store/new' })}
               </button>
               {isModalAccountTable && (
                 <ModalCreateList
@@ -176,13 +178,13 @@ const WishlistMobile = ({
               selectedWishlist !== null ? selectedWishlist : wishlists[0].id
             }
             wishlists={wishlists}
-            buttonLabel="Share"
+            buttonLabel={intl.formatMessage({ id: 'store/share' })}
           />
           <button
             className={styles.wishlistDeleteWishList}
             onClick={openModal}
           >
-            {isDeleting ? `Deleting...` : `Delete`}
+            {isDeleting ? intl.formatMessage({ id: 'store/deleting' }) : intl.formatMessage({ id: 'store/delete' })}
           </button>
         </div>
       </div>

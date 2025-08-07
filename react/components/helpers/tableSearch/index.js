@@ -13,14 +13,14 @@ export const handleInputSearchChange = ({
   } else {
     const filteredProducts = allProducts.filter((product) => {
       const valueLower = value.toLowerCase()
-      const nameMatches = product.name.toLowerCase().includes(valueLower)
+      const nameMatches = product.name?.toLowerCase().includes(valueLower) || false
       const departmentMatches = product.department
-        .toLowerCase()
-        .includes(valueLower)
+        ?.toLowerCase()
+        .includes(valueLower) || false
 
       const skuMatches = product.skuReferenceCode
-        .toLowerCase()
-        .includes(valueLower)
+        ?.toLowerCase()
+        .includes(valueLower) || false
 
       return nameMatches || departmentMatches || skuMatches
     })
@@ -45,14 +45,14 @@ export const handleInputSearchSubmit = ({
   } else {
     const filteredProducts = allProducts.filter((product) => {
       const searchValueLower = searchValue.toLowerCase()
-      const nameMatches = product.name.toLowerCase().includes(searchValueLower)
+      const nameMatches = product.name?.toLowerCase().includes(searchValueLower) || false
       const departmentMatches = product.department
-        .toLowerCase()
-        .includes(searchValueLower)
+        ?.toLowerCase()
+        .includes(searchValueLower) || false
 
       const skuMatches = product.skuReferenceCode
-        .toLowerCase()
-        .includes(searchValueLower)
+        ?.toLowerCase()
+        .includes(searchValueLower) || false
 
       return nameMatches || departmentMatches || skuMatches
     })

@@ -2,6 +2,7 @@
 import React from 'react'
 import { useRuntime } from 'vtex.render-runtime'
 import { IconDelete } from 'vtex.styleguide'
+import { useIntl } from 'react-intl'
 
 import Notes from '../components/Notes'
 import ProductPriceTotal from '../components/ProductPriceTotal'
@@ -72,6 +73,7 @@ export const JsonSchema = ({
   updateWishlist,
   wishlistColumns,
 }) => {
+  const intl = useIntl()
   const runtime = useRuntime()
   const { culture } = runtime
   const currency = culture.customCurrencySymbol
@@ -157,7 +159,7 @@ export const JsonSchema = ({
         className={styles.wishlistAddItem}
         onClick={() => addProductsToCart(rowData, wishlist || {})}
       >
-        Add
+        {intl.formatMessage({ id: 'store/table-column-add' })}
       </button>
     )
   }
@@ -216,26 +218,26 @@ export const JsonSchema = ({
   const jsonschema: IJsonSchema = {
     properties: {
       image: {
-        title: 'Image',
+        title: intl.formatMessage({ id: 'store/table-column-image' }),
         // width: undefined,
         active: true,
         cellRenderer: imageCellRenderer,
       },
       skuName: {
-        title: 'Name',
+        title: intl.formatMessage({ id: 'store/table-column-name' }),
         // width: undefined,
         active: true,
         cellRenderer: skuNameCellRenderer,
       },
       department: {
         sortable: true,
-        title: 'Department',
+        title: intl.formatMessage({ id: 'store/table-column-department' }),
         // width: undefined,
         active: true,
         cellRenderer: departmentCellRenderer,
       },
       skuReferenceCode: {
-        title: 'Part #',
+        title: intl.formatMessage({ id: 'store/table-column-part-number' }),
         // width: undefined,
         active: true,
         cellRenderer: skuReferenceCodeCellRenderer,
@@ -248,32 +250,32 @@ export const JsonSchema = ({
       //   cellRenderer: nameCellRenderer,
       // },
       quantity: {
-        title: 'Qty',
+        title: intl.formatMessage({ id: 'store/table-column-quantity' }),
         // width: undefined,
         cellRenderer: qtyCellRenderer,
       },
       unitValue: {
-        title: 'Unit Value',
+        title: intl.formatMessage({ id: 'store/table-column-unit-value' }),
         // width: undefined,
         cellRenderer: unitValueCellRenderer,
       },
       totalValue: {
-        title: 'Price',
+        title: intl.formatMessage({ id: 'store/table-column-price' }),
         // width: undefined,
         cellRenderer: priceCellRenderer,
       },
       notes: {
-        title: 'Notes',
+        title: intl.formatMessage({ id: 'store/table-column-notes' }),
         // width: undefined,
         cellRenderer: notesCellRenderer,
       },
       add: {
-        title: 'Add',
+        title: intl.formatMessage({ id: 'store/table-column-add' }),
         // width: undefined,
         cellRenderer: addToCartCellRenderer,
       },
       remove: {
-        title: 'Remove',
+        title: intl.formatMessage({ id: 'store/table-column-remove' }),
         // width: undefined,
         cellRenderer: removeCellRenderer,
       },

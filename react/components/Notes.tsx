@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useContext } from 'react'
 import { Modal, ToastContext } from 'vtex.styleguide'
+import { useIntl } from 'react-intl'
 
 import { NoteIcon } from './Icons'
 import styles from './notes.css'
@@ -17,6 +18,7 @@ const Notes = ({
   itemId,
   quantity,
 }) => {
+  const intl = useIntl()
   const [show, setShow] = useState(false)
   const [notes, setNotes] = useState('')
 
@@ -56,10 +58,10 @@ const Notes = ({
         },
       })
 
-      showToast('Notes saved successfully!')
+      showToast(intl.formatMessage({ id: 'store/notes-saved-successfully' }))
       setShow(false)
     } catch (error) {
-      showToast('Error saving notes!')
+      showToast(intl.formatMessage({ id: 'store/error-saving-notes' }))
       console.error('Notes submit error: ', error)
     }
   }
@@ -79,7 +81,7 @@ const Notes = ({
       <Modal
         isOpen={show}
         onClose={() => setShow(false)}
-        title="Add a Note"
+        title={intl.formatMessage({ id: 'store/add-note' })}
         className="w-100 hhh"
       >
         <div className={`${styles.notesModalContainer}`}>
@@ -101,10 +103,10 @@ const Notes = ({
                 <div
                   className={`${styles.productSummaryInfoDetailsPartNumber}`}
                 >
-                  <span>Part #: {partNumber}</span>
+                  <span>{intl.formatMessage({ id: 'store/part-number' })}: {partNumber}</span>
                 </div>
                 <div className={`${styles.productSummaryInfoDetailsPrice}`}>
-                  <span>Price: {formattedValue}</span>
+                  <span>{intl.formatMessage({ id: 'store/price' })}: {formattedValue}</span>
                 </div>
               </div>
             </div>
@@ -113,7 +115,7 @@ const Notes = ({
             <span
               className={`${styles.notesModalTitle} f3 db lh-copy measure flex items-center`}
             >
-              Note
+              {intl.formatMessage({ id: 'store/note' })}
             </span>
           </div>
           <textarea
@@ -130,7 +132,7 @@ const Notes = ({
                 className={`${styles.notesCancelButton}`}
                 onClick={() => setShow(false)}
               >
-                Cancel
+                {intl.formatMessage({ id: 'store/cancel' })}
               </button>
             </div>
             <div className={`${styles.notesSubmitButtonContainer}`}>
@@ -138,7 +140,7 @@ const Notes = ({
                 className={`${styles.notesSubmitButton}`}
                 onClick={() => handleNotesSubmit()}
               >
-                Save
+                {intl.formatMessage({ id: 'store/save' })}
               </button>
             </div>
           </div>

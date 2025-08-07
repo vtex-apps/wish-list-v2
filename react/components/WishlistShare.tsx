@@ -2,6 +2,7 @@ import React from 'react'
 import { useQuery } from 'react-apollo'
 import { useRuntime } from 'vtex.render-runtime'
 import { Spinner } from 'vtex.styleguide'
+import { useIntl } from 'react-intl'
 
 import GET_WISHLIST_BY_ID from '../graphql/queries/getWishlistById.gql'
 import { WishlistMD } from '../interfaces'
@@ -11,6 +12,7 @@ import TableShare from './TableShare'
 
 export default function WishlistShare() {
   const { query } = useRuntime()
+  const intl = useIntl()
   const { id } = query
 
   const { data, loading } = useQuery(GET_WISHLIST_BY_ID, {
@@ -54,7 +56,7 @@ export default function WishlistShare() {
   return (
     <div className={`${styles.wishlistShare}`}>
       <h2 className="flex justify-center mt6">
-        {`${wishlistMD.email}'s ${defaultTitleText ?? 'Favorites List'}`}
+        {`${wishlistMD.email}'s ${defaultTitleText ?? intl.formatMessage({ id: 'store/favorites-list' })}`}
       </h2>
       {wishlistMD.products && (
         <TableShare

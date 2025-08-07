@@ -1,6 +1,7 @@
 import React from 'react'
 import { useCssHandles } from 'vtex.css-handles'
 import { Button, ToastConsumer, ToastProvider } from 'vtex.styleguide'
+import { useIntl } from 'react-intl'
 
 import useGetWishlist from '../../hooks/useGetWishlists'
 import useSelectWishlist from '../../hooks/useSelectWishlist'
@@ -12,6 +13,7 @@ const CSS_HANDLES = ['container', 'containerLoggedIn'] as const
 
 const ButtonWishlist = () => {
   const { handles } = useCssHandles(CSS_HANDLES)
+  const intl = useIntl()
   const pathname = encodeURIComponent(window.location.pathname)
   const loginUrl = `/login?returnUrl=${pathname}`
 
@@ -68,9 +70,9 @@ const ButtonWishlist = () => {
                     onClick={() =>
                       showToast({
                         message:
-                          'You need to log in before adding it to the list',
+                          intl.formatMessage({ id: 'store/you-need-to-login' }),
                         action: {
-                          label: 'LOG IN',
+                          label: intl.formatMessage({ id: 'store/log-in' }),
                           onClick: () =>
                             navigate({
                               to: loginUrl,
@@ -79,7 +81,7 @@ const ButtonWishlist = () => {
                       })
                     }
                   >
-                    Add to Favorites List
+                    {intl.formatMessage({ id: 'store/add-to-favorites-list' })}
                   </Button>
                 </div>
               </div>
@@ -93,7 +95,7 @@ const ButtonWishlist = () => {
             variation="secondary"
             onClick={handleFavoritesList}
           >
-            Add to Favorites List
+            {intl.formatMessage({ id: 'store/add-to-favorites-list' })}
           </Button>
           <div className={`${handles.containerLoggedIn} relative`}>
             <ModalWishList blockClass="vtex-select-or-create-wishlist">

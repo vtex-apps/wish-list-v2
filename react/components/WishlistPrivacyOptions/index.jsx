@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useIntl } from 'react-intl'
 
 import copyToClipboard from '../../utils/copyToClipboard'
 import styles from '../../styles.css'
@@ -8,6 +9,7 @@ export default function WishlistPrivacyOptions({
   wishlists,
   buttonLabel,
 }) {
+  const intl = useIntl()
   const [textCopied, setTextCopied] = useState(false)
 
   const linkToCopy =
@@ -27,7 +29,7 @@ export default function WishlistPrivacyOptions({
         {buttonLabel}
       </button>
       {textCopied && (
-        <p className={styles.popupCopy}>Link copied to clipboard!</p>
+        <p className={styles.popupCopy}>{intl.formatMessage({ id: 'store/link-copied-to-clipboard' })}</p>
       )}
     </div>
   )

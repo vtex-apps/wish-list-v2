@@ -1,3 +1,5 @@
+import { useIntl } from 'react-intl'
+
 const tableRowsSchema = {
   items: [
     {
@@ -14,9 +16,16 @@ const tableRowsSchema = {
 
 const tableLength = 5
 
-export const initialJsonState = {
-  slicedData: tableRowsSchema.items.slice(0, tableLength),
-  searchValue: '',
-  emptyStateLabel: 'Nothing to show.',
-  filterStatements: ['Ascending', 'Descending'],
+export const initialJsonState = () => {
+  const intl = useIntl()
+  
+  return {
+    slicedData: tableRowsSchema.items.slice(0, tableLength),
+    searchValue: '',
+    emptyStateLabel: intl.formatMessage({ id: 'store/nothing-to-show' }),
+    filterStatements: [
+      intl.formatMessage({ id: 'store/ascending' }),
+      intl.formatMessage({ id: 'store/descending' })
+    ],
+  }
 }

@@ -1,5 +1,6 @@
 import React from 'react'
 import { Spinner } from 'vtex.styleguide'
+import { useIntl } from 'react-intl'
 
 import useQueryProductByIdentifier from '../hooks/actions/useQueryProductByIdentifier'
 import styles from './unitPrice.css'
@@ -10,6 +11,7 @@ interface Props {
 }
 
 const ProductDescription = ({ itemId, productUrl }: Props) => {
+  const intl = useIntl()
   const {
     getProperty,
     error: productError,
@@ -22,7 +24,7 @@ const ProductDescription = ({ itemId, productUrl }: Props) => {
 
   return productError ? (
     <Wrapper>
-      <span>Error</span>
+      <span>{intl.formatMessage({ id: 'store/error' })}</span>
     </Wrapper>
   ) : loading ? (
     <Wrapper>

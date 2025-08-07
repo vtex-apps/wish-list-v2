@@ -1,6 +1,7 @@
 import { useEffect, useState, useContext } from 'react'
 import useProduct from 'vtex.product-context/useProduct'
 import { ToastContext } from 'vtex.styleguide'
+import { useIntl } from 'react-intl'
 
 import useBundleMinQuantity from './useBundleMinQuantity'
 import useQueryWishlists from './actions/useQueryWishlists'
@@ -21,6 +22,7 @@ const useGetWishlist = () => {
 
   const { product, selectedQuantity, selectedItem } = useProduct()
   const { showToast } = useContext<any>(ToastContext)
+  const intl = useIntl()
   const bundle = useBundleMinQuantity(product)
 
   const { data, refetch } = useQueryWishlists()
@@ -98,7 +100,7 @@ const useGetWishlist = () => {
       })
 
       setisLoading(false)
-      showToast('You created a new Favourite List and your product was added')
+      showToast(intl.formatMessage({ id: 'store/you-created-new-favourite-list-and-product-added' }))
     } catch (error) {
       setisLoading(false)
       showToast(error)
@@ -120,7 +122,7 @@ const useGetWishlist = () => {
     e.preventDefault()
 
     if (nameListWishlist.trim() === '') {
-      setErrorName('The field cannot be empty')
+      setErrorName(intl.formatMessage({ id: 'store/field-cannot-be-empty' }))
     } else {
       postCreateList()
 
@@ -140,7 +142,7 @@ const useGetWishlist = () => {
     e.preventDefault()
 
     if (nameListWishlist.trim() === '') {
-      setErrorName('The field cannot be empty')
+      setErrorName(intl.formatMessage({ id: 'store/field-cannot-be-empty' }))
     } else {
       postCreateList()
 

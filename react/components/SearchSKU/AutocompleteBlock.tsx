@@ -26,6 +26,7 @@ const AutocompleteBlock: FunctionComponent<any & WrappedComponentProps> = ({
   description,
   componentOnly,
   onAddToWishlist,
+  intl,
 }) => {
   const client = useApolloClient()
   const [state, setState] = useState<{
@@ -191,7 +192,7 @@ const AutocompleteBlock: FunctionComponent<any & WrappedComponentProps> = ({
                           size="small"
                           onClick={onAddToFavoritesList}
                         >
-                          Add to Favourite List
+                          {intl.formatMessage({ id: 'store/add-to-favourite-list' })}
                         </Button>
                       </div>
                     </div>

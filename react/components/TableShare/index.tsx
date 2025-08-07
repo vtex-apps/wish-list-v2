@@ -2,6 +2,7 @@ import PropTypes from 'prop-types'
 import React, { useContext, useState } from 'react'
 import { useCssHandles } from 'vtex.css-handles'
 import { useRuntime } from 'vtex.render-runtime'
+import { useIntl } from 'react-intl'
 import {
   Button,
   Table,
@@ -44,6 +45,7 @@ interface WrapperTableWishListProps {
 
 const WrapperTableWishList: React.FC<WrapperTableWishListProps> = React.memo(
   ({ schema, items }) => {
+    const intl = useIntl()
     return (
       <Table
         fullWidth
@@ -52,7 +54,7 @@ const WrapperTableWishList: React.FC<WrapperTableWishListProps> = React.memo(
         schema={schema}
         density="medium"
         items={items}
-        emptyStateLabel="Nothing to show"
+        emptyStateLabel={intl.formatMessage({ id: 'store/nothing-to-show' })}
       />
     )
   },
@@ -88,8 +90,9 @@ export default function TableWishList({
   queryId: string
   columns: ITableWishListColumns
 }) {
-  const { showToast } = useContext(ToastContext)
+  const { showToast } = useContext<any>(ToastContext)
   const { handles } = useCssHandles(CSS_HANDLES)
+  const intl = useIntl()
   const [localProducts, setLocalProducts] = useState([
     ...wishlistMD?.products.map((product: any) => ({
       ...product,
@@ -209,7 +212,7 @@ export default function TableWishList({
           )
         }
       >
-        Add
+        {intl.formatMessage({ id: 'store/table-column-add' })}
       </button>
     </div>
   )

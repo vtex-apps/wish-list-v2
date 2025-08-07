@@ -2,6 +2,7 @@ import { useContext } from 'react'
 import { ToastContext } from 'vtex.styleguide'
 import { useOrderItems } from 'vtex.order-items/OrderItems'
 import { useOrderForm } from 'vtex.order-manager/OrderForm'
+import { useIntl } from 'react-intl'
 
 import { extractProductData } from '../components/helpers'
 import handleDataLayerEvent from '../utils/handleDataLayerEvent'
@@ -11,6 +12,7 @@ const useAddToCart = () => {
   const { addItems } = useOrderItems()
   const { showToast } = useContext<any>(ToastContext)
   const { orderForm } = useOrderForm()
+  const intl = useIntl()
 
   // hook used to add several products from the wishlist table to the cart
   const addProductsToCart = (
@@ -55,7 +57,7 @@ const useAddToCart = () => {
     addItems(items)
       .then(() => {
         handleDataLayerEvent('addToCart', [productInfo])
-        showToast('Item added to the cart')
+        showToast(intl.formatMessage({ id: 'store/item-added-to-cart' }))
       })
       .catch((error) => {
         console.error(error)

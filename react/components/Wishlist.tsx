@@ -2,6 +2,7 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { useRuntime } from 'vtex.render-runtime'
 import { Table, ToastContext } from 'vtex.styleguide'
+import { useIntl } from 'react-intl'
 // Components
 import { useQuery } from 'react-apollo'
 
@@ -60,7 +61,6 @@ const TablePaginationWrapper = React.memo<TablePaginationWrapperProps>(
       <Table
         fullWidth
         density="medium"
-        updateTableKey={`vtex-table=${Math.floor(Math.random() * 1000)}`}
         schema={tableSchema}
         items={items}
         toolbar={toolbar}
@@ -83,6 +83,7 @@ function Wishlist({ wishlists, fetchData }) {
   const { selectedWishlist, setSelectedWishlist } = useStoreGlobal()
   const { showToast } = useContext<any>(ToastContext)
   const [filterState, setfilterState] = useState<any>([])
+  const intl = useIntl()
 
   const { data: wishlistColumns } = useQuery(AppSettings, {
     variables: {
@@ -266,7 +267,7 @@ function Wishlist({ wishlists, fetchData }) {
 
     editViewText = document.createElement('span')
     editViewText.classList.add('edit-view-text')
-    editViewText.textContent = 'Edit View'
+    editViewText.textContent = intl.formatMessage({ id: 'store/edit-view' })
 
     if (window.innerWidth <= 768) {
       button.style.minHeight = '28.09px !important'
@@ -407,7 +408,7 @@ function Wishlist({ wishlists, fetchData }) {
           },
         },
       })
-      showToast('Successfully added to the Favorites List')
+      showToast(intl.formatMessage({ id: 'store/successfully-added-to-favorites-list' }))
 
       return true
     } catch (error) {
@@ -421,10 +422,10 @@ function Wishlist({ wishlists, fetchData }) {
 
   const tableFilterOptions = {
     department: {
-      label: 'Department',
+      label: intl.formatMessage({ id: 'store/department' }),
       renderFilterLabel: () => {
         if (!filterState.department || !filterState.department.object) {
-          return 'All'
+          return intl.formatMessage({ id: 'store/all' })
         }
 
         const keys = filterState.department.object
@@ -449,24 +450,24 @@ function Wishlist({ wishlists, fetchData }) {
           trueKeysLabel += `${key}${index === trueKeys.length - 1 ? '' : ', '}`
         })
 
-        return `${isAllTrue ? 'All' : isAllFalse ? 'None' : `${trueKeysLabel}`}`
-      },
-      verbs: [
-        {
-          label: 'Sort',
-          value: 'Sort',
-          object: (e: React.ChangeEvent<HTMLSelectElement>) => {
-            return SelectorObject(e, filterState?.department?.object)
+        return `${isAllTrue ? intl.formatMessage({ id: 'store/all' }) : isAllFalse ? intl.formatMessage({ id: 'store/none' }) : `${trueKeysLabel}`}`
+              },
+        verbs: [
+          {
+            label: intl.formatMessage({ id: 'store/sort' }),
+            value: 'Sort',
+            object: (e: React.ChangeEvent<HTMLSelectElement>) => {
+              return SelectorObject(e, filterState?.department?.object)
+            },
           },
-        },
-      ],
-    },
-    name: {
-      label: 'Description',
-      renderFilterLabel: () => {
-        if (!filterState.name || !filterState.name.object) {
-          return 'All'
-        }
+        ],
+      },
+      name: {
+        label: intl.formatMessage({ id: 'store/description' }),
+              renderFilterLabel: () => {
+          if (!filterState.name || !filterState.name.object) {
+            return intl.formatMessage({ id: 'store/all' })
+          }
 
         const keys = filterState.name.object
           ? Object.keys(filterState.name.object)
@@ -484,11 +485,11 @@ function Wishlist({ wishlists, fetchData }) {
           trueKeysLabel += `${key}${index === trueKeys.length - 1 ? '' : ', '}`
         })
 
-        return `${isAllTrue ? 'All' : isAllFalse ? 'None' : `${trueKeysLabel}`}`
+        return `${isAllTrue ? intl.formatMessage({ id: 'store/all' }) : isAllFalse ? intl.formatMessage({ id: 'store/none' }) : `${trueKeysLabel}`}`
       },
       verbs: [
         {
-          label: 'Sort',
+          label: intl.formatMessage({ id: 'store/sort' }),
           value: 'Sort',
           object: (e: React.ChangeEvent<HTMLSelectElement>) =>
             SelectorObject(e, filterState?.name?.object),
@@ -498,16 +499,16 @@ function Wishlist({ wishlists, fetchData }) {
   }
 
   const bulkActionsrowsSelected = (qty: number) => (
-    <React.Fragment>Selected rows: {qty}</React.Fragment>
+    <React.Fragment>{intl.formatMessage({ id: 'store/selected-rows' })}: {qty}</React.Fragment>
   )
 
   const bulkActionsAllRowsSelected = (qty: number) => (
-    <React.Fragment>All rows selected {qty}</React.Fragment>
+    <React.Fragment>{intl.formatMessage({ id: 'store/all-rows-selected' })} {qty}</React.Fragment>
   )
 
   const toolbar = {
     inputSearch: {
-      label: 'Search This List',
+      label: intl.formatMessage({ id: 'store/search-this-list' }),
       value: searchValue,
       onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
         handleInputSearchChange({
@@ -526,18 +527,18 @@ function Wishlist({ wishlists, fetchData }) {
         }),
     },
     fields: {
-      label: 'Toggle visible fields',
-      showAllLabel: 'Show All',
-      hideAllLabel: 'Hide All',
+      label: intl.formatMessage({ id: 'store/toggle-visible-fields' }),
+      showAllLabel: intl.formatMessage({ id: 'store/show-all' }),
+      hideAllLabel: intl.formatMessage({ id: 'store/hide-all' }),
     },
   }
 
   const bulkActions = {
     selectedRows: updatedSelectedRows,
     texts: {
-      secondaryActionsLabel: 'Actions',
+      secondaryActionsLabel: intl.formatMessage({ id: 'store/actions' }),
       rowsSelected: bulkActionsrowsSelected,
-      selectAll: 'Select all',
+      selectAll: intl.formatMessage({ id: 'store/select-all' }),
       allRowsSelected: bulkActionsAllRowsSelected,
     },
     totalItems: '',
@@ -546,13 +547,13 @@ function Wishlist({ wishlists, fetchData }) {
     },
     others: [
       {
-        label: 'Add to cart',
+        label: intl.formatMessage({ id: 'store/add-to-cart' }),
         handleCallback: (params) => {
           handleBulkAction(params.selectedRows, 'addToCart')
         },
       },
       {
-        label: 'Remove item(s)',
+        label: intl.formatMessage({ id: 'store/remove-items' }),
         isDangerous: true,
         handleCallback: (params) =>
           handleBulkAction(params.selectedRows, 'deleteRowsWishlist'),
@@ -572,8 +573,8 @@ function Wishlist({ wishlists, fetchData }) {
     currentItemFrom: (currentPage - 1) * itemsPerPage + 1,
     currentItemTo: Math.min(currentPage * itemsPerPage, totalItems),
     onRowsChange: handleRowsChange,
-    textShowRows: 'Show rows',
-    textOf: 'of',
+    textShowRows: intl.formatMessage({ id: 'store/show-rows' }),
+    textOf: intl.formatMessage({ id: 'store/of' }),
     totalItems,
     rowsOptions: [30, 40, 50, 60],
   }
@@ -594,7 +595,7 @@ function Wishlist({ wishlists, fetchData }) {
         filterState,
       })
     },
-    clearAllFiltersButtonLabel: 'Clear Filters',
+    clearAllFiltersButtonLabel: intl.formatMessage({ id: 'store/clear-filters' }),
     collapseLeft: true,
     options: tableFilterOptions,
   }
@@ -648,8 +649,8 @@ function Wishlist({ wishlists, fetchData }) {
       )}
 
       <AutocompleteBlock
-        text="Add SKU"
-        description="Search and add to your list"
+        text={intl.formatMessage({ id: 'store/add-sku' })}
+        description={intl.formatMessage({ id: 'store/search-and-add-to-list' })}
         componentOnly={false}
         onAddToWishlist={onAddToWishlist}
       />

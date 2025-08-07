@@ -1,5 +1,6 @@
 import React from 'react'
 import { useCssHandles } from 'vtex.css-handles'
+import { useIntl } from 'react-intl'
 
 import { SelectWishList } from '../../interfaces'
 
@@ -25,6 +26,7 @@ const CSS_HANDLES = [
 
 const SelectWishlist = (props: SelectWishList) => {
   const { handles } = useCssHandles(CSS_HANDLES)
+  const intl = useIntl()
 
   return (
     <>
@@ -53,7 +55,7 @@ const SelectWishlist = (props: SelectWishList) => {
                     size={props.selectSize}
                   >
                     <option value="" disabled selected>
-                      Select List
+                      {intl.formatMessage({ id: 'store/select-list' })}
                     </option>
                     {props.listTypeWishlist?.map(
                       (newDates: { id: string; wishlistType: string }) => (
@@ -75,7 +77,7 @@ const SelectWishlist = (props: SelectWishList) => {
                         className={`${handles.containerButtonCreate}`}
                         onClick={props.handleAddList}
                       >
-                        {props.isLoading ? 'loading..' : 'Create new list'}
+                        {props.isLoading ? intl.formatMessage({ id: 'store/loading' }) : intl.formatMessage({ id: 'store/create-new-list' })}
                       </button>
                     </>
                   ) : (
@@ -84,7 +86,7 @@ const SelectWishlist = (props: SelectWishList) => {
                         className={`${handles.containerButtonAddList}`}
                         onClick={props.handleAddToList}
                       >
-                        Add to list
+                        {intl.formatMessage({ id: 'store/add-to-list' })}
                       </button>
 
                       {props.errorSelect && (
@@ -97,7 +99,7 @@ const SelectWishlist = (props: SelectWishList) => {
                         className={`${handles.containerButtonCreate}`}
                         onClick={props.handleAddList}
                       >
-                        {props.isLoading ? 'loading..' : 'Create new list'}
+                        {props.isLoading ? intl.formatMessage({ id: 'store/loading' }) : intl.formatMessage({ id: 'store/create-new-list' })}
                       </button>
                     </>
                   )}
@@ -107,11 +109,11 @@ const SelectWishlist = (props: SelectWishList) => {
               {props.isShowForm2 && (
                 <div className={`${handles.containerShowForm}`}>
                   <p className={`${handles.containerTitleCreateList}`}>
-                    Create a name for the list
+                    {intl.formatMessage({ id: 'store/create-list-name' })}
                   </p>
                   <input
                     type="text"
-                    placeholder="List name"
+                    placeholder={intl.formatMessage({ id: 'store/list-name' })}
                     name="nameList"
                     value={props.nameListWishlist}
                     onChange={props.handleChange}
@@ -127,7 +129,7 @@ const SelectWishlist = (props: SelectWishList) => {
                     onClick={props.handleSendData1}
                     className={`${handles.containerButtonCreateList}`}
                   >
-                    {props.isLoading ? 'loading..' : 'Create list'}
+                    {props.isLoading ? intl.formatMessage({ id: 'store/loading' }) : intl.formatMessage({ id: 'store/create-list' })}
                   </button>
                 </div>
               )}
@@ -140,18 +142,18 @@ const SelectWishlist = (props: SelectWishList) => {
                   className={`${handles.containerButtonCreate}`}
                   onClick={props.handleCreateLengthZero}
                 >
-                  Create new list
+                  {intl.formatMessage({ id: 'store/create-new-list' })}
                 </button>
               )}
               {props.isShowForm && (
                 <div className={`${handles.containerSelectFlex}`}>
                   <p className={`${handles.containerTitleCreateList}`}>
-                    Create a name for the list
+                    {intl.formatMessage({ id: 'store/create-list-name' })}
                   </p>
                   <input
                     className={`${handles.containerInput}`}
                     type="text"
-                    placeholder="List name"
+                    placeholder={intl.formatMessage({ id: 'store/list-name' })}
                     name="nameList"
                     value={props.nameListWishlist}
                     onChange={props.handleChange}
@@ -165,14 +167,13 @@ const SelectWishlist = (props: SelectWishList) => {
                     className={`${handles.containerButtonCreateList2}`}
                     onClick={props.handleSendData2}
                   >
-                    Create List
+                    {intl.formatMessage({ id: 'store/create-list' })}
                   </button>
                 </div>
               )}
               {props.isMessage && (
                 <div className={`${handles.containerMessageAddCreate}`}>
-                  You created a new Favourite List and your product was added
-                  successfully.
+                  {intl.formatMessage({ id: 'store/you-created-new-favourite-list' })}
                 </div>
               )}
             </div>
