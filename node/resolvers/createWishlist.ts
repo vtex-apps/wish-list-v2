@@ -1,11 +1,6 @@
 import type { WishlistInput } from '../typings/wishlist'
 import { auth } from '../middleware/auth'
-
-function hasSpecialCharacters(str: string) {
-  const specialCharactersRegex = /[!@$%^*(),.?":{}|<>]/g
-
-  return specialCharactersRegex.test(str)
-}
+import hasSpecialCharacters from '../utils/hasSpecialCharacters'
 
 export const createWishlist = async (
   _: unknown,
@@ -33,7 +28,7 @@ export const createWishlist = async (
   const existWishlistName = foundWishlist && foundWishlist.length > 0
 
   if (existWishlistName) {
-    throw new Error(`Already exist wishlist with name ${wishlistType}`)
+    throw new Error(`A wishlist with the name "${wishlistType}" already exists.`)
   }
 
   const wishlist = {

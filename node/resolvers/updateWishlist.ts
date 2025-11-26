@@ -1,6 +1,7 @@
 import { AuthenticationError } from '@vtex/api'
 
 import { auth } from '../middleware/auth'
+import hasSpecialCharacters from '../utils/hasSpecialCharacters'
 import type { Products, WishlistUpdateArs } from '../typings/wishlist'
 
 export const updateWishlist = async (
@@ -38,17 +39,35 @@ export const updateWishlist = async (
   })
 
   if (!existWishlist) {
-    throw new Error('An wishlist with this id does not exist')
+    throw new Error('A wishlist with this id does not exist')
   }
 
   if (emailUser !== email) {
     throw new AuthenticationError('Unauthorized access')
   }
 
+  const newWishlistType = wishlist?.wishlistType || wishlistType
+
+  if (hasSpecialCharacters(newWishlistType)) {
+    throw new Error(
+      `An error occurred. No special characters are allowed in the name.`
+    )
+  }
+
+  const foundWishlist = await md.searchForExistingWishList(
+    `wishlistType = "${encodeURIComponent(newWishlistType)}" AND email = ${email}`
+  )
+
+  const existWishlistName = foundWishlist && foundWishlist.length > 0
+
+  if (existWishlistName) {
+    throw new Error(`A wishlist with the name "${newWishlistType}" already exists.`)
+  }
+
   const updatedWishlist = {
     id,
     email: wishlist?.email || emailUser,
-    wishlistType: wishlist?.wishlistType || wishlistType,
+    wishlistType: newWishlistType,
     isPublic: wishlist?.isPublic || isPublic,
     products: data as Products[],
   }

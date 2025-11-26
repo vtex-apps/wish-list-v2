@@ -163,9 +163,15 @@ const WishlistMobile = ({
 
       <div className={`${styles.nameAndOptionsMobile}`}>
         <EditableWishlistTitle
-          initialTitle={selectedWishlist !== null ? wishlist.wishlistType : ''}
+          initialTitle={
+            selectedWishlist !== null
+              ? wishlist?.wishlistType ||
+                wishlists.find((w) => w.id === selectedWishlist)?.wishlistType ||
+                ''
+              : ''
+          }
           wishlistId={
-            selectedWishlist !== null ? selectedWishlist : wishlists[0].id
+            selectedWishlist !== null ? selectedWishlist : wishlists[0]?.id
           }
           wishlist={selectedWishlist !== null ? wishlist : wishlists[0]}
           fetchData={fetchData}
