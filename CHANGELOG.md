@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `getWishlist` no longer exposes the owner's email to anyone other than the owner (shared links still work).
 - Master Data schema no longer exposes wishlist fields publicly nor allows unfiltered listing; the previous `0.0.4-mywishlists` schema is overwritten with the hardened version.
 
+### Changed
+
+- Validate the shopper token with VTEX ID `credential/validate` instead of the legacy `pub/authenticated/user` route, and reject tokens issued for another account.
+
 ## [2.3.12] - 2024-12-05
 
 ### Fixed

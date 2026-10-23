@@ -63,13 +63,29 @@ export const auth = async (ctx: Context) => {
     throw new AuthenticationError('Unauthorized access')
   }
 
-  const user = await vtexId.getAuthenticatedUser(cookie)
+  const credential = await vtexId
+    .validateCredential(cookie)
+    .catch((error) => {
+      if (error?.response?.status !== 401) {
+        ctx.vtex.logger.warn({
+          message: 'auth-validate-credential-failed',
+          error,
+        })
+      }
 
-  if (!user?.userId || !user.user) {
+      return null
+    })
+
+  if (
+    credential?.authStatus !== 'Success' ||
+    !credential.id ||
+    !credential.user ||
+    credential.account !== ctx.vtex.account
+  ) {
     throw new AuthenticationError('Unauthorized access')
   }
 
-  const impersonatedEmail = await getImpersonatedEmail(ctx, user.user)
+  const impersonatedEmail = await getImpersonatedEmail(ctx, credential.user)
 
-  return { email: impersonatedEmail ?? user.user }
+  return { email: impersonatedEmail ?? credential.user }
 }
