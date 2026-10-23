@@ -64,13 +64,12 @@ export const configuration = async (ctx: Context) => {
       settings.adminSetup.hasSchema = true
       settings.adminSetup.schemaVersion = SCHEMA_NAME
       settings.adminSetup.schemaRevision = SCHEMA_REVISION
-    } catch (e) {
-      if (e.response.status >= 400) {
-        settings.adminSetup.hasSchema = false
-      } else {
-        settings.adminSetup.hasSchema = true
-        settings.adminSetup.schemaVersion = SCHEMA_NAME
-      }
+    } catch (error) {
+      ctx.vtex.logger.warn({
+        message: 'configuration-save-schema-failed',
+        error,
+      })
+      settings.adminSetup.hasSchema = false
     }
   }
 
