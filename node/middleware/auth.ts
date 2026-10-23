@@ -37,7 +37,7 @@ const fetchImpersonationSession = async (
   const token = sessionToken ?? cookies.get('vtex_session')
 
   if (!token) {
-    return { error: new Error('Missing session token') }
+    return { namespaces: null }
   }
 
   try {
@@ -101,7 +101,7 @@ export const auth = async (ctx: Context) => {
     throw new AuthenticationError('Unauthorized access')
   }
 
-  /* Failing here avoids silently acting on the operator's own wishlists during impersonation. */
+  /* Failing here avoids silently acting on the operator's own wishlists when the session is unavailable. */
   if ('error' in sessionResult) {
     ctx.vtex.logger.warn({
       message: 'auth-get-session-failed',
