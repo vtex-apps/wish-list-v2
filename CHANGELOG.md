@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Security
+
+- Stop trusting the `vtex-impersonated-customer-email` cookie: the user is always resolved from the auth token, and impersonation is only honored when granted by the session.
+
 ## [2.3.12] - 2024-12-05
 
 ### Fixed
