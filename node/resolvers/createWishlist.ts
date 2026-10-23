@@ -27,7 +27,7 @@ export const createWishlist = async (
   }
 
   const foundWishlist = await md.searchForExistingWishList(
-    `wishlistType = "${encodeURIComponent(wishlistType)}" AND email = ${email}`
+    `wishlistType = "${encodeURIComponent(wishlistType)}" AND email = "${encodeURIComponent(email)}"`
   )
 
   const existWishlistName = foundWishlist && foundWishlist.length > 0

@@ -1,6 +1,11 @@
 import { Apps } from '@vtex/api'
 
-import { DATA_ENTITY_NAME, SCHEMA, SCHEMA_NAME } from '../utils/constant'
+import {
+  DATA_ENTITY_NAME,
+  SCHEMA,
+  SCHEMA_NAME,
+  SCHEMA_REVISION,
+} from '../utils/constant'
 
 const getAppId = (): string => {
   return process.env.VTEX_APP_ID ?? ''
@@ -46,7 +51,8 @@ export const configuration = async (ctx: Context) => {
 
   if (
     !settings.adminSetup.hasSchema ||
-    settings.adminSetup.schemaVersion !== SCHEMA_NAME
+    settings.adminSetup.schemaVersion !== SCHEMA_NAME ||
+    settings.adminSetup.schemaRevision !== SCHEMA_REVISION
   ) {
     try {
       const url = routes.saveSchema(account, SCHEMA_NAME, DATA_ENTITY_NAME)
@@ -57,13 +63,13 @@ export const configuration = async (ctx: Context) => {
 
       settings.adminSetup.hasSchema = true
       settings.adminSetup.schemaVersion = SCHEMA_NAME
-    } catch (e) {
-      if (e.response.status >= 400) {
-        settings.adminSetup.hasSchema = false
-      } else {
-        settings.adminSetup.hasSchema = true
-        settings.adminSetup.schemaVersion = SCHEMA_NAME
-      }
+      settings.adminSetup.schemaRevision = SCHEMA_REVISION
+    } catch (error) {
+      ctx.vtex.logger.warn({
+        message: 'configuration-save-schema-failed',
+        error,
+      })
+      settings.adminSetup.hasSchema = false
     }
   }
 

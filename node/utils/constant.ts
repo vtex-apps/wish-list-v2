@@ -5,6 +5,9 @@ export const DATA_ENTITY_NAME = 'myWishlists'
 
 export const SCHEMA_NAME = '0.0.4-mywishlists'
 
+/* Bump to reapply SCHEMA on accounts that already have it, without renaming the schema and moving documents. */
+export const SCHEMA_REVISION = 1
+
 export const SCHEMA = {
   properties: {
     email: {
@@ -42,14 +45,9 @@ export const SCHEMA = {
   'v-cache': false,
   'v-immediate-indexing': true,
   'v-security': {
-    allowGetAll: true,
-    publicRead: [
-      'id',
-      'email',
-      'wishlistType',
-      'products',
-      'isPublic',
-      'fieldsConfig',
-    ],
+    allowGetAll: false,
+    publicRead: [],
+    publicWrite: [],
+    publicFilter: [],
   },
 }
