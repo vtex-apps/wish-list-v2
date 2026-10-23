@@ -3,10 +3,10 @@ export const FIELDS =
 
 export const DATA_ENTITY_NAME = 'myWishlists'
 
-export const SCHEMA_NAME = '0.0.5-mywishlists'
+export const SCHEMA_NAME = '0.0.4-mywishlists'
 
-/* Master Data keeps old schemas and lets callers pick them via `_schema`, so they must be hardened too. */
-export const LEGACY_SCHEMA_NAMES = ['0.0.4-mywishlists']
+/* Bump to reapply SCHEMA on accounts that already have it, without renaming the schema and moving documents. */
+export const SCHEMA_REVISION = 1
 
 export const SCHEMA = {
   properties: {
