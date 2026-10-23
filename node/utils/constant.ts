@@ -3,7 +3,10 @@ export const FIELDS =
 
 export const DATA_ENTITY_NAME = 'myWishlists'
 
-export const SCHEMA_NAME = '0.0.4-mywishlists'
+export const SCHEMA_NAME = '0.0.5-mywishlists'
+
+/* Master Data keeps old schemas and lets callers pick them via `_schema`, so they must be hardened too. */
+export const LEGACY_SCHEMA_NAMES = ['0.0.4-mywishlists']
 
 export const SCHEMA = {
   properties: {
@@ -42,14 +45,9 @@ export const SCHEMA = {
   'v-cache': false,
   'v-immediate-indexing': true,
   'v-security': {
-    allowGetAll: true,
-    publicRead: [
-      'id',
-      'email',
-      'wishlistType',
-      'products',
-      'isPublic',
-      'fieldsConfig',
-    ],
+    allowGetAll: false,
+    publicRead: [],
+    publicWrite: [],
+    publicFilter: [],
   },
 }

@@ -1,6 +1,11 @@
 import { Apps } from '@vtex/api'
 
-import { DATA_ENTITY_NAME, SCHEMA, SCHEMA_NAME } from '../utils/constant'
+import {
+  DATA_ENTITY_NAME,
+  LEGACY_SCHEMA_NAMES,
+  SCHEMA,
+  SCHEMA_NAME,
+} from '../utils/constant'
 
 const getAppId = (): string => {
   return process.env.VTEX_APP_ID ?? ''
@@ -49,11 +54,17 @@ export const configuration = async (ctx: Context) => {
     settings.adminSetup.schemaVersion !== SCHEMA_NAME
   ) {
     try {
-      const url = routes.saveSchema(account, SCHEMA_NAME, DATA_ENTITY_NAME)
-
       const headers = defaultHeaders(authToken)
 
-      await hub.put(url, SCHEMA, headers)
+      await Promise.all(
+        [SCHEMA_NAME, ...LEGACY_SCHEMA_NAMES].map((schemaName) =>
+          hub.put(
+            routes.saveSchema(account, schemaName, DATA_ENTITY_NAME),
+            SCHEMA,
+            headers
+          )
+        )
+      )
 
       settings.adminSetup.hasSchema = true
       settings.adminSetup.schemaVersion = SCHEMA_NAME
