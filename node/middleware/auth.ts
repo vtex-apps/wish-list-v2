@@ -1,5 +1,7 @@
 import { AuthenticationError } from '@vtex/api'
 
+const IMPERSONATION_HINT_COOKIE = 'vtex-impersonated-customer-email'
+
 const SESSION_ITEMS = [
   'authentication.storeUserEmail',
   'impersonate.storeUserEmail',
@@ -9,46 +11,59 @@ interface SessionValue {
   value?: string
 }
 
-interface SessionData {
-  namespaces?: {
-    authentication?: { storeUserEmail?: SessionValue }
-    impersonate?: { storeUserEmail?: SessionValue }
-  }
+interface SessionNamespaces {
+  authentication?: { storeUserEmail?: SessionValue }
+  impersonate?: { storeUserEmail?: SessionValue }
 }
 
-/* Only trusts impersonation granted by the session server to the same user that owns the auth token. */
-const getImpersonatedEmail = async (ctx: Context, operatorEmail: string) => {
+type SessionResult =
+  | { namespaces: SessionNamespaces | null }
+  | { error: unknown }
+
+/* The hint cookie is client-controlled: it only decides whether to ask the session, never which email to use. */
+const fetchImpersonationSession = async (
+  ctx: Context
+): Promise<SessionResult> => {
   const {
     cookies,
     vtex: { sessionToken },
     clients: { session },
   } = ctx
 
+  if (!cookies.get(IMPERSONATION_HINT_COOKIE)) {
+    return { namespaces: null }
+  }
+
   const token = sessionToken ?? cookies.get('vtex_session')
 
   if (!token) {
-    return null
+    return { error: new Error('Missing session token') }
   }
 
   try {
     const { sessionData } = await session.getSession(token, SESSION_ITEMS)
-    const { namespaces } = (sessionData ?? {}) as SessionData
-    const sessionOperator = namespaces?.authentication?.storeUserEmail?.value
-    const impersonated = namespaces?.impersonate?.storeUserEmail?.value
 
-    if (
-      !impersonated ||
-      sessionOperator?.toLowerCase() !== operatorEmail.toLowerCase()
-    ) {
-      return null
-    }
-
-    return impersonated
+    return { namespaces: sessionData?.namespaces ?? {} }
   } catch (error) {
-    ctx.vtex.logger.warn({ message: 'auth-get-session-failed', error })
+    return { error }
+  }
+}
 
+const getImpersonatedEmail = (
+  namespaces: SessionNamespaces | null,
+  operatorEmail: string
+) => {
+  const sessionOperator = namespaces?.authentication?.storeUserEmail?.value
+  const impersonated = namespaces?.impersonate?.storeUserEmail?.value
+
+  if (
+    !impersonated ||
+    sessionOperator?.toLowerCase() !== operatorEmail.toLowerCase()
+  ) {
     return null
   }
+
+  return impersonated
 }
 
 export const auth = async (ctx: Context) => {
@@ -63,9 +78,8 @@ export const auth = async (ctx: Context) => {
     throw new AuthenticationError('Unauthorized access')
   }
 
-  const credential = await vtexId
-    .validateCredential(cookie)
-    .catch((error) => {
+  const [credential, sessionResult] = await Promise.all([
+    vtexId.validateCredential(cookie).catch((error) => {
       if (error?.response?.status !== 401) {
         ctx.vtex.logger.warn({
           message: 'auth-validate-credential-failed',
@@ -74,7 +88,9 @@ export const auth = async (ctx: Context) => {
       }
 
       return null
-    })
+    }),
+    fetchImpersonationSession(ctx),
+  ])
 
   if (
     credential?.authStatus !== 'Success' ||
@@ -85,7 +101,20 @@ export const auth = async (ctx: Context) => {
     throw new AuthenticationError('Unauthorized access')
   }
 
-  const impersonatedEmail = await getImpersonatedEmail(ctx, credential.user)
+  /* Failing here avoids silently acting on the operator's own wishlists during impersonation. */
+  if ('error' in sessionResult) {
+    ctx.vtex.logger.warn({
+      message: 'auth-get-session-failed',
+      error: sessionResult.error,
+    })
+
+    throw new Error('Could not resolve impersonation session')
+  }
+
+  const impersonatedEmail = getImpersonatedEmail(
+    sessionResult.namespaces,
+    credential.user
+  )
 
   return { email: impersonatedEmail ?? credential.user }
 }
