@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Security
 
 - Stop trusting the `vtex-impersonated-customer-email` cookie: the user is always resolved from the auth token, and impersonation is only honored when granted by the session.
+- `getWishlist` no longer exposes the owner's email to anyone other than the owner (shared links still work).
 
 ## [2.3.12] - 2024-12-05
 
