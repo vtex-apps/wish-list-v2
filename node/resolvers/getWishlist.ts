@@ -22,11 +22,13 @@ export const getWishlist = async (
 
   const { id } = args
 
+  const requesterEmailPromise = getRequesterEmail(ctx)
+
   await configuration(ctx)
 
   const [wishlist, requesterEmail] = await Promise.all([
     md.getWishlist(id),
-    getRequesterEmail(ctx),
+    requesterEmailPromise,
   ])
 
   if (!wishlist) {
