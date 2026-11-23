@@ -131,7 +131,7 @@ Schema Name: `0.0.5-mywishlists`
 
 </details>
 
-The schema is private: shoppers never reach Master Data directly, and the app reads and writes wishlists with its own credentials. To reapply the schema on accounts that already have it, without renaming it, increase `SCHEMA_REVISION` in `node/utils/constant.ts`. If the schema setup fails, the app logs `configuration-save-schema-failed`. Master Data outages and timeouts are retried on the next request; rejections are retried after 1, 2, 4… minutes, up to 30.
+The schema is private: shoppers never reach Master Data directly, and the app reads and writes wishlists with its own credentials. To reapply the schema on accounts that already have it, without renaming it, increase `SCHEMA_REVISION` in `node/utils/constant.ts`. If the schema setup fails, the app logs `configuration-save-schema-failed`. Master Data outages and timeouts are retried after 1 minute; rejections after 1, 2, 4… minutes, up to 30.
 
 
 ## Wishlist Share Component
