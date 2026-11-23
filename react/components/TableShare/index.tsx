@@ -216,6 +216,7 @@ export default function TableWishList({
 
   // ADD SHARED LIST PAGE
   const {
+    isCallCenterOperator,
     isUserLoggedOut,
     navigateToLoginPage,
     isListNameInputVisible,
@@ -319,7 +320,8 @@ export default function TableWishList({
   return (
     <div className={handles.importList__generalContainer}>
       {/* NEW */}
-      {isUserLoggedOut ? (
+      {!isCallCenterOperator &&
+        (isUserLoggedOut ? (
         <ToastProvider positioning="window">
           <ToastConsumer>
             {() => (
@@ -369,7 +371,7 @@ export default function TableWishList({
             </div>
           </div>
         </div>
-      )}
+      ))}
       <ProductsProvider items={localProducts}>
         <WrapperTableWishList items={localProducts} schema={schema} />
       </ProductsProvider>

@@ -3,6 +3,7 @@ import { useCssHandles } from 'vtex.css-handles'
 import { Button, ToastConsumer, ToastProvider } from 'vtex.styleguide'
 
 import useGetWishlist from '../../hooks/useGetWishlists'
+import useIsCallCenterOperator from '../../hooks/useIsCallCenterOperator'
 import useSelectWishlist from '../../hooks/useSelectWishlist'
 import useWishList from '../../hooks/useWishlists'
 import ModalWishList from '../modal'
@@ -10,7 +11,7 @@ import SelectWishlist from '../selectWishlists/selectWishlist'
 
 const CSS_HANDLES = ['container', 'containerLoggedIn'] as const
 
-const ButtonWishlist = () => {
+const ButtonWishlistContent = () => {
   const { handles } = useCssHandles(CSS_HANDLES)
   const pathname = encodeURIComponent(window.location.pathname)
   const loginUrl = `/login?returnUrl=${pathname}`
@@ -132,6 +133,13 @@ const ButtonWishlist = () => {
       )}
     </div>
   )
+}
+
+/* Gate before mounting the content, so its wishlist queries never run for operators. */
+const ButtonWishlist = () => {
+  const isCallCenterOperator = useIsCallCenterOperator()
+
+  return isCallCenterOperator ? null : <ButtonWishlistContent />
 }
 
 export default ButtonWishlist
