@@ -79,15 +79,18 @@ export const auth = async (ctx: Context) => {
   }
 
   const [credential, sessionResult] = await Promise.all([
+    /* Only an explicit 401 means a bad token; other failures are VTEX ID outages and must not look like logouts. */
     vtexId.validateCredential(cookie).catch((error) => {
-      if (error?.response?.status !== 401) {
-        ctx.vtex.logger.warn({
-          message: 'auth-validate-credential-failed',
-          error,
-        })
+      if (error?.response?.status === 401) {
+        return null
       }
 
-      return null
+      ctx.vtex.logger.error({
+        message: 'auth-validate-credential-failed',
+        error,
+      })
+
+      throw error
     }),
     fetchImpersonationSession(ctx),
   ])
@@ -95,9 +98,17 @@ export const auth = async (ctx: Context) => {
   if (
     credential?.authStatus !== 'Success' ||
     !credential.id ||
-    !credential.user ||
-    credential.account !== ctx.vtex.account
+    !credential.user
   ) {
+    throw new AuthenticationError('Unauthorized access')
+  }
+
+  if (credential.account !== ctx.vtex.account) {
+    ctx.vtex.logger.warn({
+      message: 'auth-credential-account-mismatch',
+      tokenAccount: credential.account,
+    })
+
     throw new AuthenticationError('Unauthorized access')
   }
 
