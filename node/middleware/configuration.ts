@@ -28,6 +28,9 @@ const defaultHeaders = (authToken: string) => ({
   'Proxy-Authorization': authToken,
 })
 
+/* Persisted in app settings rather than memory, so every pod of the account honors it. */
+const SCHEMA_RETRY_INTERVAL_MS = 30 * 60 * 1000
+
 const defaultSettings = {
   adminSetup: {
     storeLogoUrl: '',
@@ -51,48 +54,70 @@ export const configuration = async (ctx: Context) => {
     settings = { ...settings, adminSetup: { ...defaultSettings.adminSetup } }
   }
 
-  if (
-    !settings.adminSetup.hasSchema ||
-    settings.adminSetup.schemaVersion !== SCHEMA_NAME ||
-    settings.adminSetup.schemaRevision !== SCHEMA_REVISION
-  ) {
-    const previous = {
-      previousHasSchema: settings.adminSetup.hasSchema,
-      previousSchemaVersion: settings.adminSetup.schemaVersion,
-      previousSchemaRevision: settings.adminSetup.schemaRevision,
-    }
+  const { adminSetup } = settings
 
-    let step = 'put-schema'
+  const isSchemaCurrent =
+    adminSetup.hasSchema &&
+    adminSetup.schemaVersion === SCHEMA_NAME &&
+    adminSetup.schemaRevision === SCHEMA_REVISION
 
-    try {
-      const url = routes.saveSchema(account, SCHEMA_NAME, DATA_ENTITY_NAME)
+  const lastFailure = Date.parse(adminSetup.schemaFailedAt ?? '')
+  const isBackingOff = Date.now() - lastFailure < SCHEMA_RETRY_INTERVAL_MS
 
-      const headers = defaultHeaders(authToken)
+  if (isSchemaCurrent || isBackingOff) {
+    return 'settings'
+  }
 
-      await hub.put(url, SCHEMA, headers)
+  const previous = {
+    previousHasSchema: adminSetup.hasSchema,
+    previousSchemaVersion: adminSetup.schemaVersion,
+    previousSchemaRevision: adminSetup.schemaRevision,
+  }
 
-      settings.adminSetup.hasSchema = true
-      settings.adminSetup.schemaVersion = SCHEMA_NAME
-      settings.adminSetup.schemaRevision = SCHEMA_REVISION
+  let step = 'put-schema'
 
-      step = 'save-settings'
-      await apps.saveAppSettings(app, settings)
+  try {
+    const url = routes.saveSchema(account, SCHEMA_NAME, DATA_ENTITY_NAME)
 
-      ctx.vtex.logger.info({
-        message: 'configuration-schema-applied',
+    const headers = defaultHeaders(authToken)
+
+    await hub.put(url, SCHEMA, headers)
+
+    step = 'save-settings'
+    await apps.saveAppSettings(app, {
+      ...settings,
+      adminSetup: {
+        ...adminSetup,
+        hasSchema: true,
         schemaVersion: SCHEMA_NAME,
         schemaRevision: SCHEMA_REVISION,
-        ...previous,
+        schemaFailedAt: null,
+      },
+    })
+
+    ctx.vtex.logger.info({
+      message: 'configuration-schema-applied',
+      schemaVersion: SCHEMA_NAME,
+      schemaRevision: SCHEMA_REVISION,
+      ...previous,
+    })
+  } catch (error) {
+    /* Keep hasSchema untouched: older app versions republish their public schema when it is false. */
+    const backoffSaved = await apps
+      .saveAppSettings(app, {
+        ...settings,
+        adminSetup: { ...adminSetup, schemaFailedAt: new Date().toISOString() },
       })
-    } catch (error) {
-      /* Keep hasSchema untouched: older app versions republish their public schema when it is false. */
-      ctx.vtex.logger.error({
-        message: 'configuration-save-schema-failed',
-        step,
-        ...previous,
-        ...describeError(error),
-      })
-    }
+      .then(() => true)
+      .catch(() => false)
+
+    ctx.vtex.logger.error({
+      message: 'configuration-save-schema-failed',
+      step,
+      backoffSaved,
+      ...previous,
+      ...describeError(error),
+    })
   }
 
   return 'settings'
