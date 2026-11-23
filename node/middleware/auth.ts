@@ -17,49 +17,39 @@ interface SessionNamespaces {
 }
 
 type SessionResult =
-  | { hinted: false }
-  | { hinted: true; namespaces: SessionNamespaces }
-  | { hinted: true; missingToken: true }
-  | { hinted: true; error: unknown }
+  | { namespaces: SessionNamespaces }
+  | { missingToken: true }
+  | { error: unknown }
 
-/* The hint cookie is client-controlled: it only decides whether to ask the session, never which email to use. */
-const fetchImpersonationSession = async (
-  ctx: Context
-): Promise<SessionResult> => {
+const fetchSession = async (ctx: Context): Promise<SessionResult> => {
   const {
     cookies,
     vtex: { sessionToken },
     clients: { session },
   } = ctx
 
-  if (!cookies.get(IMPERSONATION_HINT_COOKIE)) {
-    return { hinted: false }
-  }
-
   const token = sessionToken ?? cookies.get('vtex_session')
 
   if (!token) {
-    return { hinted: true, missingToken: true }
+    return { missingToken: true }
   }
 
   try {
     const { sessionData } = await session.getSession(token, SESSION_ITEMS)
 
-    return { hinted: true, namespaces: sessionData?.namespaces ?? {} }
+    return { namespaces: sessionData?.namespaces ?? {} }
   } catch (error) {
-    return { hinted: true, error }
+    return { error }
   }
 }
 
-/* During impersonation the operator must only act as the customer: anything unconfirmed is refused, never downgraded to the operator. */
+/* Impersonation is decided by the session, not by the client-controlled hint cookie; anything unconfirmed is refused, never downgraded to the operator. */
 const resolveEmail = (
   ctx: Context,
   sessionResult: SessionResult,
   operatorEmail: string
 ) => {
-  if (!sessionResult.hinted) {
-    return operatorEmail
-  }
+  const hinted = !!ctx.cookies.get(IMPERSONATION_HINT_COOKIE)
 
   if ('error' in sessionResult) {
     ctx.vtex.logger.error({
@@ -67,10 +57,14 @@ const resolveEmail = (
       error: sessionResult.error,
     })
 
-    throw new Error('Could not resolve impersonation session')
+    throw new Error('Could not resolve session')
   }
 
   if ('missingToken' in sessionResult) {
+    if (!hinted) {
+      return operatorEmail
+    }
+
     ctx.vtex.logger.warn({ message: 'auth-impersonation-missing-session' })
 
     throw new ForbiddenError('Impersonation could not be confirmed')
@@ -79,14 +73,15 @@ const resolveEmail = (
   const { namespaces } = sessionResult
   const sessionOperator = namespaces.authentication?.storeUserEmail?.value
   const impersonated = namespaces.impersonate?.storeUserEmail?.value
+  const operatorMatches =
+    sessionOperator?.toLowerCase() === operatorEmail.toLowerCase()
 
-  if (sessionOperator?.toLowerCase() !== operatorEmail.toLowerCase()) {
+  if ((impersonated || hinted) && !operatorMatches) {
     ctx.vtex.logger.warn({ message: 'auth-impersonation-operator-mismatch' })
 
     throw new ForbiddenError('Impersonation could not be confirmed')
   }
 
-  /* The session confirms the operator is not impersonating anymore (stale hint cookie). */
   return impersonated ?? operatorEmail
 }
 
@@ -116,7 +111,7 @@ export const auth = async (ctx: Context) => {
 
       throw error
     }),
-    fetchImpersonationSession(ctx),
+    fetchSession(ctx),
   ])
 
   if (
