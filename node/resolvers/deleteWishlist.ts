@@ -23,7 +23,7 @@ export const deleteWishlist = async (
     throw new Error('An wishlist with this id does not exist')
   }
 
-  if (getWishlist?.email !== email) {
+  if (getWishlist?.email?.toLowerCase() !== email.toLowerCase()) {
     throw new AuthenticationError('Unauthorized access')
   }
 

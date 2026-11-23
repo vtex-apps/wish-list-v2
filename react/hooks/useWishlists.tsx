@@ -9,8 +9,8 @@ const useWishList = () => {
 
   const emailInfo = orderForm?.clientProfileData?.email
   const isLoggedIn =
-    orderForm?.loggedIn ||
-    (orderForm?.userType === 'CALL_CENTER_OPERATOR' && emailInfo != null)
+    orderForm?.loggedIn === true &&
+    orderForm?.userType !== 'CALL_CENTER_OPERATOR'
 
   const nameProduct = product?.productName
   const linkProduct = product?.link

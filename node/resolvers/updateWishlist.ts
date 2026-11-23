@@ -41,7 +41,7 @@ export const updateWishlist = async (
     throw new Error('An wishlist with this id does not exist')
   }
 
-  if (emailUser !== email) {
+  if (emailUser?.toLowerCase() !== email.toLowerCase()) {
     throw new AuthenticationError('Unauthorized access')
   }
 

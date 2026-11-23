@@ -1,29 +1,37 @@
 import type { InstanceOptions, IOContext } from '@vtex/api'
-import { JanusClient } from '@vtex/api'
+import { ExternalClient } from '@vtex/api'
 
-interface AuthenticatedUser {
-  userId: string
-  user: string
+export interface ValidatedCredential {
+  authStatus: string
+  id?: string
+  user?: string
+  account?: string
 }
 
-export default class VtexId extends JanusClient {
+export default class VtexId extends ExternalClient {
   constructor(context: IOContext, options?: InstanceOptions) {
-    super(context, {
-      ...options,
-      headers: {
-        VtexIdclientAutCookie: context.authToken,
-        ...options?.headers,
-        'x-vtex-user-agent': context.userAgent,
-      },
-    })
+    super(
+      `http://${context.account}.vtexcommercestable.com.br/api/vtexid`,
+      context,
+      {
+        ...options,
+        headers: {
+          ...options?.headers,
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          'X-VTEX-Proxy-To': `https://${context.account}.vtexcommercestable.com.br`,
+          'x-vtex-user-agent': context.userAgent,
+        },
+      }
+    )
   }
 
-  public async getAuthenticatedUser(
-    authToken: string
-  ): Promise<AuthenticatedUser> {
-    return this.http.get('/api/vtexid/pub/authenticated/user/', {
-      metric: 'authenticated-user-get',
-      params: { authToken },
-    })
+  /* The store token must only travel in the body: VTEX ID rejects store tokens sent as VtexIdclientAutCookie headers. */
+  public async validateCredential(token: string) {
+    return this.http.post<ValidatedCredential>(
+      `/credential/validate?an=${this.context.account}`,
+      { token },
+      { metric: 'vtexid-credential-validate' }
+    )
   }
 }

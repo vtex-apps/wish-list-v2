@@ -1,4 +1,4 @@
-import { IOClients } from '@vtex/api'
+import { IOClients, Session } from '@vtex/api'
 import { masterDataFor } from '@vtex/clients'
 
 import { Wishlist } from '../typings/wishlist'
@@ -21,6 +21,10 @@ export class Clients extends IOClients {
 
   public get vtexId() {
     return this.getOrSet('vtexId', VtexId)
+  }
+
+  public get session() {
+    return this.getOrSet('session', Session)
   }
 
   public get hub() {

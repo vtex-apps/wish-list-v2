@@ -21,8 +21,7 @@ export const getWishlistsByEmail = async (
     pageSize,
   }
 
-  await configuration(ctx)
-  const { email } = await auth(ctx)
+  const [{ email }] = await Promise.all([auth(ctx), configuration(ctx)])
 
   const wishlists = await md.searchWistlist('email', email, pagination)
 

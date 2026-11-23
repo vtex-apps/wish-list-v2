@@ -51,10 +51,12 @@ export default function WishlistShare() {
     wishlistColumns.publicSettingsForApp.message
   )
 
+  const title = defaultTitleText ?? 'Favorites List'
+
   return (
     <div className={`${styles.wishlistShare}`}>
       <h2 className="flex justify-center mt6">
-        {`${wishlistMD.email}'s ${defaultTitleText ?? 'Favorites List'}`}
+        {wishlistMD.email ? `${wishlistMD.email}'s ${title}` : title}
       </h2>
       {wishlistMD.products && (
         <TableShare

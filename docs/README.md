@@ -79,7 +79,7 @@ On each schema version update new schema is created automatically with following
 Here is the latest masterdata schema.
 
 Data Entity Name: `myWishlists`
-Schema Name: `0.0.4-mywishlists`
+Schema Name: `0.0.5-mywishlists`
 
 <details><summary>myWishlists</summary>
 
@@ -121,34 +121,17 @@ Schema Name: `0.0.4-mywishlists`
   "v-cache": false,
   "v-immediate-indexing": true,
   "v-security": {
-    "allowGetAll": true,
-    "publicRead": [
-      "id",
-      "email",
-      "wishlistType",
-      "products",
-      "isPublic",
-      "fieldsConfig"
-    ],
-    "publicWrite": [
-      "email",
-      "wishlistType",
-      "products",
-      "isPublic",
-      "fieldsConfig"
-    ],
-    "publicFilter": [
-      "email",
-      "wishlistType",
-      "products",
-      "isPublic",
-      "fieldsConfig"
-    ]
+    "allowGetAll": false,
+    "publicRead": [],
+    "publicWrite": [],
+    "publicFilter": []
   }
 }
 ```
 
 </details>
+
+The schema is private: shoppers never reach Master Data directly, and the app reads and writes wishlists with its own credentials. To reapply the schema on accounts that already have it, without renaming it, increase `SCHEMA_REVISION` in `node/utils/constant.ts`. If the schema setup fails, the app logs `configuration-save-schema-failed`. Master Data outages and timeouts are retried after 1 minute; rejections after 1, 2, 4… minutes, up to 30.
 
 
 ## Wishlist Share Component

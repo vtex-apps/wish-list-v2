@@ -43,7 +43,10 @@ export default function useAddSharedListPage({
   const { updatedProducts } = useStoreGlobal.getState()
 
   const { createWishlist } = useMutationCreateWishlist(() => {})
-  const { data: wishlistsByEmail, refetch } = useQueryWishlists()
+  const isCallCenterOperator = orderForm?.userType === 'CALL_CENTER_OPERATOR'
+  const { data: wishlistsByEmail, refetch } = useQueryWishlists({
+    skip: isCallCenterOperator,
+  })
 
   // CREATE WISH LIST
   const {
@@ -60,6 +63,8 @@ export default function useAddSharedListPage({
   // USER EMAIL
   const userEmail = useUserEmail()
   const fetchData = async () => {
+    if (isCallCenterOperator) return
+
     setIsLoading(true)
     refetch()
     const data = wishlistsByEmail
@@ -153,6 +158,7 @@ export default function useAddSharedListPage({
 
   // RETURN
   return {
+    isCallCenterOperator,
     isUserLoggedOut,
     navigateToLoginPage,
     isListNameInputVisible,

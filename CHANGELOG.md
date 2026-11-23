@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Security
+
+- Stop trusting the `vtex-impersonated-customer-email` cookie: the user is always resolved from the auth token.
+- Wishlists are personal: while impersonating (as confirmed by the session), wishlist queries and mutations that require authentication return Forbidden.
+- `getWishlist` no longer exposes the owner's email to anyone other than the owner (shared links still work).
+- New private Master Data schema `0.0.5-mywishlists`: wishlist fields are no longer public and unfiltered listing is disabled. Previous schemas (`0.0.4-mywishlists` and older) are left unchanged.
+
+### Fixed
+
+- Updating and deleting a wishlist no longer fail for its owner when the stored email differs only in letter case.
+
+### Changed
+
+- Validate the shopper token with VTEX ID `credential/validate` instead of the legacy `pub/authenticated/user` route, and reject tokens issued for another account.
+
 ## [2.3.12] - 2024-12-05
 
 ### Fixed
