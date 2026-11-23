@@ -65,11 +65,11 @@ export const configuration = async (ctx: Context) => {
       settings.adminSetup.schemaVersion = SCHEMA_NAME
       settings.adminSetup.schemaRevision = SCHEMA_REVISION
     } catch (error) {
-      ctx.vtex.logger.warn({
+      /* Keep hasSchema untouched: older app versions republish their public schema when it is false. */
+      ctx.vtex.logger.error({
         message: 'configuration-save-schema-failed',
         error,
       })
-      settings.adminSetup.hasSchema = false
     }
   }
 
