@@ -2,6 +2,9 @@ import { AuthenticationError, ForbiddenError } from '@vtex/api'
 
 const IMPERSONATION_HINT_COOKIE = 'vtex-impersonated-customer-email'
 
+const IMPERSONATION_FORBIDDEN =
+  'Wishlists are not available while impersonating'
+
 const SESSION_ITEMS = [
   'authentication.storeUserEmail',
   'impersonate.storeUserEmail',
@@ -43,11 +46,11 @@ const fetchSession = async (ctx: Context): Promise<SessionResult> => {
   }
 }
 
-/* Impersonation is decided by the session, not by the client-controlled hint cookie; anything unconfirmed is refused, never downgraded to the operator. */
-const resolveEmail = (
+/* Wishlists are personal: whoever is impersonating may not read or change any list, theirs or the customer's. */
+const assertNotImpersonating = (
   ctx: Context,
   sessionResult: SessionResult,
-  operatorEmail: string
+  userEmail: string
 ) => {
   const hinted = !!ctx.cookies.get(IMPERSONATION_HINT_COOKIE)
 
@@ -61,28 +64,24 @@ const resolveEmail = (
   }
 
   if ('missingToken' in sessionResult) {
-    if (!hinted) {
-      return operatorEmail
+    if (hinted) {
+      throw new ForbiddenError(IMPERSONATION_FORBIDDEN)
     }
 
-    ctx.vtex.logger.warn({ message: 'auth-impersonation-missing-session' })
-
-    throw new ForbiddenError('Impersonation could not be confirmed')
+    return
   }
 
   const { namespaces } = sessionResult
-  const sessionOperator = namespaces.authentication?.storeUserEmail?.value
+  const sessionUser = namespaces.authentication?.storeUserEmail?.value
   const impersonated = namespaces.impersonate?.storeUserEmail?.value
-  const operatorMatches =
-    sessionOperator?.toLowerCase() === operatorEmail.toLowerCase()
 
-  if ((impersonated || hinted) && !operatorMatches) {
-    ctx.vtex.logger.warn({ message: 'auth-impersonation-operator-mismatch' })
+  /* A hint whose session belongs to someone else cannot prove impersonation has ended. */
+  const unconfirmedHint =
+    hinted && sessionUser?.toLowerCase() !== userEmail.toLowerCase()
 
-    throw new ForbiddenError('Impersonation could not be confirmed')
+  if (impersonated || unconfirmedHint) {
+    throw new ForbiddenError(IMPERSONATION_FORBIDDEN)
   }
-
-  return impersonated ?? operatorEmail
 }
 
 export const auth = async (ctx: Context) => {
@@ -131,5 +130,7 @@ export const auth = async (ctx: Context) => {
     throw new AuthenticationError('Unauthorized access')
   }
 
-  return { email: resolveEmail(ctx, sessionResult, credential.user) }
+  assertNotImpersonating(ctx, sessionResult, credential.user)
+
+  return { email: credential.user }
 }
