@@ -29,7 +29,18 @@ const defaultHeaders = (authToken: string) => ({
 })
 
 /* Persisted in app settings rather than memory, so every pod of the account honors it. */
-const SCHEMA_RETRY_INTERVAL_MS = 30 * 60 * 1000
+const SCHEMA_RETRY_BASE_MS = 60 * 1000
+const SCHEMA_RETRY_MAX_MS = 30 * 60 * 1000
+
+const retryInterval = (failures: number) =>
+  Math.min(SCHEMA_RETRY_BASE_MS * 2 ** (failures - 1), SCHEMA_RETRY_MAX_MS)
+
+/* Outages and timeouts may clear on the next request; only rejections are worth backing off. */
+const isTransient = (error: any) => {
+  const status = error?.response?.status
+
+  return !status || status >= 500
+}
 
 const defaultSettings = {
   adminSetup: {
@@ -61,8 +72,10 @@ export const configuration = async (ctx: Context) => {
     adminSetup.schemaVersion === SCHEMA_NAME &&
     adminSetup.schemaRevision === SCHEMA_REVISION
 
+  const failures = Number(adminSetup.schemaFailureCount) || 0
   const lastFailure = Date.parse(adminSetup.schemaFailedAt ?? '')
-  const isBackingOff = Date.now() - lastFailure < SCHEMA_RETRY_INTERVAL_MS
+  const isBackingOff =
+    failures > 0 && Date.now() - lastFailure < retryInterval(failures)
 
   if (isSchemaCurrent || isBackingOff) {
     return 'settings'
@@ -92,6 +105,7 @@ export const configuration = async (ctx: Context) => {
         schemaVersion: SCHEMA_NAME,
         schemaRevision: SCHEMA_REVISION,
         schemaFailedAt: null,
+        schemaFailureCount: 0,
       },
     })
 
@@ -102,19 +116,30 @@ export const configuration = async (ctx: Context) => {
       ...previous,
     })
   } catch (error) {
+    const transient = isTransient(error)
+    const nextFailures = failures + 1
+
     /* Keep hasSchema untouched: older app versions republish their public schema when it is false. */
-    const backoffSaved = await apps
-      .saveAppSettings(app, {
-        ...settings,
-        adminSetup: { ...adminSetup, schemaFailedAt: new Date().toISOString() },
-      })
-      .then(() => true)
-      .catch(() => false)
+    const backoffSaved = transient
+      ? false
+      : await apps
+          .saveAppSettings(app, {
+            ...settings,
+            adminSetup: {
+              ...adminSetup,
+              schemaFailedAt: new Date().toISOString(),
+              schemaFailureCount: nextFailures,
+            },
+          })
+          .then(() => true)
+          .catch(() => false)
 
     ctx.vtex.logger.error({
       message: 'configuration-save-schema-failed',
       step,
+      transient,
       backoffSaved,
+      retryInMs: backoffSaved ? retryInterval(nextFailures) : 0,
       ...previous,
       ...describeError(error),
     })
