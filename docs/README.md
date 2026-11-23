@@ -121,34 +121,17 @@ Schema Name: `0.0.4-mywishlists`
   "v-cache": false,
   "v-immediate-indexing": true,
   "v-security": {
-    "allowGetAll": true,
-    "publicRead": [
-      "id",
-      "email",
-      "wishlistType",
-      "products",
-      "isPublic",
-      "fieldsConfig"
-    ],
-    "publicWrite": [
-      "email",
-      "wishlistType",
-      "products",
-      "isPublic",
-      "fieldsConfig"
-    ],
-    "publicFilter": [
-      "email",
-      "wishlistType",
-      "products",
-      "isPublic",
-      "fieldsConfig"
-    ]
+    "allowGetAll": false,
+    "publicRead": [],
+    "publicWrite": [],
+    "publicFilter": []
   }
 }
 ```
 
 </details>
+
+The schema is private: shoppers never reach Master Data directly, and the app reads and writes wishlists with its own credentials. To reapply the schema on accounts that already have it, without renaming it, increase `SCHEMA_REVISION` in `node/utils/constant.ts`. If the schema setup fails, the app logs `configuration-save-schema-failed` and tries again after 30 minutes.
 
 
 ## Wishlist Share Component
