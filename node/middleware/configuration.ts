@@ -45,8 +45,9 @@ export const configuration = async (ctx: Context) => {
   const app: string = getAppId()
   let settings = await apps.getAppSettings(app)
 
+  /* Copy the defaults: the module object is shared by every account in the pod, and other settings must be kept. */
   if (!settings.adminSetup) {
-    settings = defaultSettings
+    settings = { ...settings, adminSetup: { ...defaultSettings.adminSetup } }
   }
 
   if (
@@ -64,6 +65,8 @@ export const configuration = async (ctx: Context) => {
       settings.adminSetup.hasSchema = true
       settings.adminSetup.schemaVersion = SCHEMA_NAME
       settings.adminSetup.schemaRevision = SCHEMA_REVISION
+
+      await apps.saveAppSettings(app, settings)
     } catch (error) {
       /* Keep hasSchema untouched: older app versions republish their public schema when it is false. */
       ctx.vtex.logger.error({
@@ -72,8 +75,6 @@ export const configuration = async (ctx: Context) => {
       })
     }
   }
-
-  await apps.saveAppSettings(app, settings)
 
   return 'settings'
 }
