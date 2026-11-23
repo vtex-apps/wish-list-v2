@@ -3,7 +3,7 @@ export const FIELDS =
 
 export const DATA_ENTITY_NAME = 'myWishlists'
 
-export const SCHEMA_NAME = '0.0.4-mywishlists'
+export const SCHEMA_NAME = '0.0.5-mywishlists'
 
 /* Bump to reapply SCHEMA on accounts that already have it, without renaming the schema and moving documents. */
 export const SCHEMA_REVISION = 1

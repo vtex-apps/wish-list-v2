@@ -79,7 +79,7 @@ On each schema version update new schema is created automatically with following
 Here is the latest masterdata schema.
 
 Data Entity Name: `myWishlists`
-Schema Name: `0.0.4-mywishlists`
+Schema Name: `0.0.5-mywishlists`
 
 <details><summary>myWishlists</summary>
 
