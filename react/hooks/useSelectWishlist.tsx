@@ -1,4 +1,3 @@
-import axios from 'axios'
 import { useState, useEffect, useRef, useContext } from 'react'
 import useProduct from 'vtex.product-context/useProduct'
 import { ToastContext } from 'vtex.styleguide'
@@ -10,7 +9,6 @@ import useMutationUpdateWishlist from './actions/useMutationUpdateWishlist'
 
 const useSelectWishlist = () => {
   const {
-    emailInfo,
     nameProduct,
     linkProduct,
     urlImageProduct,
@@ -121,39 +119,6 @@ const useSelectWishlist = () => {
     setErrorSelect('')
   }
 
-  const addProductToFavouriteList = (selectedProduct, selectedWishList) => {
-    const existingWishlist = listWishlist.find(
-      (typeWish: { email: string; id: string | number }) =>
-        typeWish.email === emailInfo && typeWish.id === selectedWishList
-    )
-
-    if (selectedProduct.bundle > 1)
-      selectedProduct.quantityProduct *= selectedProduct.bundle
-    if (existingWishlist) {
-      const productExists = existingWishlist.products.some(
-        (item: { ID: any }) => item.ID === selectedProduct.ID
-      )
-
-      if (!productExists) {
-        existingWishlist.products.push(selectedProduct)
-
-        const urlPut =
-          '/api/dataentities/whitebird_my_wishlists_wishlist/documents?_schema=0.0.2-mywishlists'
-
-        axios
-          .put(urlPut, existingWishlist)
-          .then(() => {
-            showToast('Successfully added to the Favorites List')
-          })
-          .catch((error) => {
-            console.error('PUT request failed:', error)
-          })
-      } else {
-        showToast('You have already added this product to the list')
-      }
-    }
-  }
-
   return {
     errorSelect,
     selectSize,
@@ -166,7 +131,6 @@ const useSelectWishlist = () => {
     handleSelectBlur,
     addToList,
     setCloseSelect,
-    addProductToFavouriteList,
   }
 }
 
