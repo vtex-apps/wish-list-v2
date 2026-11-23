@@ -1,5 +1,6 @@
 import { Apps } from '@vtex/api'
 
+import { describeError } from '../utils/describeError'
 import {
   DATA_ENTITY_NAME,
   SCHEMA,
@@ -71,7 +72,7 @@ export const configuration = async (ctx: Context) => {
       /* Keep hasSchema untouched: older app versions republish their public schema when it is false. */
       ctx.vtex.logger.error({
         message: 'configuration-save-schema-failed',
-        error,
+        ...describeError(error),
       })
     }
   }

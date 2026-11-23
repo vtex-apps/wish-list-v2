@@ -1,5 +1,7 @@
 import { AuthenticationError, ForbiddenError } from '@vtex/api'
 
+import { describeError } from '../utils/describeError'
+
 const IMPERSONATION_HINT_COOKIE = 'vtex-impersonated-customer-email'
 
 const IMPERSONATION_FORBIDDEN =
@@ -57,7 +59,7 @@ const assertNotImpersonating = (
   if ('error' in sessionResult) {
     ctx.vtex.logger.error({
       message: 'auth-get-session-failed',
-      error: sessionResult.error,
+      ...describeError(sessionResult.error),
     })
 
     throw new Error('Could not resolve session')
@@ -105,10 +107,11 @@ export const auth = async (ctx: Context) => {
 
       ctx.vtex.logger.error({
         message: 'auth-validate-credential-failed',
-        error,
+        ...describeError(error),
       })
 
-      throw error
+      /* A fresh error: the framework logs the original's request config, which carries the token. */
+      throw new Error('Could not validate credential')
     }),
     fetchSession(ctx),
   ])
