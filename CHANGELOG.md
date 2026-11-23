@@ -16,7 +16,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Creating a wishlist with a name the shopper already uses is now rejected: the duplicate-name check never matched before because the email was not quoted.
 - Updating and deleting a wishlist no longer fail for its owner when the stored email differs only in letter case.
 
 ### Changed
