@@ -56,6 +56,14 @@ export const configuration = async (ctx: Context) => {
     settings.adminSetup.schemaVersion !== SCHEMA_NAME ||
     settings.adminSetup.schemaRevision !== SCHEMA_REVISION
   ) {
+    const previous = {
+      previousHasSchema: settings.adminSetup.hasSchema,
+      previousSchemaVersion: settings.adminSetup.schemaVersion,
+      previousSchemaRevision: settings.adminSetup.schemaRevision,
+    }
+
+    let step = 'put-schema'
+
     try {
       const url = routes.saveSchema(account, SCHEMA_NAME, DATA_ENTITY_NAME)
 
@@ -67,11 +75,21 @@ export const configuration = async (ctx: Context) => {
       settings.adminSetup.schemaVersion = SCHEMA_NAME
       settings.adminSetup.schemaRevision = SCHEMA_REVISION
 
+      step = 'save-settings'
       await apps.saveAppSettings(app, settings)
+
+      ctx.vtex.logger.info({
+        message: 'configuration-schema-applied',
+        schemaVersion: SCHEMA_NAME,
+        schemaRevision: SCHEMA_REVISION,
+        ...previous,
+      })
     } catch (error) {
       /* Keep hasSchema untouched: older app versions republish their public schema when it is false. */
       ctx.vtex.logger.error({
         message: 'configuration-save-schema-failed',
+        step,
+        ...previous,
         ...describeError(error),
       })
     }

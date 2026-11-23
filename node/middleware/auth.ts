@@ -1,5 +1,6 @@
 import { AuthenticationError, ForbiddenError } from '@vtex/api'
 
+import type { ValidatedCredential } from '../clients/vtexId'
 import { describeError } from '../utils/describeError'
 
 const IMPERSONATION_HINT_COOKIE = 'vtex-impersonated-customer-email'
@@ -65,9 +66,15 @@ const assertNotImpersonating = (
     throw new Error('Could not resolve session')
   }
 
+  const forbid = (reason: string) => {
+    ctx.vtex.logger.warn({ message: 'auth-impersonation-blocked', reason })
+
+    return new ForbiddenError(IMPERSONATION_FORBIDDEN)
+  }
+
   if ('missingToken' in sessionResult) {
     if (hinted) {
-      throw new ForbiddenError(IMPERSONATION_FORBIDDEN)
+      throw forbid('hint-without-session')
     }
 
     return
@@ -77,12 +84,13 @@ const assertNotImpersonating = (
   const sessionUser = namespaces.authentication?.storeUserEmail?.value
   const impersonated = namespaces.impersonate?.storeUserEmail?.value
 
-  /* A hint whose session belongs to someone else cannot prove impersonation has ended. */
-  const unconfirmedHint =
-    hinted && sessionUser?.toLowerCase() !== userEmail.toLowerCase()
+  if (impersonated) {
+    throw forbid('impersonating')
+  }
 
-  if (impersonated || unconfirmedHint) {
-    throw new ForbiddenError(IMPERSONATION_FORBIDDEN)
+  /* A hint whose session belongs to someone else cannot prove impersonation has ended. */
+  if (hinted && sessionUser?.toLowerCase() !== userEmail.toLowerCase()) {
+    throw forbid('unconfirmed-hint')
   }
 }
 
@@ -100,9 +108,9 @@ export const auth = async (ctx: Context) => {
 
   const [credential, sessionResult] = await Promise.all([
     /* Only an explicit 401 means a bad token; other failures are VTEX ID outages and must not look like logouts. */
-    vtexId.validateCredential(cookie).catch((error) => {
+    vtexId.validateCredential(cookie).catch((error): ValidatedCredential => {
       if (error?.response?.status === 401) {
-        return null
+        return { authStatus: 'HttpUnauthorized' }
       }
 
       ctx.vtex.logger.error({
@@ -121,6 +129,14 @@ export const auth = async (ctx: Context) => {
     !credential.id ||
     !credential.user
   ) {
+    /* Expired sessions land here too: watch the rate against the pre-deploy baseline, not single events. */
+    ctx.vtex.logger.warn({
+      message: 'auth-credential-rejected',
+      authStatus: credential?.authStatus,
+      hasId: !!credential?.id,
+      hasUser: !!credential?.user,
+    })
+
     throw new AuthenticationError('Unauthorized access')
   }
 
